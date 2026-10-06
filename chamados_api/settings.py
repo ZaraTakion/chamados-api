@@ -40,7 +40,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-if not DEBUG:
+SERVE_STATIC = os.getenv("DJANGO_SERVE_STATIC", "false").lower() in {"1", "true", "yes"}
+if not DEBUG or SERVE_STATIC:
     MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 ROOT_URLCONF = "chamados_api.urls"
