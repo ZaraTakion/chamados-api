@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-chamados}
+      POSTGRES_USER: ${POSTGRES_USER:-chamados}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chamados-local-only}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-chamados} -d ${POSTGRES_DB:-chamados}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://chamados:chamados@db:5432/chamados}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      DJANGO_SERVE_STATIC: "true"
+    command: sh -c "python manage.py migrate --noinput && gunicorn chamados_api.wsgi:application --bind 0.0.0.0:8000 --workers 2 --access-logfile - --error-logfile -"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
