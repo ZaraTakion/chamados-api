@@ -14,7 +14,7 @@ jobs:
         python-version: ["3.10", "3.11", "3.12"]
     env:
       DJANGO_DEBUG: "true"
-      DJANGO_SECRET_KEY: "ci-only-not-a-production-secret"
+      DJANGO_SECRET_KEY: "ci-only-not-a-production-secret-with-adequate-length"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

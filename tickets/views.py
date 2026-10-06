@@ -1,17 +1,24 @@
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import filters, generics, permissions, status, viewsets
+from rest_framework import filters, generics, permissions, serializers, status, viewsets
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 from tickets.models import Ticket, TicketComment
 from tickets.permissions import IsRequesterOrStaff
 from tickets.serializers import TicketCommentSerializer, TicketSerializer
 
 
+class HealthSerializer(serializers.Serializer):
+    status = serializers.CharField()
+    timestamp = serializers.DateTimeField()
+
+
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
+@extend_schema(responses=HealthSerializer)
 def health(request):
     return Response({"status": "ok", "timestamp": timezone.now().isoformat()})
 
@@ -25,6 +32,8 @@ class TicketViewSet(viewsets.ModelViewSet):
     ordering = ["-created_at", "-id"]
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Ticket.objects.none()
         tickets = Ticket.objects.select_related("requester", "assignee")
         if self.request.user.is_staff:
             return tickets
@@ -50,6 +59,8 @@ class TicketCommentListCreateView(generics.ListCreateAPIView):
         return get_object_or_404(queryset, pk=self.kwargs["ticket_pk"])
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return TicketComment.objects.none()
         ticket = self.get_ticket()
         comments = TicketComment.objects.filter(ticket=ticket).select_related("author")
         if not self.request.user.is_staff:

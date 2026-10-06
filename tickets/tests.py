@@ -108,7 +108,9 @@ class AccountsAndTicketsAPITests(APITestCase):
         self.authenticate(self.requester)
         requester_comments = self.client.get(reverse("ticket-comments", args=[self.ticket.id]))
         self.assertEqual(requester_comments.status_code, status.HTTP_200_OK)
-        self.assertEqual([item["id"] for item in requester_comments.data], [public_comment.id])
+        self.assertEqual(
+            [item["id"] for item in requester_comments.data["results"]], [public_comment.id]
+        )
 
         denied = self.client.post(
             reverse("ticket-comments", args=[self.ticket.id]),
@@ -119,7 +121,10 @@ class AccountsAndTicketsAPITests(APITestCase):
 
         self.authenticate(self.staff)
         staff_comments = self.client.get(reverse("ticket-comments", args=[self.ticket.id]))
-        self.assertEqual({item["id"] for item in staff_comments.data}, {public_comment.id, internal_comment.id})
+        self.assertEqual(
+            {item["id"] for item in staff_comments.data["results"]},
+            {public_comment.id, internal_comment.id},
+        )
 
     def test_list_filters_search_and_ordering(self):
         self.authenticate(self.requester)
