@@ -15,13 +15,15 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** PLANEJADO / NÃO INICIADO
+**Status:** SPRINT 01 ATIVA
 
-O desenvolvimento deste roadmap está bloqueado pelo issue [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2).
+O gate [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2) foi concluído em **07/10/2026** após a finalização da Bird e validação da `main`.
 
-> O trabalho da próxima fase só começa depois que o projeto Bird estiver concluído e estável.
+A **Sprint 01 — Qualidade e baseline** está ativa.
 
-Nenhum item CHM-101+ deve ser tratado como **Doing** enquanto o gate CHM-000 estiver aberto.
+Item atual em **Doing**: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3).
+
+CHM-102 e todos os itens seguintes permanecem em Backlog enquanto CHM-101 não estiver Done.
 
 ## Princípios de trabalho
 
@@ -88,10 +90,14 @@ O calendário começa somente quando CHM-000 for fechado.
 - [x] definir roadmap;
 - [x] definir trilha de estudo;
 - [x] definir Definition of Done;
-- [ ] concluir Bird;
-- [ ] fechar [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2).
+- [x] concluir Bird;
+- [x] fechar [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2).
 
 ### Sprint 01 — Qualidade e baseline
+
+**Status:** ATIVA
+
+**Doing:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
 
 **Sprint Goal:** conseguir medir a qualidade atual antes de aprofundar a arquitetura.
 
