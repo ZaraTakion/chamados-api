@@ -119,3 +119,19 @@ python manage.py test
 ```
 
 Os testes cobrem cadastro, autenticação, isolamento por usuário, fluxo da equipe, comentários internos, filtros e documentação. O GitHub Actions executa essas verificações em Python 3.10, 3.11 e 3.12.
+
+
+## Roadmap profissional
+
+A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
+
+**Estado atual:** planejamento concluído; implementação aguardando a conclusão do projeto Bird.
+
+- [Status atual](docs/STATUS.md)
+- [Scrum e sprints](docs/SCRUM.md)
+- [Roadmap de 90 dias](docs/ROADMAP.md)
+- [Trilha de estudos](docs/LEARNING_PATH.md)
+- [Definition of Done](docs/DEFINITION_OF_DONE.md)
+- [Backlog no GitHub Issues](https://github.com/ZaraTakion/chamados-api/issues)
+
+A implementação seguirá WIP limitado: **uma tarefa Doing por vez**.
