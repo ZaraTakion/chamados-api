@@ -47,6 +47,16 @@ Um teste específico, executado apenas no PostgreSQL, atualiza um ticket sem res
 - Coverage da aplicação: **95,2%**.
 - Migração `0003_database_integrity` gerada e verificada quanto a mudanças pendentes.
 
+## Aceite local — Windows / SQLite (08/10/2026)
+
+- Backend local confirmado: `django.db.backends.sqlite3`.
+- Backup consistente criado antes da migração; arquivo mantido localmente, fora do versionamento.
+- `python manage.py migrate`: `Applying tickets.0003_database_integrity... OK`.
+- Ruff, Django system check e `makemigrations --check --dry-run`: aprovados.
+- `coverage run manage.py test`: 75 testes encontrados, 74 aprovados e 1 skip específico PostgreSQL, em 259.988s.
+- `coverage report`: **95,8%**, 391 statements, 13 misses, 88 branches e 7 partial branches.
+- PR #23 integrada por squash em 08/10/2026. A validação local cobre SQLite; a validação do bloqueio PostgreSQL foi feita no CI com PostgreSQL 16.
+
 ## Limites
 
 - O job PostgreSQL roda em CI com dados de teste descartáveis, não representa produção.
