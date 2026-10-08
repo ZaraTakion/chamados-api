@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. Único item em Doing: [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10), PR #24 em revisão.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. Próximo item planejado: [CHM-402 #11](https://github.com/ZaraTakion/chamados-api/issues/11).
 
 ## Princípios de trabalho
 
@@ -145,7 +145,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 04 — Produção e observabilidade
 
-**Status:** ATIVA, CHM-401 Doing; demais tarefas aguardam.
+**Status:** ATIVA; CHM-401 Done, CHM-402 é o próximo item planejado e CHM-403 aguarda.
 
 **Sprint Goal:** tornar a API diagnosticável e mais próxima de um serviço operável.
 
@@ -228,3 +228,12 @@ Quando a Bird terminar:
 - Manter: evidências de QA local antes de merge, backup anterior a migrações e decisões de índices baseadas em medições.
 - Melhorar: investigar duração da suíte (~260s no Windows) e aprofundar testes operacionais/concorrência na Sprint 04.
 - Próximo: refinar e iniciar CHM-401, respeitando WIP máximo de um Doing.
+
+
+### CHM-401 — Review e aceite
+
+- Logs HTTP JSON de campos controlados, request ID por requisição e resposta HTTP, correlação de erros 5xx.
+- CI verde em SQLite/Python 3.10–3.12 e PostgreSQL 16: 82 testes por ambiente (SQLite: 81 aprovados, 1 ignorado; PostgreSQL: 82 aprovados), 94,3% coverage.
+- QA Windows 08/10/2026: Ruff, Django check, migrations verdes; 82 testes descobertos (81 aprovados, 1 skip), 286.338s, 94,8% coverage.
+- [PR #24](https://github.com/ZaraTakion/chamados-api/pull/24) integrada e Issue #10 fechada.
+- Próximo: CHM-402, com atenção a liveness/readiness, segurança de configuração e testes de integração.

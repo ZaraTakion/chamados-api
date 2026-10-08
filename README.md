@@ -150,14 +150,14 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável, respostas de erro, regressões de consultas SQL, constraints e atualização transacional. O CI também usa PostgreSQL 16 em um job separado. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável, respostas de erro, regressões de consultas SQL, constraints, atualização transacional, correlação por request ID e segurança dos logs JSON. O CI também usa PostgreSQL 16 em um job separado. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 iniciada com CHM-401 (logs JSON seguros e request ID) em desenvolvimento, aguardando CI e validação Windows.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). Próxima tarefa: CHM-402.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)

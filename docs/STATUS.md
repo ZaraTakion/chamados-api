@@ -5,7 +5,7 @@
 - Sprints 00, 01, 02 e 03: **Done**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
 - [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Done**, PR #23 merged, validação Windows aprovada.
-- [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10): **Doing** — logs estruturados e request ID; branch `feat/chm-401-structured-request-logging`.
+- [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10): **Done** — PR #24 integrada à main; QA Windows e CI aprovados.
 - WIP limit: uma tarefa Doing por vez.
 
 ## CHM-301 — Evidências concluídas
@@ -32,7 +32,7 @@ Foram revisados índices, adicionadas constraints e corrigido o bloqueio de linh
 5. Fazer verificação real em PostgreSQL; não usar SQLite como prova substituta.
 6. Validar CI, migrations e Windows antes de merge.
 
-CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 04 aguarda início de CHM-401.
+CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 04 está ativa; CHM-401 concluída.
 
 ## CHM-302 — Resultados da validação
 
@@ -48,19 +48,21 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Windows: Ruff/check/migrations verdes; suíte encontrou **75 testes**, **74 aprovados e 1 skip específico PostgreSQL**, em **259.988s**; **95,8% de cobertura** (391 statements, 13 misses, 88 branches, 7 partial branches).
 - PR #23: [squash merge concluído](https://github.com/ZaraTakion/chamados-api/pull/23) (commit `10c08a9`). Issue #9 fechada.
 
-## Sprint 04 — CHM-401 em andamento
+## Sprint 04 — CHM-401 concluída
 
 - Middleware gera request ID aleatório de 32 caracteres para cada requisição.
 - Header de resposta `X-Request-ID`, incluindo respostas com erro.
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
-- Testes de segurança e correlação adicionados; validação CI e Windows ainda pendente.
-- WIP: somente CHM-401 em Doing.
+- Testes de segurança e correlação aprovados no CI e no Windows.
+- WIP: nenhum item em Doing no momento; CHM-402 é a próxima tarefa planejada.
 
 ## CHM-401 — Observabilidade
 
-- Implementação no PR #24 em andamento.
+- [PR #24 integrada via squash merge](https://github.com/ZaraTakion/chamados-api/pull/24), commit `ef5e57f`.
 - Identificação de requisição e logging HTTP em JSON.
 - Testes de correlação e formatação segura adicionados.
 - Documentação em [OBSERVABILITY.md](./OBSERVABILITY.md).
-- Sem aprovação de QA local ou merge por enquanto.
+- CI: Python 3.10–3.12 (SQLite) e PostgreSQL 16 aprovados; 82 testes descobertos por ambiente (SQLite: 81 passaram e 1 skip; PostgreSQL: 82 passaram). Coverage no CI 94,3%.
+- Windows: Ruff, check e migrations verdes; 82 testes (81 passaram, 1 skip PostgreSQL), 286.338s, cobertura **94,8%** (457 statements, 18 misses, 104 branches, 11 partial branches).
+- Logs JSON observados durante os testes de erro, com request ID e sem informação sensível nas linhas exibidas.
