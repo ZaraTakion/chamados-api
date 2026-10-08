@@ -4,6 +4,8 @@ The original validation fields and HTTP codes are preserved. Only the
 `error` member is added to a handled response.
 """
 
+from django.core.exceptions import PermissionDenied as DjangoPermissionDenied
+from django.http import Http404
 from rest_framework.exceptions import (
     AuthenticationFailed,
     MethodNotAllowed,
@@ -37,9 +39,9 @@ def _error_type(exc):
         return "validation_error", "Dados inválidos."
     if isinstance(exc, (NotAuthenticated, AuthenticationFailed)):
         return "authentication_error", "Autenticação necessária ou inválida."
-    if isinstance(exc, PermissionDenied):
+    if isinstance(exc, (PermissionDenied, DjangoPermissionDenied)):
         return "permission_denied", "Acesso negado."
-    if isinstance(exc, NotFound):
+    if isinstance(exc, (NotFound, Http404)):
         return "not_found", "Recurso não encontrado."
     if isinstance(exc, Throttled):
         return "rate_limited", "Limite de requisições excedido."
