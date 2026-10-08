@@ -113,3 +113,36 @@ jobs:
 
       - name: Relatório de cobertura
         run: coverage report
+
+  celery_worker:
+    name: Redis + Celery — smoke Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Criar ambiente de exemplo somente para CI
+        run: cp .env.example .env
+
+      - name: Verificar configuração Compose
+        run: docker compose config --quiet
+
+      - name: Construir API e worker
+        run: docker compose build api worker
+
+      - name: Iniciar PostgreSQL, Redis e worker
+        run: docker compose up -d db redis worker
+
+      - name: Aplicar migrations no banco de integração
+        run: docker compose run --rm --no-deps api python manage.py migrate --noinput
+
+      - name: Executar tarefa no worker real
+        run: |
+          docker compose run --rm --no-deps api python manage.py shell -c "from tickets.tasks import ticket_queue_summary; r = ticket_queue_summary.delay(); result = r.get(timeout=30); assert result['total'] == 0, result; assert set(result['by_status']) == {'open', 'in_progress', 'waiting', 'resolved', 'closed'}; print('Celery + Redis: tarefa executada com sucesso')"
+
+      - name: Relatar logs no caso de falha
+        if: failure()
+        run: docker compose logs --tail=80 worker redis db
+
+      - name: Limpar containers de CI
+        if: always()
+        run: docker compose down --volumes --remove-orphans
