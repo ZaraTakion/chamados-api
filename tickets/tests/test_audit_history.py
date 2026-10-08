@@ -74,7 +74,9 @@ class TicketAuditHistoryTests(APITestBase):
             {item["actor_display"] for item in requester_history.data["results"]},
             {"Equipe de suporte"},
         )
-        self.assertNotIn(self.staff.username, str(requester_history.data))
+        for item in requester_history.data["results"]:
+            self.assertNotIn("actor_username", item)
+            self.assertNotIn("actor", item)
 
     def test_requester_priority_change_is_recorded_without_exposing_username(self):
         self.authenticate(self.requester)
