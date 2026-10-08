@@ -1,11 +1,11 @@
 # Status do Projeto
 
-## Agora — Sprint 04: Produção e observabilidade (planejamento)
+## Agora — Sprint 04: Produção e observabilidade
 
 - Sprints 00, 01, 02 e 03: **Done**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
 - [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Done**, PR #23 merged, validação Windows aprovada.
-- Próximo item planejado: [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) (ainda não iniciado).
+- [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10): **Doing** — logs estruturados e request ID; branch `feat/chm-401-structured-request-logging`.
 - WIP limit: uma tarefa Doing por vez.
 
 ## CHM-301 — Evidências concluídas
@@ -47,3 +47,20 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Windows/SQLite: backup local concluído antes da migration; `tickets.0003_database_integrity` aplicada com sucesso.
 - Windows: Ruff/check/migrations verdes; suíte encontrou **75 testes**, **74 aprovados e 1 skip específico PostgreSQL**, em **259.988s**; **95,8% de cobertura** (391 statements, 13 misses, 88 branches, 7 partial branches).
 - PR #23: [squash merge concluído](https://github.com/ZaraTakion/chamados-api/pull/23) (commit `10c08a9`). Issue #9 fechada.
+
+## Sprint 04 — CHM-401 em andamento
+
+- Middleware gera request ID aleatório de 32 caracteres para cada requisição.
+- Header de resposta `X-Request-ID`, incluindo respostas com erro.
+- Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
+- Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
+- Testes de segurança e correlação adicionados; validação CI e Windows ainda pendente.
+- WIP: somente CHM-401 em Doing.
+
+## CHM-401 — Observabilidade
+
+- Implementação no PR #24 em andamento.
+- Identificação de requisição e logging HTTP em JSON.
+- Testes de correlação e formatação segura adicionados.
+- Documentação em [OBSERVABILITY.md](./OBSERVABILITY.md).
+- Sem aprovação de QA local ou merge por enquanto.

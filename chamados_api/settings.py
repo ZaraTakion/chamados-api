@@ -32,6 +32,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "chamados_api.observability.RequestLoggingMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -135,3 +136,42 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+# CHM-401: minimal JSON logs; request bodies, query strings and credentials are excluded.
+# Local test runs are quiet by default; production emits request completion metadata.
+APP_LOG_LEVEL = os.getenv("APP_LOG_LEVEL", "WARNING" if DEBUG else "INFO").upper()
+if APP_LOG_LEVEL not in {"DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"}:
+    raise ValueError("APP_LOG_LEVEL must be DEBUG, INFO, WARNING, ERROR or CRITICAL")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "safe_json": {"()": "chamados_api.observability.SafeJSONFormatter"},
+    },
+    "handlers": {
+        "safe_console": {
+            "class": "logging.StreamHandler",
+            "formatter": "safe_json",
+        },
+    },
+    "loggers": {
+        "chamados_api.http": {
+            "handlers": ["safe_console"],
+            "level": APP_LOG_LEVEL,
+            "propagate": False,
+        },
+        # The default Django request/security messages may include raw URLs
+        # or exception text. Serialize only allowlisted fields instead.
+        "django.request": {
+            "handlers": ["safe_console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["safe_console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
+}
