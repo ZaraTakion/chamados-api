@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from tickets.models import Ticket, TicketComment
+from tickets.models import Ticket, TicketAuditEvent, TicketComment
 from tickets.transitions import InvalidStatusTransition, validate_ticket_transition
 
 User = get_user_model()
@@ -49,3 +49,22 @@ class TicketCommentSerializer(serializers.ModelSerializer):
         if attrs.get("is_internal", False) and not self.context["request"].user.is_staff:
             raise serializers.ValidationError({"is_internal": "Notas internas são restritas à equipe."})
         return attrs
+
+
+class TicketAuditEventSerializer(serializers.ModelSerializer):
+    """Read-only projection with redacted actor identity for requesters."""
+
+    actor_display = serializers.SerializerMethodField()
+
+    class Meta:
+        model = TicketAuditEvent
+        fields = [
+            "id", "ticket_reference", "field", "old_value", "new_value",
+            "actor_display", "created_at",
+        ]
+        read_only_fields = fields
+
+    def get_actor_display(self, obj) -> str:
+        if self.context["request"].user.is_staff:
+            return obj.actor_username
+        return "Equipe de suporte" if obj.actor_was_staff else "Solicitante"
