@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-Item atual em **Doing**: [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9).
+Item atual em **Review**: [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9). CI verde; aceite Windows pendente.
 
 ## Princípios de trabalho
 
@@ -134,7 +134,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 **Done:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
 
-**Doing:** [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9)
+**Review:** [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9)
 
 **Sprint Goal:** demonstrar uso consciente do ORM e PostgreSQL.
 
