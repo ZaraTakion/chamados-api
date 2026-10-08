@@ -6,6 +6,8 @@
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
 - [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Done**, PR #23 merged, validação Windows aprovada.
 - [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10): **Done** — PR #24 integrada à main; QA Windows e CI aprovados.
+- [CHM-402 #11](https://github.com/ZaraTakion/chamados-api/issues/11): Done, PR #25 merged; 95 testes aprovados e 1 skip no Windows, 94,5% coverage.
+- [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12): Doing — migrations explícitas e smoke test em PostgreSQL 16 CI.
 - WIP limit: uma tarefa Doing por vez.
 
 ## CHM-301 — Evidências concluídas
@@ -73,4 +75,14 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Readiness executa `SELECT 1` e devolve 503 seguro se o banco estiver indisponível.
 - Guarda de inicialização de produção: segredo aleatório forte, hosts explícitos, PostgreSQL persistente e HTTPS.
 - Checklist de deploy em [PRODUCTION_SECURITY.md](./PRODUCTION_SECURITY.md).
-- CI e validação Windows ainda pendentes; sem autorização para merge.
+- CI aprovado em Python 3.10–3.12/SQLite e PostgreSQL 16: 96 testes descobertos por ambiente.
+- QA Windows: 95 testes passaram, 1 skip específico PostgreSQL, 0 falhas, 285.633s; cobertura 94,5%.
+- PR #25 squash merged na main em 08/10/2026, commit e9a9571c.
+- CHM-403 é o único item Doing.
+
+## CHM-403 — Evidência de PostgreSQL no CI
+
+- PostgreSQL 16 já executava toda a suíte desde CHM-302.
+- Esta entrega explicita `migrate --noinput`, `migrate --check` e smoke test de `/api/health/ready/` antes dos testes.
+- SQLite permanece na matriz 3.10–3.12 e as diferenças estão descritas em [CI_POSTGRESQL.md](./CI_POSTGRESQL.md).
+- CI da nova mudança e review ainda pendentes.
