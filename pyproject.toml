@@ -11,6 +11,8 @@ branch = true
 source = ["accounts", "tickets", "chamados_api"]
 omit = [
     "*/migrations/*",
+    "*/tests.py",
+    "*/tests/*",
     "manage.py",
     "*/asgi.py",
     "*/wsgi.py",
