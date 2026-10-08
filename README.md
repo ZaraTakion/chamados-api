@@ -132,6 +132,7 @@ O código do erro distingue autenticação (`authentication_error`), acesso proi
 - `DATABASE_URL`: URL PostgreSQL opcional; sem ela, usa SQLite local.
 - `SQLITE_PATH`: caminho alternativo do arquivo SQLite.
 - `DJANGO_SECURE_SSL_REDIRECT`: redireciona para HTTPS quando `DEBUG=false` (padrão `true`).
+- `APP_LOG_LEVEL`: severidade mínima de logs HTTP estruturados; padrão `WARNING` no desenvolvimento e `INFO` em produção. Respostas incluem `X-Request-ID` gerado pelo servidor.
 
 ## Testes e verificações
 
@@ -156,13 +157,14 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Próxima etapa: Sprint 04, CHM-401 (planejada).
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 iniciada com CHM-401 (logs JSON seguros e request ID) em desenvolvimento, aguardando CI e validação Windows.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
 - [Contrato de erros e compatibilidade](docs/API_ERRORS.md)
 - [Medições do ORM e prevenção de N+1](docs/ORM_QUERY_BASELINE.md)
 - [Índices, integridade e transações PostgreSQL](docs/DATABASE_INTEGRITY.md)
+- [Observabilidade segura e correlação de requisições](docs/OBSERVABILITY.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
