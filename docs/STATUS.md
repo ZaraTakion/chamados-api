@@ -45,3 +45,29 @@ O CHM-102 deve eliminar ou justificar esses warnings sem alterar comportamento f
 Trabalhar exclusivamente no CHM-102 até Review/Done.
 
 A Sprint 02 só começa quando CHM-102 estiver concluído.
+
+
+## CHM-102 — Review
+
+Validação automatizada concluída:
+
+- suíte ampliada de **7 para 25 testes**;
+- Python 3.10: verde;
+- Python 3.11: verde;
+- Python 3.12: verde;
+- Ruff: verde;
+- Django system check: verde;
+- migrations check: verde;
+- schema OpenAPI sem warnings do drf-spectacular;
+- cobertura de código da aplicação: **92,7%**;
+- 261 statements, 14 misses, 40 branches e 6 partial branches.
+
+### Ajuste metodológico de cobertura
+
+No CHM-101, o Coverage ainda incluía arquivos de teste no cálculo. O CHM-102 corrige isso e passa a excluir `tests.py` e `tests/`, então o percentual de 92,7% representa o código da aplicação. Por essa mudança metodológica, o percentual antigo não deve ser comparado diretamente como se usasse o mesmo denominador.
+
+### Review pendente
+
+- validação local no Windows.
+
+Após o teste local, o CHM-102 poderá ser marcado como Done e a Sprint 01 encerrada.
