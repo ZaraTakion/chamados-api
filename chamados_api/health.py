@@ -25,7 +25,6 @@ def _health_response(ready=True):
 @extend_schema(responses=HealthSerializer)
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
-@throttle_classes([])
 def health(request):
     """Legacy liveness alias: keep the existing response contract."""
     return _health_response()
