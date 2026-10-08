@@ -1,0 +1,56 @@
+# CHM-501 — Celery e Redis
+
+## Objetivo
+
+Introduzir processamento assíncrono após estabilizar a API síncrona.
+Redis é o broker Celery; o worker é um serviço independente no Docker Compose.
+HTTP ainda não despacha tarefas nesta etapa (isso será tratado na CHM-502).
+
+## Arquitetura e segurança
+
+- Broker Redis: database 0; resultados Redis: database 1.
+- O worker Compose usa concorrência 1 para limitar consumo de RAM.
+- Redis não publica porta externa; o volume redis_data é de desenvolvimento.
+- JSON é o formato permitido para mensagens e resultados.
+- Em produção, usar rede privada, credenciais seguras, TLS quando apropriado
+  e retenção limitada. O env.example não contém credenciais de produção.
+
+## Tarefa útil e idempotente
+
+tickets.queue_summary contabiliza chamados por status usando uma consulta.
+Retorna apenas total e contagens, sem texto de tickets, nomes ou identificadores
+pessoais. É read-only, portanto repetir a execução não altera os registros.
+Contagens podem mudar entre execuções caso novos tickets sejam criados.
+
+## Como executar
+
+Suba os serviços de desenvolvimento:
+
+    docker compose up --build -d
+
+Execute a tarefa pelo serviço API:
+
+    docker compose exec api python manage.py shell -c "from tickets.tasks import ticket_queue_summary; r = ticket_queue_summary.delay(); print(r.get(timeout=15))"
+
+Observe o worker:
+
+    docker compose logs worker
+
+Não chame result.get() dentro das views HTTP: bloquearia a requisição.
+Sem Redis ativo, .delay() pode falhar; nenhum endpoint a chama nesta etapa.
+
+## Retries e timeouts
+
+OperationalError do banco ativa até 3 retries automáticos com backoff
+exponencial e jitter. A tarefa tem soft time limit de 20 segundos e hard
+time limit de 30 segundos. Se o broker falhar, a falha do envio precisa ser
+tratada na origem; CHM-502 deve enfileirar com transaction.on_commit e
+tolerar indisponibilidade da infraestrutura assíncrona.
+
+## Testes e limites
+
+Os testes validam contagens, consulta única, repetição sem efeitos colaterais,
+modo eager sem Redis, conteúdo seguro do resultado e configuração de retry.
+Modo eager comprova o código da tarefa, não o worker/broker real. A verificação
+em Docker Compose é etapa distinta. Não são prometidas semânticas exactly-once
+para tarefas futuras com efeitos colaterais.
