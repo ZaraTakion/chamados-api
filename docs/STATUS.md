@@ -68,6 +68,19 @@ No CHM-101, o Coverage ainda incluía arquivos de teste no cálculo. O CHM-102 c
 
 ### Review pendente
 
-- validação local no Windows.
+- validação local no Windows: **concluída**.
 
-Após o teste local, o CHM-102 poderá ser marcado como Done e a Sprint 01 encerrada.
+### Validação local — Windows 10 / Python 3.12
+
+- Ruff: verde;
+- Django system check: verde;
+- migrations check: verde;
+- suíte: **25 testes verdes**;
+- tempo local: 86.039s;
+- cobertura local da aplicação: **93,7%**;
+- 261 statements, 12 misses, 40 branches e 7 partial branches;
+- nenhum warning `unable to guess serializer` do drf-spectacular.
+
+O texto `unable to guess serializer` digitado após o relatório foi interpretado pelo CMD como comando e não representa warning da execução.
+
+**CHM-102 está pronto para merge e encerramento da Sprint 01.**
