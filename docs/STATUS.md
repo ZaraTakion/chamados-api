@@ -1,6 +1,6 @@
 # Status do Projeto
 
-## Agora — Sprint 05: Processamento assíncrono (planejamento)
+## Agora — Sprint 05: Processamento assíncrono
 
 - Sprints 00, 01, 02, 03 e 04: **Done**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- Sprint 04 encerrada. WIP: sem Doing até início de CHM-501.
+- Sprint 04 encerrada. WIP: somente CHM-501 em Doing.
 
 ## CHM-401 — Observabilidade
 
@@ -93,4 +93,13 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CHM-401, CHM-402 e CHM-403 Done, com PRs #24, #25, #26 integradas.
 - Review: observabilidade segura, health probes e configuração de produção, PostgreSQL 16 real no CI.
 - Retrospectiva: preservar contratos anteriores (throttling legado); detectar regressões no CI; confirmar Windows antes dos merges de código.
-- A próxima Sprint 05 depende de CHM-501; nenhuma tarefa assíncrona foi iniciada até este registro.
+- Sprint 05 iniciada: CHM-501 implementa broker Redis, app Celery Django, worker e métricas agregadas de fila.
+
+## CHM-501 — Redis + Celery (em desenvolvimento)
+
+- Broker Redis e result backend parametrizados via ambiente.
+- Worker separado em Docker Compose, concorrência 1 e Redis sem porta publicada.
+- Tarefa `tickets.queue_summary` é read-only e retorna apenas contagens por status, sem PII.
+- Retries em falha transitória de banco e timeouts limitados; testes eager sem exigir Redis.
+- Implementação documentada em [ASYNC_ARCHITECTURE.md](./ASYNC_ARCHITECTURE.md).
+- CI e aceite Windows pendentes; CHM-502 ainda não iniciou.

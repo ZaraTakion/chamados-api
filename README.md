@@ -47,7 +47,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-O Compose executa as migrações, inicia a API em `http://localhost:8000` e mantém o banco no volume `postgres_data`. Os valores de `.env.example` servem apenas para desenvolvimento local. Em produção, use segredo aleatório privado, credenciais individuais, `DJANGO_DEBUG=false`, hosts explícitos, TLS e backups do banco.
+O Compose executa as migrações, inicia a API em `http://localhost:8000`, mantém o banco no volume `postgres_data` e sobe Redis + um worker Celery separado para tarefas opcionais. Redis não publica portas externas e persiste dados de desenvolvimento em `redis_data`. Os valores de `.env.example` servem apenas para desenvolvimento local. Em produção, use segredo aleatório privado, credenciais individuais, `DJANGO_DEBUG=false`, hosts explícitos, TLS e backups do banco.
 
 Também é possível apontar a aplicação para um PostgreSQL gerenciado definindo `DATABASE_URL`. Em hospedagem com disco efêmero, não dependa do SQLite local: use PostgreSQL ou outro armazenamento persistente.
 
@@ -137,6 +137,8 @@ O código do erro distingue autenticação (`authentication_error`), acesso proi
 - `DJANGO_TRUST_PROXY_SSL_HEADER`: opcional, somente atrás de proxy confiável que sobrescreve `X-Forwarded-Proto`; não habilite em outros ambientes.
 - `DJANGO_ALLOWED_HOSTS` e `DATABASE_URL`: obrigatórios e explícitos em produção, sem hosts curinga e com PostgreSQL persistente.
 - `APP_LOG_LEVEL`: severidade mínima de logs HTTP estruturados; padrão `WARNING` no desenvolvimento e `INFO` em produção. Respostas incluem `X-Request-ID` gerado pelo servidor.
+- `CELERY_BROKER_URL`: endereço do broker Redis; padrão local `redis://127.0.0.1:6379/0`; Compose `redis://redis:6379/0`.
+- `CELERY_RESULT_BACKEND`: Redis de resultados; padrão local `redis://127.0.0.1:6379/1`.
 
 ## Testes e verificações
 
@@ -161,7 +163,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 concluiu liveness/readiness e validação de segurança de produção (PR #25; QA Windows 96 testes encontrados, 95 aprovados, 1 skip; 94,5% cobertura). CHM-403 concluída via PR #26: migrations explícitas, validação de schema e readiness smoke no PostgreSQL 16, com 4/4 jobs verdes (96 testes, 94,0% cobertura CI). Sprint 04 encerrada. Próxima tarefa planejada: CHM-501 na Sprint 05.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 concluiu liveness/readiness e validação de segurança de produção (PR #25; QA Windows 96 testes encontrados, 95 aprovados, 1 skip; 94,5% cobertura). CHM-403 concluída via PR #26: migrations explícitas, validação de schema e readiness smoke no PostgreSQL 16, com 4/4 jobs verdes (96 testes, 94,0% cobertura CI). Sprint 04 encerrada. Sprint 05 ativa: CHM-501 em desenvolvimento — Redis + Celery, worker Compose e tarefa idempotente de resumo de fila; CI e QA ainda pendentes.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
@@ -171,6 +173,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 - [Observabilidade segura e correlação de requisições](docs/OBSERVABILITY.md)
 - [Checklist de produção e endpoints de health](docs/PRODUCTION_SECURITY.md)
 - [Matriz SQLite/PostgreSQL e CI real](docs/CI_POSTGRESQL.md)
+- [Arquitetura Redis/Celery e tarefas idempotentes](docs/ASYNC_ARCHITECTURE.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
