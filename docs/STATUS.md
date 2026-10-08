@@ -1,43 +1,34 @@
 # Status do Projeto
 
-## Agora — Sprint 02: Domínio e consistência
+## Agora — Sprint 03: Banco e performance
 
-- Sprint 00 e Sprint 01: **Done**.
-- Sprint 02: **ativa**.
-- [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5): **Done**, PR #19 merged.
-- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): **Done**, PR #20 merged.
-- [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7): **Review**, aguardando validação local.
-- Branch: `feat/chm-203-consistent-errors`.
-- WIP: **1 tarefa Doing**.
+- Sprint 00: **Done**
+- Sprint 01 — Qualidade e baseline: **Done**
+- Sprint 02 — Domínio e consistência: **Done**
+- Sprint ativa: **Sprint 03 — Banco e performance**
+- **Doing:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
+- Branch de desenvolvimento: `perf/chm-301-orm-query-baseline`
+- CHM-302 permanece em Backlog, com limite WIP de uma tarefa em Doing.
 
-## Evidências concluídas
+## Sprint 02 — Entregas e evidências
 
-### CHM-201
-- Regras de transição centralizadas.
-- 35 testes, CI verde em Python 3.10–3.12.
-- Coverage: 93,2% CI / 94,1% Windows.
+- [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5): regras explícitas de transição, PR #19 merged; 35 testes e 94,1% de cobertura local.
+- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): trilha auditável com migração, PR #20 merged; 48 testes e 95,1% de cobertura local.
+- [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7): contrato de erros compatível, PR #21 merged; **62 testes aprovados** em Python 3.10, 3.11 e 3.12 no CI, **94,8% de cobertura CI**.
+- Aceite local do CHM-203: Windows, Python 3.12, Ruff e Django check verdes, nenhuma migration pendente, **62/62 testes aprovados** (221.716s), **95,4% de cobertura local**.
+- Documentação: `docs/TICKET_LIFECYCLE.md`, `docs/TICKET_AUDIT.md` e `docs/API_ERRORS.md`.
 
-### CHM-202
-- Modelo e migration de trilha auditável, endpoint protegido, persistência atômica e testes de integridade.
-- 48 testes verdes em Python 3.10–3.12.
-- Coverage: 94,4% CI / 95,1% Windows.
-- Migration `tickets.0002_ticketauditevent` aplicada no Windows.
-- PR #20 integrada à `main` após aprovação local.
+## Sprint 03 — Objetivo
 
-## CHM-203 — Próxima entrega
+Medir, explicar e melhorar o comportamento de acesso a dados no ORM e PostgreSQL.
 
-Padronizar representação das exceções tratadas pelo Django REST Framework, diferenciando autenticação, autorização, validação e regras de negócio. Preservar códigos HTTP e campos de validação legados nesta etapa; adicionar contrato `error` estável e documentado.
+### CHM-301 — Primeiro item
 
-## CHM-203 — Validação automatizada
+1. Medir **listagem**, **detalhe** e **comentários** dos tickets em cenários requester/staff, com poucos e muitos registros.
+2. Registrar valores reais de query count antes de propor otimização (baseline).
+3. Detectar possíveis N+1 e revisar `select_related`/`prefetch_related` onde necessário.
+4. Aplicar otimizações apenas quando houver justificativa mensurável.
+5. Criar testes de regressão e documentar comparação antes/depois.
+6. Revalidar Ruff, check, migrations, testes e cobertura no CI Python 3.10–3.12; obter aceite local antes do merge.
 
-- Handler central de exceções DRF em `chamados_api/errors.py`.
-- Contrato aditivo `error: {code, message, details}`; códigos HTTP e campos anteriores preservados.
-- Códigos específicos de autenticação, autorização, validação, regra de negócio, 404, 405, JSON inválido e throttling.
-- Documentação e exemplos em `docs/API_ERRORS.md`.
-- **62 testes aprovados por versão** em Python 3.10, 3.11 e 3.12.
-- Ruff, Django check e migrations check: verdes.
-- Coverage da aplicação: **94,8%** (389 statements, 16 misses, 88 branches, 7 partial branches).
-
-[PR #21](https://github.com/ZaraTakion/chamados-api/pull/21) em draft até validação local no Windows.
-
-**Review pendente:** repetir checks e testes no Windows; não iniciar CHM-301 antes do fechamento da Sprint 02.
+A otimização de transações/índices é CHM-302; não iniciar antes de CHM-301 Done.

@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 02 ATIVA — Domínio e consistência.
+**Status:** SPRINT 03 ATIVA — Banco e performance.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -23,7 +23,9 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6) está **Done**, após validação local e merge da PR #20.
 
-Item atual em **Review**: [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7). Aguardando teste no Windows; não iniciar Sprint 03 antes do merge.
+[CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7) está **Done**, após 62 testes locais aprovados e merge da PR #21.
+
+A Sprint 02 está encerrada. Item atual em **Doing**: [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8).
 
 ## Princípios de trabalho
 
@@ -108,13 +110,13 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 02 — Domínio e consistência
 
-**Status:** ATIVA
+**Status:** DONE — encerrada em 08/10/2026.
 
 **Done:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
 
 **Done:** [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6)
 
-**Review:** [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7)
+**Done:** [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7)
 
 **Sprint Goal:** transformar status/permissões em regras de negócio explícitas.
 
@@ -125,6 +127,10 @@ O calendário começa somente quando CHM-000 for fechado.
 **Resultado esperado:** ciclo de vida do chamado é previsível, testável e auditável.
 
 ### Sprint 03 — Banco e performance
+
+**Status:** ATIVA
+
+**Doing:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
 
 **Sprint Goal:** demonstrar uso consciente do ORM e PostgreSQL.
 
@@ -193,3 +199,15 @@ Quando a Bird terminar:
 - Funcionou: tarefas de escopo limitado, PR e teste local antes do merge.
 - Melhorar: modelar regras de negócio separadas de views/serializers.
 - Evitar: porcentagens infladas pela inclusão de arquivos de teste.
+
+
+## Review e Retrospectiva — Sprint 02
+
+- CHM-201: matriz de transições centralizada, com regras válidas e inválidas cobertas.
+- CHM-202: histórico persistente de status, prioridade e responsável; transação e controle de acesso.
+- CHM-203: respostas de erro padronizadas de forma aditiva, mantendo compatibilidade com os campos existentes.
+- Suíte evoluiu de **25 para 62 testes**, todos aprovados no Windows e em Python 3.10–3.12 no CI.
+- CHM-203: cobertura de **94,8% no CI** e **95,4% no Windows**.
+- Manter: revisão por PR, regressão automatizada antes do merge e confirmação Windows.
+- Melhorar: desempenho do tempo total de testes e evidências quantitativas de consultas.
+- Evitar: supor melhoria de desempenho sem medir o número de queries antes/depois.
