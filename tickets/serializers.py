@@ -26,14 +26,14 @@ class TicketSerializer(serializers.ModelSerializer):
         request = self.context["request"]
         is_staff = request.user.is_staff
         if not is_staff and "assignee" in attrs:
-            raise serializers.ValidationError({"assignee": "Somente a equipe pode atribuir chamados."})
+            raise serializers.ValidationError({"assignee": "Somente a equipe pode atribuir chamados."}, code="forbidden_field")
         if not is_staff and "status" in attrs:
-            raise serializers.ValidationError({"status": "Somente a equipe pode alterar o status."})
+            raise serializers.ValidationError({"status": "Somente a equipe pode alterar o status."}, code="forbidden_field")
         if self.instance and is_staff and "status" in attrs:
             try:
                 validate_ticket_transition(self.instance.status, attrs["status"])
             except InvalidStatusTransition as exc:
-                raise serializers.ValidationError({"status": str(exc)}) from exc
+                raise serializers.ValidationError({"status": str(exc)}, code="invalid_transition") from exc
         return attrs
 
 
@@ -47,7 +47,7 @@ class TicketCommentSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs.get("is_internal", False) and not self.context["request"].user.is_staff:
-            raise serializers.ValidationError({"is_internal": "Notas internas são restritas à equipe."})
+            raise serializers.ValidationError({"is_internal": "Notas internas são restritas à equipe."}, code="forbidden_field")
         return attrs
 
 
