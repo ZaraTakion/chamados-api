@@ -149,7 +149,7 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os 48 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição e histórico auditável. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os 62 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável e respostas de erro. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
