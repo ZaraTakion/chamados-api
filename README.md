@@ -75,7 +75,9 @@ Envie o token de acesso em chamadas protegidas: `Authorization: Bearer <access>`
 
 | Método | Rota | Acesso | Descrição |
 |---|---|---|---|
-| `GET` | `/api/health/` | Público | Estado da API |
+| `GET` | `/api/health/` | Público | Liveness legado (sem consultar banco) |
+| `GET` | `/api/health/live/` | Público | Liveness (processo HTTP responde) |
+| `GET` | `/api/health/ready/` | Público | Readiness (PostgreSQL/SQLite alcançável: 200; falha: 503) |
 | `POST` | `/api/auth/register/` | Público, limitado | Criar conta de solicitante |
 | `POST` | `/api/auth/token/` | Público, limitado | Obter tokens JWT |
 | `POST` | `/api/auth/token/refresh/` | Refresh token | Renovar access token |
@@ -126,12 +128,14 @@ O código do erro distingue autenticação (`authentication_error`), acesso proi
 
 ## Configuração
 
-- `DJANGO_SECRET_KEY`: segredo Django; obrigatório quando `DJANGO_DEBUG=false`.
+- `DJANGO_SECRET_KEY`: segredo aleatório de pelo menos 50 caracteres, obrigatório em produção.
 - `DJANGO_DEBUG`: padrão local `true`; em produção defina `false`.
 - `DJANGO_ALLOWED_HOSTS`: hosts permitidos separados por vírgula.
 - `DATABASE_URL`: URL PostgreSQL opcional; sem ela, usa SQLite local.
 - `SQLITE_PATH`: caminho alternativo do arquivo SQLite.
-- `DJANGO_SECURE_SSL_REDIRECT`: redireciona para HTTPS quando `DEBUG=false` (padrão `true`).
+- `DJANGO_SECURE_SSL_REDIRECT`: deve ser `true` em produção; desabilitar faz a inicialização falhar.
+- `DJANGO_TRUST_PROXY_SSL_HEADER`: opcional, somente atrás de proxy confiável que sobrescreve `X-Forwarded-Proto`; não habilite em outros ambientes.
+- `DJANGO_ALLOWED_HOSTS` e `DATABASE_URL`: obrigatórios e explícitos em produção, sem hosts curinga e com PostgreSQL persistente.
 - `APP_LOG_LEVEL`: severidade mínima de logs HTTP estruturados; padrão `WARNING` no desenvolvimento e `INFO` em produção. Respostas incluem `X-Request-ID` gerado pelo servidor.
 
 ## Testes e verificações
@@ -157,7 +161,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). Próxima tarefa: CHM-402.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 implementa liveness/readiness e validação de segurança de produção; trabalho em PR, aguardando CI e aceite local.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
@@ -165,6 +169,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 - [Medições do ORM e prevenção de N+1](docs/ORM_QUERY_BASELINE.md)
 - [Índices, integridade e transações PostgreSQL](docs/DATABASE_INTEGRITY.md)
 - [Observabilidade segura e correlação de requisições](docs/OBSERVABILITY.md)
+- [Checklist de produção e endpoints de health](docs/PRODUCTION_SECURITY.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
