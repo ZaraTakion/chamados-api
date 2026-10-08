@@ -97,7 +97,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 **Status:** ATIVA
 
-**Doing:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
+**Review concluída:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
 
 **Sprint Goal:** conseguir medir a qualidade atual antes de aprofundar a arquitetura.
 

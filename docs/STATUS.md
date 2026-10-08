@@ -70,10 +70,21 @@ Uma execução anterior de 50 baterias também terminou em sucesso antes da redu
 
 ## Próximo movimento
 
-CHM-101 está em **Review** e aguarda somente validação local no Windows.
+CHM-101 está em **Review concluída**. A validação local no Windows passou integralmente.
 
-Após o teste local:
-- se passar, finalizar revisão e preparar merge;
-- se falhar, registrar o ambiente/erro e corrigir na mesma branch.
+Validação local em Windows 10 + Python 3.12:
+- Ruff: verde;
+- Django system check: verde;
+- migrations check: verde;
+- 7 testes: verdes;
+- cobertura local: **90,7%**.
+
+Diferença entre CI e Windows:
+- CI: 89,9%;
+- Windows: 90,7%.
+
+Os avisos do drf-spectacular em `accounts.views.me` e `tickets.views.health` são não bloqueantes e foram registrados como melhoria para a próxima fase de testes/documentação.
+
+**CHM-101 está pronto para merge.**
 
 CHM-102 só poderá entrar em Doing depois disso.
