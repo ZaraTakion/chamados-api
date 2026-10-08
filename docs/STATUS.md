@@ -5,7 +5,7 @@
 - Sprint 00, Sprint 01 e Sprint 02: **Done**.
 - Sprint 03: **ativa**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
-- [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Doing** — único item ativo.
+- [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Review** — CI verde, aceite Windows pendente.
 - Branch de trabalho: `perf/chm-302-database-integrity`.
 - WIP limit: uma tarefa Doing por vez.
 
@@ -34,3 +34,15 @@ Revisar índices, constraints e transações com base nos acessos reais e nas in
 6. Validar CI, migrations e Windows antes de merge.
 
 CHM-301 está encerrado; CHM-302 é o único Doing. A Sprint 04 ainda não começou.
+
+## CHM-302 — Resultados da validação remota
+
+- Migration `0003_database_integrity`: restrições de domínio para status, prioridade e tipo de evento.
+- `select_for_update(of=("self",))`: lock somente da linha do ticket, compatível com `assignee` anulável.
+- CI: 75 testes verdes em Python 3.10–3.12 (SQLite), um teste específico PostgreSQL é pulado nesses ambientes.
+- PostgreSQL 16 real no GitHub Actions: **75 testes aprovados**, incluindo cenário de lock com responsável nulo.
+- Ruff, Django check, migrations check verdes.
+- Coverage da aplicação: **95,2%**.
+- Índices atuais revisados; nenhum composto novo adicionado sem comprovação de ganho.
+- Documento de decisões: [DATABASE_INTEGRITY.md](./DATABASE_INTEGRITY.md).
+- [PR #23](https://github.com/ZaraTakion/chamados-api/pull/23) aguarda validação local no Windows.
