@@ -156,7 +156,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01 e 02 concluídas. Sprint 03 ativa: CHM-301 mede consultas SQL em listagens, detalhes, comentários e histórico, com testes para evitar regressões N+1; o relatório de medições fica em `docs/ORM_QUERY_BASELINE.md`.
+**Estado atual:** Sprints 01 e 02 concluídas. Na Sprint 03, CHM-301 concluiu as medições de consultas e os testes de prevenção de N+1 (70 testes, coverage de 95,2% CI / 95,8% Windows). CHM-302 agora revisa índices, constraints e transações, incluindo validação com PostgreSQL.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
