@@ -156,7 +156,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01 e 02 concluídas. Na Sprint 03, CHM-301 mediu e protegeu consultas SQL; CHM-302 acrescenta constraints e correção de row-lock no PostgreSQL. CI atual: 75 testes verdes em Python 3.10–3.12 (SQLite) e PostgreSQL 16; validação Windows pendente.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Próxima etapa: Sprint 04, CHM-401 (planejada).
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
