@@ -53,10 +53,27 @@ A branch agora prepara:
 - artifact `coverage.json` por versão do Python;
 - comandos locais documentados no README.
 
-A baseline numérica de cobertura será registrada após a primeira execução verde desta configuração.
+## Baseline registrada
+
+Validação automatizada concluída em 08/10/2026:
+
+- matriz CI verde em Python 3.10, 3.11 e 3.12;
+- Ruff: verde;
+- Django system check: verde;
+- migrations check: verde;
+- suíte atual: 7 testes verdes;
+- validação de estabilidade: **10/10 baterias completas verdes**;
+- cobertura: **89,9%**;
+- 335 statements, 24 misses, 40 branches e 10 partial branches.
+
+Uma execução anterior de 50 baterias também terminou em sucesso antes da redução solicitada para 10, mas o critério mantido para esta revisão é 10 baterias.
 
 ## Próximo movimento
 
-Validar o CHM-101 no CI e no Windows local. Se ambos passarem, registrar a baseline, colocar o issue em Review e preparar o merge.
+CHM-101 está em **Review** e aguarda somente validação local no Windows.
+
+Após o teste local:
+- se passar, finalizar revisão e preparar merge;
+- se falhar, registrar o ambiente/erro e corrigir na mesma branch.
 
 CHM-102 só poderá entrar em Doing depois disso.
