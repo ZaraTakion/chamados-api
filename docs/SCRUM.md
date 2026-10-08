@@ -21,9 +21,11 @@ O gate [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2) foi con
 
 A **Sprint 01 — Qualidade e baseline** está ativa.
 
-Item atual em **Doing**: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3).
+CHM-101 foi concluído e merged.
 
-CHM-102 e todos os itens seguintes permanecem em Backlog enquanto CHM-101 não estiver Done.
+Item atual em **Doing**: [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4).
+
+Os itens da Sprint 02 permanecem em Backlog enquanto CHM-102 não estiver Done.
 
 ## Princípios de trabalho
 
@@ -97,7 +99,9 @@ O calendário começa somente quando CHM-000 for fechado.
 
 **Status:** ATIVA
 
-**Review concluída:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
+**Done:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
+
+**Doing:** [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4)
 
 **Sprint Goal:** conseguir medir a qualidade atual antes de aprofundar a arquitetura.
 
@@ -173,4 +177,4 @@ Quando a Bird terminar:
 6. criar branch `chore/chm-101-quality-baseline`;
 7. implementar em passos pequenos;
 8. abrir PR;
-9. só iniciar CHM-102 depois de CHM-101 estar Done.
+9. CHM-101 concluído; CHM-102 é agora o único item em Doing.
