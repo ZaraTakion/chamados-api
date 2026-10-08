@@ -37,6 +37,35 @@ class FiltersPaginationAndSchemaTests(APITestBase):
         self.assertEqual(filtered.data["count"], 1)
         self.assertEqual(filtered.data["results"][0]["id"], older.id)
 
+    def test_staff_can_filter_by_assignee_and_order_by_creation(self):
+        assigned = self.create_ticket(
+            requester=self.other_user,
+            title="Chamado atribuído",
+            assignee=self.staff,
+        )
+        self.create_ticket(requester=self.other_user, title="Sem responsável")
+        self.authenticate(self.staff)
+
+        filtered = self.client.get(
+            reverse("ticket-list"),
+            {"assignee": self.staff.id, "ordering": "created_at"},
+        )
+
+        self.assertEqual(filtered.status_code, status.HTTP_200_OK)
+        self.assertEqual(filtered.data["count"], 1)
+        self.assertEqual(filtered.data["results"][0]["id"], assigned.id)
+
+    def test_ordering_by_created_at_is_applied(self):
+        second = self.create_ticket(title="Segundo chamado")
+        third = self.create_ticket(title="Terceiro chamado")
+        self.authenticate(self.requester)
+
+        response = self.client.get(reverse("ticket-list"), {"ordering": "created_at"})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        ids = [item["id"] for item in response.data["results"]]
+        self.assertEqual(ids[:3], [self.ticket.id, second.id, third.id])
+
     def test_pagination_uses_twenty_items_per_page(self):
         for index in range(20):
             self.create_ticket(title=f"Chamado {index:02d}")
