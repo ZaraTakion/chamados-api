@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  tests:
+  quality:
+    name: Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -17,12 +18,38 @@ jobs:
       DJANGO_SECRET_KEY: "ci-only-not-a-production-secret-with-adequate-length"
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-          cache-dependency-path: requirements.txt
-      - run: python -m pip install -r requirements.txt
-      - run: python manage.py check
-      - run: python manage.py makemigrations --check --dry-run
-      - run: python manage.py test
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+
+      - name: Instalar dependências
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: Django system check
+        run: python manage.py check
+
+      - name: Verificar migrations pendentes
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Testes com cobertura
+        run: coverage run manage.py test
+
+      - name: Relatório de cobertura
+        run: |
+          coverage report
+          coverage json -o coverage.json
+
+      - name: Salvar relatório de cobertura
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-py${{ matrix.python-version }}
+          path: coverage.json
+          if-no-files-found: error

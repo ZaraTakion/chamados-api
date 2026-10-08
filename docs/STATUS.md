@@ -42,8 +42,21 @@ O projeto já possui:
 - testes automatizados;
 - GitHub Actions em Python 3.10–3.12.
 
+## Implementação do CHM-101
+
+A branch agora prepara:
+
+- dependências de desenvolvimento separadas em `requirements-dev.txt`;
+- Ruff configurado em `pyproject.toml`;
+- Coverage configurado para medir código da aplicação e branches;
+- GitHub Actions executando lint + checks + testes + cobertura em Python 3.10–3.12;
+- artifact `coverage.json` por versão do Python;
+- comandos locais documentados no README.
+
+A baseline numérica de cobertura será registrada após a primeira execução verde desta configuração.
+
 ## Próximo movimento
 
-Trabalhar exclusivamente no CHM-101 até ele chegar a Review/Done.
+Validar o CHM-101 no CI e no Windows local. Se ambos passarem, registrar a baseline, colocar o issue em Review e preparar o merge.
 
 CHM-102 só poderá entrar em Doing depois disso.

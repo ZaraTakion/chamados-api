@@ -14,3 +14,5 @@ staticfiles/
 coverage.xml
 .coverage
 htmlcov/
+
+coverage.json
