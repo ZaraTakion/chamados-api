@@ -10,6 +10,7 @@ API REST para abrir e acompanhar solicitações de suporte. Construída com Djan
 - Fila de atendimento para equipe (`is_staff`), com atribuição, mudanças de status e exclusão.
 - Prioridade, categoria, busca, filtros, ordenação e paginação.
 - Conversa por chamado, com notas internas visíveis somente à equipe.
+- Histórico persistente de status, prioridade e atribuição, com acesso por papel e snapshots de auditoria.
 - Validação de dados, limite básico de requisições anônimas e documentação OpenAPI.
 
 ## Executar localmente com SQLite
@@ -83,6 +84,7 @@ Envie o token de acesso em chamadas protegidas: `Authorization: Bearer <access>`
 | `GET`, `POST` | `/api/tickets/` | Autenticado | Listar/criar chamados |
 | `GET`, `PUT`, `PATCH`, `DELETE` | `/api/tickets/{id}/` | Dono ou equipe | Consultar/alterar chamado; exclusão só pela equipe |
 | `GET`, `POST` | `/api/tickets/{id}/comments/` | Dono ou equipe | Listar/comentar; notas internas só para equipe |
+| `GET` | `/api/tickets/{id}/history/` | Dono ou equipe | Histórico auditável; atribuições internas visíveis só para equipe |
 | `GET` | `/api/schema/` | Público | Esquema OpenAPI |
 | `GET` | `/api/docs/` | Público | Swagger UI |
 
@@ -98,6 +100,8 @@ curl -X POST http://127.0.0.1:8000/api/tickets/ \
   -H "Content-Type: application/json" \
   -d '{"title":"Acesso bloqueado","description":"Não consigo entrar na minha conta.","category":"Acesso","priority":"high"}'
 ```
+
+Após atualizar esta branch com a migration de auditoria, execute `python manage.py migrate` no seu banco local antes de testar manualmente o endpoint `/api/tickets/{id}/history/`. A suíte `manage.py test` cria seu próprio banco temporário.
 
 Para promover um usuário existente a integrante da equipe, entre em `/admin/` com o superusuário e marque `Staff status`. Não conceda esse perfil para contas públicas.
 
@@ -119,21 +123,24 @@ python -m pip install -r requirements-dev.txt
 ruff check .
 python manage.py check
 python manage.py makemigrations --check --dry-run
+coverage erase
 coverage run manage.py test
 coverage report
 ```
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os 25 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação e contrato OpenAPI. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os 48 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição e histórico auditável. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprint 01 concluída. Na Sprint 02, CHM-201 centralizou as transições de status (35 testes, 93,2% de cobertura CI). CHM-202 está em desenvolvimento para trilha auditável.
+**Estado atual:** Sprint 01 concluída. Na Sprint 02, CHM-201 centralizou as transições de status; CHM-202 adiciona trilha auditável (48 testes e 94,4% de cobertura da aplicação no CI, aguardando validação local).
 
+- [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
+- [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
