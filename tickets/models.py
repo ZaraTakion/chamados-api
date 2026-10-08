@@ -34,6 +34,16 @@ class Ticket(models.Model):
 
     class Meta:
         ordering = ["-created_at", "-id"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(status__in=["open", "in_progress", "waiting", "resolved", "closed"]),
+                name="ticket_status_valid",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(priority__in=["low", "normal", "high", "urgent"]),
+                name="ticket_priority_valid",
+            ),
+        ]
 
     def __str__(self):
         return f"CH-{self.pk:06d}: {self.title}"
@@ -90,6 +100,12 @@ class TicketAuditEvent(models.Model):
 
     class Meta:
         ordering = ["created_at", "id"]
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(field__in=["status", "priority", "assignee"]),
+                name="ticket_audit_field_valid",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.ticket_reference}: {self.field} ({self.old_value} → {self.new_value})"
