@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, permissions, serializers, viewsets
@@ -6,9 +7,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
 
-from tickets.models import Ticket, TicketComment
+from tickets.audit import record_ticket_changes, ticket_audit_snapshot
+from tickets.models import Ticket, TicketAuditEvent, TicketComment
 from tickets.permissions import IsRequesterOrStaff
-from tickets.serializers import TicketCommentSerializer, TicketSerializer
+from tickets.serializers import TicketAuditEventSerializer, TicketCommentSerializer, TicketSerializer
 
 
 class HealthSerializer(serializers.Serializer):
@@ -35,9 +37,21 @@ class TicketViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Ticket.objects.none()
         tickets = Ticket.objects.select_related("requester", "assignee")
+        if getattr(self, "action", None) in {"update", "partial_update"}:
+            tickets = tickets.select_for_update()
         if self.request.user.is_staff:
             return tickets
         return tickets.filter(requester=self.request.user)
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        # Validation, ticket update and audit inserts share a single transaction.
+        return super().update(request, *args, **kwargs)
+
+    def perform_update(self, serializer):
+        previous = ticket_audit_snapshot(serializer.instance)
+        ticket = serializer.save()
+        record_ticket_changes(ticket, self.request.user, previous)
 
     def perform_create(self, serializer):
         serializer.save(requester=self.request.user)
@@ -70,3 +84,26 @@ class TicketCommentListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         ticket = self.get_ticket()
         serializer.save(ticket=ticket, author=self.request.user)
+
+
+class TicketAuditHistoryView(generics.ListAPIView):
+    """History is read-only; requesters never see assignee changes."""
+
+    serializer_class = TicketAuditEventSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = []
+
+    def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return TicketAuditEvent.objects.none()
+        ticket_queryset = Ticket.objects.all()
+        if not self.request.user.is_staff:
+            ticket_queryset = ticket_queryset.filter(requester=self.request.user)
+        ticket = get_object_or_404(ticket_queryset, pk=self.kwargs["ticket_pk"])
+        events = TicketAuditEvent.objects.filter(ticket=ticket)
+        if not self.request.user.is_staff:
+            events = events.filter(field__in=[
+                TicketAuditEvent.Field.STATUS,
+                TicketAuditEvent.Field.PRIORITY,
+            ])
+        return events

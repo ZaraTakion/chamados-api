@@ -5,7 +5,7 @@ from rest_framework_simplejwt.views import TokenBlacklistView, TokenObtainPairVi
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from accounts.views import RegisterView, me
-from tickets.views import TicketViewSet, TicketCommentListCreateView, health
+from tickets.views import TicketAuditHistoryView, TicketViewSet, TicketCommentListCreateView, health
 
 router = DefaultRouter()
 router.register("tickets", TicketViewSet, basename="ticket")
@@ -19,6 +19,7 @@ urlpatterns = [
     path("api/auth/token/blacklist/", TokenBlacklistView.as_view(), name="token_blacklist"),
     path("api/auth/me/", me, name="me"),
     path("api/tickets/<int:ticket_pk>/comments/", TicketCommentListCreateView.as_view(), name="ticket-comments"),
+    path("api/tickets/<int:ticket_pk>/history/", TicketAuditHistoryView.as_view(), name="ticket-history"),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("api/", include(router.urls)),
