@@ -48,7 +48,7 @@ O código anterior ao CHM-301 já utilizava corretamente:
 
 ## Validação
 
-- GitHub Actions Python 3.10, 3.11 e 3.12: **69 testes verdes** por versão.
+- GitHub Actions Python 3.10, 3.11 e 3.12: **70 testes verdes** por versão.
 - Ruff, Django system check e migrations check: verdes.
 - Cobertura de código da aplicação no CI: **95,2%**.
 
