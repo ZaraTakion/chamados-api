@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 03 CONCLUÍDA — Sprint 04 em planejamento.
+**Status:** SPRINT 04 ATIVA — Observabilidade.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. Próximo item planejado: [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) (não iniciado).
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. Único item em Doing: [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10), PR #24 em revisão.
 
 ## Princípios de trabalho
 
@@ -144,6 +144,8 @@ O calendário começa somente quando CHM-000 for fechado.
 **Resultado esperado:** decisões de banco sustentadas por medidas, testes e integridade.
 
 ### Sprint 04 — Produção e observabilidade
+
+**Status:** ATIVA, CHM-401 Doing; demais tarefas aguardam.
 
 **Sprint Goal:** tornar a API diagnosticável e mais próxima de um serviço operável.
 
