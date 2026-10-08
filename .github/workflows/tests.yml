@@ -17,9 +17,9 @@ jobs:
       DJANGO_DEBUG: "true"
       DJANGO_SECRET_KEY: "ci-only-not-a-production-secret-with-adequate-length"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
