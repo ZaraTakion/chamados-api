@@ -125,14 +125,14 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os testes cobrem cadastro, autenticação, isolamento por usuário, fluxo da equipe, comentários internos, filtros e documentação. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os 25 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação e contrato OpenAPI. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprint 01 em execução. O CHM-101 está medindo e automatizando a baseline de qualidade do projeto.
+**Estado atual:** Sprint 01 concluída com 25 testes, CI em Python 3.10–3.12 e cobertura da aplicação de 92,7% no CI. Sprint 02 ativa; CHM-201 formaliza transições de status.
 
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)

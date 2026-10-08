@@ -15,17 +15,13 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 01 ATIVA
+**Status:** SPRINT 02 ATIVA — Domínio e consistência.
 
-O gate [CHM-000 #2](https://github.com/ZaraTakion/chamados-api/issues/2) foi concluído em **07/10/2026** após a finalização da Bird e validação da `main`.
+A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
-A **Sprint 01 — Qualidade e baseline** está ativa.
+Item atual em **Doing**: [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5).
 
-CHM-101 foi concluído e merged.
-
-Item atual em **Doing**: [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4).
-
-Os itens da Sprint 02 permanecem em Backlog enquanto CHM-102 não estiver Done.
+CHM-202 e CHM-203 permanecem em Backlog até CHM-201 estar Done.
 
 ## Princípios de trabalho
 
@@ -97,11 +93,9 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 01 — Qualidade e baseline
 
-**Status:** ATIVA
+**Status:** DONE — concluída em 08/10/2026.
 
-**Done:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3)
-
-**Doing:** [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4)
+**Done:** [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4).
 
 **Sprint Goal:** conseguir medir a qualidade atual antes de aprofundar a arquitetura.
 
@@ -111,6 +105,10 @@ O calendário começa somente quando CHM-000 for fechado.
 **Resultado esperado:** CI mede qualidade e os principais fluxos possuem cobertura de regressão.
 
 ### Sprint 02 — Domínio e consistência
+
+**Status:** ATIVA
+
+**Doing:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
 
 **Sprint Goal:** transformar status/permissões em regras de negócio explícitas.
 
@@ -177,4 +175,15 @@ Quando a Bird terminar:
 6. criar branch `chore/chm-101-quality-baseline`;
 7. implementar em passos pequenos;
 8. abrir PR;
-9. CHM-101 concluído; CHM-102 é agora o único item em Doing.
+9. CHM-101 e CHM-102 concluídos; Sprint 01 finalizada e CHM-201 é o único item em Doing.
+
+
+## Review e Retrospectiva — Sprint 01
+
+- Qualidade: Ruff, Coverage e GitHub Actions adicionados.
+- Suíte de regressão: 7 para 25 testes.
+- CI: Python 3.10, 3.11 e 3.12 verdes.
+- Cobertura da aplicação: 92,7% CI / 93,7% Windows.
+- Funcionou: tarefas de escopo limitado, PR e teste local antes do merge.
+- Melhorar: modelar regras de negócio separadas de views/serializers.
+- Evitar: porcentagens infladas pela inclusão de arquivos de teste.
