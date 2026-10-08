@@ -19,9 +19,11 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
-Item atual em **Doing**: [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5).
+[CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5) está **Done** após PR #19 merged.
 
-CHM-202 e CHM-203 permanecem em Backlog até CHM-201 estar Done.
+Item atual em **Doing**: [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6).
+
+CHM-203 permanece em Backlog até CHM-202 estar Done.
 
 ## Princípios de trabalho
 
@@ -108,7 +110,9 @@ O calendário começa somente quando CHM-000 for fechado.
 
 **Status:** ATIVA
 
-**Doing:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
+**Done:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
+
+**Doing:** [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6)
 
 **Sprint Goal:** transformar status/permissões em regras de negócio explícitas.
 

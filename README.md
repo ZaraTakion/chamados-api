@@ -132,7 +132,7 @@ Os 25 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, 
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprint 01 concluída com 25 testes, CI em Python 3.10–3.12 e cobertura da aplicação de 92,7% no CI. Sprint 02 ativa; CHM-201 formaliza transições de status.
+**Estado atual:** Sprint 01 concluída. Na Sprint 02, CHM-201 centralizou as transições de status (35 testes, 93,2% de cobertura CI). CHM-202 está em desenvolvimento para trilha auditável.
 
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
