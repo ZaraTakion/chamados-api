@@ -8,8 +8,9 @@
 | `GET /api/health/live/` | Indica que o processo responde | Não consulta | 200 |
 | `GET /api/health/ready/` | Confirma que o banco principal está disponível | `SELECT 1` | 200 ou 503 |
 
-Os três endpoints são públicos, sem throttling, para que sondas periódicas
-não encontrem HTTP 429. Os resultados não são cacheáveis (`Cache-Control:
+Os três endpoints são públicos. Somente os novos endpoints /live/ e /ready/
+dispensam throttling para que sondas periódicas não encontrem HTTP 429.
+A rota antiga /api/health/ preserva seus limites originais de requisição. Os resultados não são cacheáveis (`Cache-Control:
 no-store`). O corpo mantém `status` e `timestamp`; readiness devolve
 `status: unavailable` e HTTP 503 quando o banco não responde, sem informar
 credenciais, host, nomes internos ou mensagens de exceções. As respostas recebem
