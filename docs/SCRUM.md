@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 03 ATIVA — Banco e performance.
+**Status:** SPRINT 03 CONCLUÍDA — Sprint 04 em planejamento.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-Item atual em **Review**: [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9). CI verde; aceite Windows pendente.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. Próximo item planejado: [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) (não iniciado).
 
 ## Princípios de trabalho
 
@@ -130,11 +130,11 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 03 — Banco e performance
 
-**Status:** ATIVA
+**Status:** DONE — concluída em 08/10/2026.
 
 **Done:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
 
-**Review:** [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9)
+**Done:** [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9)
 
 **Sprint Goal:** demonstrar uso consciente do ORM e PostgreSQL.
 
@@ -215,3 +215,14 @@ Quando a Bird terminar:
 - Manter: revisão por PR, regressão automatizada antes do merge e confirmação Windows.
 - Melhorar: desempenho do tempo total de testes e evidências quantitativas de consultas.
 - Evitar: supor melhoria de desempenho sem medir o número de queries antes/depois.
+
+
+## Review e Retrospectiva — Sprint 03
+
+- CHM-301: contagens SQL constantes em listagens/detalhes/comentários/histórico; regressões de N+1 cobertas.
+- CHM-302: constraints de domínio, row lock restrito ao próprio ticket, revisão de índices sem otimizações especulativas.
+- GitHub Actions: Python 3.10–3.12 (SQLite) e PostgreSQL 16 aprovados; teste específico de bloqueio executado no PostgreSQL.
+- Validação Windows em 08/10/2026: SQLite com migration `0003` aplicada após backup; Ruff, check e migrations verdes; 75 testes encontrados (74 passaram, 1 skip), cobertura da aplicação de 95,8%.
+- Manter: evidências de QA local antes de merge, backup anterior a migrações e decisões de índices baseadas em medições.
+- Melhorar: investigar duração da suíte (~260s no Windows) e aprofundar testes operacionais/concorrrência na Sprint 04.
+- Próximo: refinar e iniciar CHM-401, respeitando WIP máximo de um Doing.
