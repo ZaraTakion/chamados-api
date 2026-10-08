@@ -76,7 +76,7 @@ class RequestObservabilityTests(APITestBase):
         self.assertEqual(level, logging.ERROR)
         self.assertEqual(event, "http.server_error")
         self.assertEqual(extra["request_id"], response["X-Request-ID"])
-        self.assertEqual(extra["route"], "api/tickets/")
+        self.assertEqual(extra["route"], "api/tickets/$")
         self.assertNotIn("private-password-and-token", str(extra))
         self.assertIsNone(get_request_id())
 
