@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. Único item Doing: [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13). CHM-502 aguarda.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) é a próxima tarefa planejada; não há Doing no momento.
 
 ## Princípios de trabalho
 
@@ -157,7 +157,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 05 — Processamento assíncrono
 
-**Status:** ATIVA; CHM-501 Doing.
+**Status:** ATIVA; CHM-501 Done, CHM-502 planejada.
 
 **Sprint Goal:** introduzir fila somente depois que o núcleo síncrono estiver sólido.
 
@@ -249,3 +249,12 @@ Quando a Bird terminar:
 - Melhorar: documentação de infraestrutura operacional e diminuir tempo de suíte no Windows sem remover cobertura.
 - Evitar: mudar comportamento de rota legada sem teste de compatibilidade.
 - Próxima Sprint: CHM-501, Redis/Celery, com uma tarefa Doing por vez e integração após QA.
+
+
+### CHM-501 — Review e aceite
+
+- API e worker Celery configurados com broker Redis; tarefa de métricas agregadas de tickets é idempotente e read-only.
+- CI: cinco jobs verdes, incluindo execução de tarefa por worker real no Docker Compose; 101 testes por ambiente (SQLite 100 passaram, 1 skip PostgreSQL; PostgreSQL 101 aprovados), cobertura CI 94,3%.
+- Windows (08/10/2026): Ruff, check e migration check verdes; 101 testes encontrados, 100 aprovados e 1 skip, duração 288.867s, cobertura 94,7%.
+- PR #27 squash merged no commit `49b549bc`; Issue #13 concluída.
+- Próximo item: CHM-502 — integração segura de notificações após commit de transações, retries e idempotência.

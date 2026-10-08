@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- Sprint 04 encerrada. WIP: somente CHM-501 em Doing.
+- Sprint 04 encerrada. CHM-501 concluída; WIP: sem Doing. Próximo item: [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14).
 
 ## CHM-401 — Observabilidade
 
@@ -93,13 +93,16 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CHM-401, CHM-402 e CHM-403 Done, com PRs #24, #25, #26 integradas.
 - Review: observabilidade segura, health probes e configuração de produção, PostgreSQL 16 real no CI.
 - Retrospectiva: preservar contratos anteriores (throttling legado); detectar regressões no CI; confirmar Windows antes dos merges de código.
-- Sprint 05 iniciada: CHM-501 implementa broker Redis, app Celery Django, worker e métricas agregadas de fila.
+- Sprint 05 em andamento: CHM-501 Done, CHM-502 é a próxima tarefa planejada.
 
-## CHM-501 — Redis + Celery (em desenvolvimento)
+## CHM-501 — Redis + Celery (Done)
 
 - Broker Redis e result backend parametrizados via ambiente.
 - Worker separado em Docker Compose, concorrência 1 e Redis sem porta publicada.
 - Tarefa `tickets.queue_summary` é read-only e retorna apenas contagens por status, sem PII.
 - Retries em falha transitória de banco e timeouts limitados; testes eager sem exigir Redis.
 - Implementação documentada em [ASYNC_ARCHITECTURE.md](./ASYNC_ARCHITECTURE.md).
-- CI e aceite Windows pendentes; CHM-502 ainda não iniciou.
+- CI: 5/5 jobs aprovados, incluindo Redis+Celery real em Docker Compose e PostgreSQL 16; 101 testes descobertos por ambiente e 94,3% de cobertura.
+- QA Windows em 08/10/2026: 101 testes encontrados, 100 passaram, 1 skip PostgreSQL, 0 falhas, 288.867s; coverage **94,7%** (527 statements, 21 misses, 118 branches, 11 partial branches); Ruff, Django e migrações verdes.
+- [PR #27 integrada](https://github.com/ZaraTakion/chamados-api/pull/27), commit `49b549bc87c348f9bdf445cc36710902ee0d3e60`; Issue #13 fechada.
+- CHM-502: notificações assíncronas, ainda não iniciada.

@@ -54,3 +54,10 @@ modo eager sem Redis, conteúdo seguro do resultado e configuração de retry.
 Modo eager comprova o código da tarefa, não o worker/broker real. A verificação
 em Docker Compose é etapa distinta. Não são prometidas semânticas exactly-once
 para tarefas futuras com efeitos colaterais.
+
+## Aceite da CHM-501 — 08/10/2026
+
+- CI: cinco jobs aprovados, incluindo worker real com Redis e PostgreSQL no Docker Compose. PostgreSQL 16 passou em 101 testes; a matriz SQLite encontrou 101, com 100 passando e 1 skip específico PostgreSQL; coverage CI 94,3%.
+- Windows: Ruff e Django check aprovados; `makemigrations --check --dry-run` sem mudanças; 101 testes encontrados, 100 passaram, 1 skip específico PostgreSQL, 0 falhas, coverage **94,7%**.
+- [PR #27 merged](https://github.com/ZaraTakion/chamados-api/pull/27), commit `49b549bc`.
+- Os próximos fluxos HTTP que publicarem tarefas serão implementados na CHM-502, usando publicação após commit e idempotência de efeitos colaterais.
