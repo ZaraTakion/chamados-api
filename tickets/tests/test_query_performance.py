@@ -22,6 +22,7 @@ class ORMQueryBaselineTests(APITestBase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         if expected_count is not None:
             self.assertEqual(response.data["count"], expected_count)
+            self.assertEqual(len(response.data["results"]), expected_count)
         return len(queries)
 
     def compare_scaling(self, label, small, large):
@@ -57,15 +58,19 @@ class ORMQueryBaselineTests(APITestBase):
         large = self.measure_get("requester-list", url, expected_count=20)
         self.compare_scaling("requester_ticket_list", small, large)
 
-    def test_staff_and_requester_ticket_detail_constant_query_count(self):
+    def verify_ticket_detail_scaling(self, user, role):
         url = reverse("ticket-detail", args=[self.ticket.pk])
-        for user, role in ((self.staff, "staff"), (self.requester, "requester")):
-            with self.subTest(role=role):
-                self.authenticate(user)
-                small = self.measure_get(f"{role}-detail", url)
-                self.add_nineteen_tickets(requester=self.other_user)
-                large = self.measure_get(f"{role}-detail", url)
-                self.compare_scaling(f"{role}_ticket_detail", small, large)
+        self.authenticate(user)
+        small = self.measure_get(f"{role}-detail", url)
+        self.add_nineteen_tickets(requester=self.other_user)
+        large = self.measure_get(f"{role}-detail", url)
+        self.compare_scaling(f"{role}_ticket_detail", small, large)
+
+    def test_staff_ticket_detail_constant_query_count(self):
+        self.verify_ticket_detail_scaling(self.staff, "staff")
+
+    def test_requester_ticket_detail_constant_query_count(self):
+        self.verify_ticket_detail_scaling(self.requester, "requester")
 
     def add_comments(self, count):
         for index in range(count):
