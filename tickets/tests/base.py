@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -12,6 +13,8 @@ class APITestBase(APITestCase):
     password = "Strong-test-pass-2026!"
 
     def setUp(self):
+        # Reset per-test throttle counters; keep throttling active within each test.
+        cache.clear()
         self.requester = User.objects.create_user(
             username="solicitante",
             email="requester@example.com",
