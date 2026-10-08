@@ -161,7 +161,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 implementa liveness/readiness e validação de segurança de produção; trabalho em PR, aguardando CI e aceite local.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 concluiu liveness/readiness e validação de segurança de produção (PR #25; QA Windows 96 testes encontrados, 95 aprovados, 1 skip; 94,5% cobertura). CHM-403 em andamento: migrations explícitas e readiness smoke no PostgreSQL CI.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
@@ -170,6 +170,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 - [Índices, integridade e transações PostgreSQL](docs/DATABASE_INTEGRITY.md)
 - [Observabilidade segura e correlação de requisições](docs/OBSERVABILITY.md)
 - [Checklist de produção e endpoints de health](docs/PRODUCTION_SECURITY.md)
+- [Matriz SQLite/PostgreSQL e CI real](docs/CI_POSTGRESQL.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)

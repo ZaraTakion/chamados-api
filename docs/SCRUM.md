@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. Único Doing: [CHM-402 #11](https://github.com/ZaraTakion/chamados-api/issues/11), com health probes e proteções de produção em PR; CHM-403 aguarda.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. Único Doing: [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12), aprimoramento de CI PostgreSQL.
 
 ## Princípios de trabalho
 
@@ -145,7 +145,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 04 — Produção e observabilidade
 
-**Status:** ATIVA; CHM-401 Done, CHM-402 Doing, CHM-403 aguarda.
+**Status:** ATIVA; CHM-401 e CHM-402 Done, CHM-403 Doing.
 
 **Sprint Goal:** tornar a API diagnosticável e mais próxima de um serviço operável.
 

@@ -63,3 +63,7 @@ Um teste específico, executado apenas no PostgreSQL, atualiza um ticket sem res
 - Não foram medidos ganhos de latência ou desempenho de índice. Evite prometer percentuais de aceleração.
 - O bloqueio de linha protege atualizações transacionais feitas pelo endpoint; mutações diretas por outros caminhos não participam automaticamente do mesmo protocolo de locks/auditoria.
 - A Sprint 04 / CHM-403 poderá ampliar o CI PostgreSQL com diferentes configurações, maior cobertura de cenários de deploy, concorrência e verificações operacionais.
+
+## CHM-403 — Migrações explícitas e readiness no CI
+
+A suíte PostgreSQL já criava um banco de testes isolado, com migrations gerenciadas pelo Django. CHM-403 acrescenta `migrate --noinput`, `migrate --check` e smoke test HTTP de readiness contra o banco PostgreSQL de CI antes da suíte. Ver [CI_POSTGRESQL.md](./CI_POSTGRESQL.md).

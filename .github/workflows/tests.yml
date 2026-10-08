@@ -98,6 +98,16 @@ jobs:
       - name: Conferir migrations
         run: python manage.py makemigrations --check --dry-run
 
+      - name: Aplicar migrations em PostgreSQL
+        run: python manage.py migrate --noinput
+
+      - name: Conferir schema migrado
+        run: python manage.py migrate --check
+
+      - name: Smoke test readiness PostgreSQL
+        run: |
+          python manage.py shell -c "from django.db import connection; from django.test import Client; assert connection.vendor == 'postgresql'; r = Client().get('/api/health/ready/'); assert r.status_code == 200; assert r.json()['status'] == 'ok'"
+
       - name: Testes no PostgreSQL real
         run: coverage run manage.py test
 
