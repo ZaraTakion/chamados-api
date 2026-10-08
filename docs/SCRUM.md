@@ -224,5 +224,5 @@ Quando a Bird terminar:
 - GitHub Actions: Python 3.10–3.12 (SQLite) e PostgreSQL 16 aprovados; teste específico de bloqueio executado no PostgreSQL.
 - Validação Windows em 08/10/2026: SQLite com migration `0003` aplicada após backup; Ruff, check e migrations verdes; 75 testes encontrados (74 passaram, 1 skip), cobertura da aplicação de 95,8%.
 - Manter: evidências de QA local antes de merge, backup anterior a migrações e decisões de índices baseadas em medições.
-- Melhorar: investigar duração da suíte (~260s no Windows) e aprofundar testes operacionais/concorrrência na Sprint 04.
+- Melhorar: investigar duração da suíte (~260s no Windows) e aprofundar testes operacionais/concorrência na Sprint 04.
 - Próximo: refinar e iniciar CHM-401, respeitando WIP máximo de um Doing.
