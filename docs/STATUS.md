@@ -56,3 +56,11 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação adicionados; validação CI e Windows ainda pendente.
 - WIP: somente CHM-401 em Doing.
+
+## CHM-401 — Observabilidade
+
+- Implementação no PR #24 em andamento.
+- Identificação de requisição e logging HTTP em JSON.
+- Testes de correlação e formatação segura adicionados.
+- Documentação em [OBSERVABILITY.md](./OBSERVABILITY.md).
+- Sem aprovação de QA local ou merge por enquanto.
