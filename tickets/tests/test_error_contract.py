@@ -105,9 +105,9 @@ class APIErrorContractTests(APITestBase):
     def test_throttle_preserves_429_and_retry_after(self):
         cache.clear()
         with patch("rest_framework.throttling.AnonRateThrottle.get_rate", return_value="1/minute"):
-            first = self.client.get(reverse("me"))
-            blocked = self.client.get(reverse("me"))
-        self.assertEqual(first.status_code, status.HTTP_401_UNAUTHORIZED)
+            first = self.client.get(reverse("health"))
+            blocked = self.client.get(reverse("health"))
+        self.assertEqual(first.status_code, status.HTTP_200_OK)
         self.assert_error(blocked, status.HTTP_429_TOO_MANY_REQUESTS, "rate_limited", "detail")
         self.assertIn("Retry-After", blocked)
 
