@@ -55,3 +55,41 @@ class TicketComment(models.Model):
 
     def __str__(self):
         return f"Comentário em {self.ticket.reference} por {self.author}"
+
+
+class TicketAuditEvent(models.Model):
+    """Immutable snapshots of important updates made through the ticket API."""
+
+    class Field(models.TextChoices):
+        STATUS = "status", "Status"
+        PRIORITY = "priority", "Prioridade"
+        ASSIGNEE = "assignee", "Responsável"
+
+    ticket = models.ForeignKey(
+        Ticket,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="audit_events",
+    )
+    ticket_id_snapshot = models.PositiveBigIntegerField()
+    ticket_reference = models.CharField(max_length=20)
+    field = models.CharField(max_length=12, choices=Field.choices)
+    old_value = models.CharField(max_length=150, blank=True)
+    new_value = models.CharField(max_length=150, blank=True)
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="ticket_audit_events",
+    )
+    actor_username = models.CharField(max_length=150)
+    actor_was_staff = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    class Meta:
+        ordering = ["created_at", "id"]
+
+    def __str__(self):
+        return f"{self.ticket_reference}: {self.field} ({self.old_value} → {self.new_value})"
