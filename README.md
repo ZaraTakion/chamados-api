@@ -11,7 +11,7 @@ API REST para abrir e acompanhar solicitações de suporte. Construída com Djan
 - Prioridade, categoria, busca, filtros, ordenação e paginação.
 - Conversa por chamado, com notas internas visíveis somente à equipe.
 - Histórico persistente de status, prioridade e atribuição, com acesso por papel e snapshots de auditoria.
-- Validação de dados, limite básico de requisições anônimas e documentação OpenAPI.
+- Validação de dados, respostas de erro padronizadas (mantendo campos antigos), limite básico de requisições anônimas e documentação OpenAPI.
 
 ## Executar localmente com SQLite
 
@@ -105,6 +105,25 @@ Após atualizar esta branch com a migration de auditoria, execute `python manage
 
 Para promover um usuário existente a integrante da equipe, entre em `/admin/` com o superusuário e marque `Staff status`. Não conceda esse perfil para contas públicas.
 
+## Contrato de erros
+
+Erros tratados pelo Django REST Framework incluem um objeto `error` adicional com `code`, `message` e `details`. Campos antigos de validação (como `status` ou `detail`) continuam no nível raiz; códigos HTTP e cabeçalhos existentes foram preservados.
+
+Exemplo simplificado de transição inválida (`HTTP 400`):
+
+```json
+{
+  "status": ["Transição de 'open' para 'resolved' não permitida."],
+  "error": {
+    "code": "invalid_transition",
+    "message": "Transição de status não permitida.",
+    "details": {"status": ["Transição de 'open' para 'resolved' não permitida."]}
+  }
+}
+```
+
+O código do erro distingue autenticação (`authentication_error`), acesso proibido (`permission_denied`), recurso não encontrado (`not_found`), validação (`validation_error`), campo restrito (`forbidden_field`), transição inválida (`invalid_transition`), limite (`rate_limited`) e outros casos descritos em [docs/API_ERRORS.md](docs/API_ERRORS.md). Erros fora do tratamento do DRF não são cobertos por este envelope.
+
 ## Configuração
 
 - `DJANGO_SECRET_KEY`: segredo Django; obrigatório quando `DJANGO_DEBUG=false`.
@@ -130,7 +149,7 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os 48 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição e histórico auditável. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os 62 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável e respostas de erro. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
@@ -141,6 +160,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
+- [Contrato de erros e compatibilidade](docs/API_ERRORS.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
