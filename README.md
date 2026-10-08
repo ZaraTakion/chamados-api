@@ -149,18 +149,19 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os 62 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável e respostas de erro. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável, respostas de erro e regressões de consultas SQL. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01 e 02 concluídas. A API tem 62 testes verdes e cobertura de 94,8% no CI / 95,4% no Windows. Sprint 03 ativa: CHM-301 mede consultas ORM e investiga N+1 antes de otimizações.
+**Estado atual:** Sprints 01 e 02 concluídas. Sprint 03 ativa: CHM-301 mede consultas SQL em listagens, detalhes, comentários e histórico, com testes para evitar regressões N+1; o relatório de medições fica em `docs/ORM_QUERY_BASELINE.md`.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
 - [Contrato de erros e compatibilidade](docs/API_ERRORS.md)
+- [Medições do ORM e prevenção de N+1](docs/ORM_QUERY_BASELINE.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
