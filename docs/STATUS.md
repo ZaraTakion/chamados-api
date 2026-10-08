@@ -6,7 +6,7 @@
 - Sprint 01 — Qualidade e baseline: **Done**
 - Sprint ativa: **Sprint 02 — Domínio e consistência**
 - [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5): **Done**, PR #19 merged
-- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): **Review — CI verde, teste local pendente**
+- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): **Review concluída — CI e teste local aprovados**
 - Branch ativa: `feat/chm-202-ticket-audit-history`
 - Próximos itens: CHM-203 e sprints posteriores no Backlog
 - Limite WIP: **1 item Doing**
@@ -44,8 +44,16 @@ Implementar histórico auditável persistente para mudanças de status, priorida
 - Ruff, Django system check e migrations check verdes.
 - Cobertura da aplicação no CI: **94,4%**.
 - Contrato de histórico e suas limitações em [TICKET_AUDIT.md](./TICKET_AUDIT.md).
-- [PR #20](https://github.com/ZaraTakion/chamados-api/pull/20) em draft: aguardando testes no Windows.
+- [PR #20](https://github.com/ZaraTakion/chamados-api/pull/20) aguardando merge após validação local.
 
 ## Critério para merge
 
-Repetir checks e 48 testes no Windows; executar `python manage.py migrate` para aplicar a nova tabela no SQLite local após aprovação. Não iniciar CHM-203 até CHM-202 estar Done.
+**Validação local concluída (Windows / Python 3.12):**
+- `ruff check .`: passou;
+- `python manage.py check`: passou;
+- `python manage.py makemigrations --check --dry-run`: nenhuma mudança;
+- `python manage.py migrate`: migration `tickets.0002_ticketauditevent` aplicada com sucesso;
+- `coverage run manage.py test`: **48/48 testes passaram**;
+- `coverage report`: **95,1%**, 347 statements, 13 miss, 62 branches, 7 partial branches.
+
+A PR #20 está pronta para merge. CHM-203 entra em Doing somente depois de concluir o merge e fechar CHM-202.
