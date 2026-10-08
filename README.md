@@ -11,7 +11,7 @@ API REST para abrir e acompanhar solicitações de suporte. Construída com Djan
 - Prioridade, categoria, busca, filtros, ordenação e paginação.
 - Conversa por chamado, com notas internas visíveis somente à equipe.
 - Histórico persistente de status, prioridade e atribuição, com acesso por papel e snapshots de auditoria.
-- Validação de dados, respostas de erro padronizadas (mantendo campos antigos), limite básico de requisições anônimas e documentação OpenAPI.
+- Validação de dados com constraints no banco, respostas de erro padronizadas (mantendo campos antigos), limite básico de requisições anônimas e documentação OpenAPI.
 
 ## Executar localmente com SQLite
 
@@ -101,7 +101,7 @@ curl -X POST http://127.0.0.1:8000/api/tickets/ \
   -d '{"title":"Acesso bloqueado","description":"Não consigo entrar na minha conta.","category":"Acesso","priority":"high"}'
 ```
 
-Após atualizar esta branch com a migration de auditoria, execute `python manage.py migrate` no seu banco local antes de testar manualmente o endpoint `/api/tickets/{id}/history/`. A suíte `manage.py test` cria seu próprio banco temporário.
+Após atualizar a branch, execute `python manage.py migrate` para aplicar as migrations pendentes, incluindo as constraints de integridade da etapa CHM-302. Faça backup de bancos importantes antes de migrar; valores antigos inválidos devem ser corrigidos explicitamente. A suíte `manage.py test` cria seu próprio banco temporário.
 
 Para promover um usuário existente a integrante da equipe, entre em `/admin/` com o superusuário e marque `Staff status`. Não conceda esse perfil para contas públicas.
 
@@ -149,19 +149,20 @@ coverage report
 
 O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
 
-Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável, respostas de erro e regressões de consultas SQL. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
+Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, fluxo da equipe, comentários públicos/internos, filtros, paginação, contrato OpenAPI, regras de transição, histórico auditável, respostas de erro, regressões de consultas SQL, constraints e atualização transacional. O CI também usa PostgreSQL 16 em um job separado. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01 e 02 concluídas. Na Sprint 03, CHM-301 concluiu as medições de consultas e os testes de prevenção de N+1 (70 testes, coverage de 95,2% CI / 95,8% Windows). CHM-302 agora revisa índices, constraints e transações, incluindo validação com PostgreSQL.
+**Estado atual:** Sprints 01 e 02 concluídas. Na Sprint 03, CHM-301 mediu e protegeu consultas SQL; CHM-302 acrescenta constraints e correção de row-lock no PostgreSQL. CI atual: 75 testes verdes em Python 3.10–3.12 (SQLite) e PostgreSQL 16; validação Windows pendente.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
 - [Contrato de erros e compatibilidade](docs/API_ERRORS.md)
 - [Medições do ORM e prevenção de N+1](docs/ORM_QUERY_BASELINE.md)
+- [Índices, integridade e transações PostgreSQL](docs/DATABASE_INTEGRITY.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)
