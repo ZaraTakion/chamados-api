@@ -6,7 +6,7 @@
 - Sprint 01 — Qualidade e baseline: **Done**
 - Sprint 02 — Domínio e consistência: **Done**
 - Sprint ativa: **Sprint 03 — Banco e performance**
-- **Doing:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
+- **Review:** [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8)
 - Branch de desenvolvimento: `perf/chm-301-orm-query-baseline`
 - CHM-302 permanece em Backlog, com limite WIP de uma tarefa em Doing.
 
@@ -30,5 +30,15 @@ Medir, explicar e melhorar o comportamento de acesso a dados no ORM e PostgreSQL
 4. Aplicar otimizações apenas quando houver justificativa mensurável.
 5. Criar testes de regressão e documentar comparação antes/depois.
 6. Revalidar Ruff, check, migrations, testes e cobertura no CI Python 3.10–3.12; obter aceite local antes do merge.
+
+## CHM-301 — Review automatizada
+
+- Baseline SQL medida no SQLite do CI, com Python 3.10–3.12: a contagem de queries dos endpoints não cresceu entre 1 e 20 objetos.
+- Chamados: listagem **3 queries**; detalhe **2**.
+- Comentários e histórico: listagem **4 queries** cada.
+- Demonstração direta do N+1 evitado: serializers de chamados e comentários passaram de **21 para 1 consulta** ao usar `select_related`.
+- Nenhuma alteração de código de produção foi necessária: os joins adequados já estavam implementados.
+- Testes regressivos e resultados registrados em [ORM_QUERY_BASELINE.md](./ORM_QUERY_BASELINE.md).
+- PR #22 aguardando conclusão do CI final e validação local no Windows.
 
 A otimização de transações/índices é CHM-302; não iniciar antes de CHM-301 Done.
