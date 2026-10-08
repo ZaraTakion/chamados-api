@@ -2,58 +2,30 @@
 
 ## Agora — Sprint 02: Domínio e consistência
 
-- Sprint 00: **Done**
-- Sprint 01 — Qualidade e baseline: **Done**
-- Sprint ativa: **Sprint 02 — Domínio e consistência**
-- [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5): **Done**, PR #19 merged
-- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): **Review concluída — CI e teste local aprovados**
-- Branch ativa: `feat/chm-202-ticket-audit-history`
-- Próximos itens: CHM-203 e sprints posteriores no Backlog
-- Limite WIP: **1 item Doing**
+- Sprint 00 e Sprint 01: **Done**.
+- Sprint 02: **ativa**.
+- [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5): **Done**, PR #19 merged.
+- [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6): **Done**, PR #20 merged.
+- [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7): **Doing**, único item em execução.
+- Branch: `feat/chm-203-consistent-errors`.
+- WIP: **1 tarefa Doing**.
 
-## Resultados verificados
+## Evidências concluídas
 
-### Sprint 01
-- Ruff + Coverage + CI em Python 3.10–3.12.
-- Regressão ampliada de 7 para 25 testes.
-- Cobertura da aplicação: 92,7% CI / 93,7% Windows (CHM-102).
+### CHM-201
+- Regras de transição centralizadas.
+- 35 testes, CI verde em Python 3.10–3.12.
+- Coverage: 93,2% CI / 94,1% Windows.
 
-### CHM-201 (Sprint 02)
-- Matriz de transições em `tickets/transitions.py` e documentação em `docs/TICKET_LIFECYCLE.md`.
-- 35 testes aprovados em Python 3.10, 3.11 e 3.12.
-- Ruff/check/migrations aprovados.
-- Cobertura da aplicação: **93,2% CI / 94,1% Windows 10, Python 3.12**.
-- PR #19 mergeada após teste local.
+### CHM-202
+- Modelo e migration de trilha auditável, endpoint protegido, persistência atômica e testes de integridade.
+- 48 testes verdes em Python 3.10–3.12.
+- Coverage: 94,4% CI / 95,1% Windows.
+- Migration `tickets.0002_ticketauditevent` aplicada no Windows.
+- PR #20 integrada à `main` após aprovação local.
 
-## Próximo objetivo — CHM-202
+## CHM-203 — Próxima entrega
 
-Implementar histórico auditável persistente para mudanças de status, prioridade e atribuição.
+Padronizar representação das exceções tratadas pelo Django REST Framework, diferenciando autenticação, autorização, validação e regras de negócio. Preservar códigos HTTP e campos de validação legados nesta etapa; adicionar contrato `error` estável e documentado.
 
-- Registrar valores anteriores e novos, ator e horário.
-- Gravar alterações relevantes de forma transacional e coerente com as permissões atuais.
-- Staff visualiza histórico completo; solicitante vê apenas eventos explicitamente permitidos do próprio chamado.
-- Impedir vazamento de informações internas e de chamados alheios.
-- Testar ações autorizadas, não autorizadas e ausência de registros em operações inválidas.
-- Atualizar API/OpenAPI e documentação.
-- Validar no CI e no Windows antes do merge.
-
-## CHM-202 — Validação automatizada
-
-- Migration `0002_ticketauditevent` validada.
-- 48 testes aprovados por versão em Python 3.10, 3.11 e 3.12.
-- Ruff, Django system check e migrations check verdes.
-- Cobertura da aplicação no CI: **94,4%**.
-- Contrato de histórico e suas limitações em [TICKET_AUDIT.md](./TICKET_AUDIT.md).
-- [PR #20](https://github.com/ZaraTakion/chamados-api/pull/20) aguardando merge após validação local.
-
-## Critério para merge
-
-**Validação local concluída (Windows / Python 3.12):**
-- `ruff check .`: passou;
-- `python manage.py check`: passou;
-- `python manage.py makemigrations --check --dry-run`: nenhuma mudança;
-- `python manage.py migrate`: migration `tickets.0002_ticketauditevent` aplicada com sucesso;
-- `coverage run manage.py test`: **48/48 testes passaram**;
-- `coverage report`: **95,1%**, 347 statements, 13 miss, 62 branches, 7 partial branches.
-
-A PR #20 está pronta para merge. CHM-203 entra em Doing somente depois de concluir o merge e fechar CHM-202.
+Critérios de Review: lint/check/migrations, regressão e testes do contrato em CI Python 3.10–3.12. Sem merge antes de testar no Windows.

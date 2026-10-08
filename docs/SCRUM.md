@@ -21,9 +21,9 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5) está **Done** após PR #19 merged.
 
-Item atual em **Doing**: [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6).
+[CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6) está **Done**, após validação local e merge da PR #20.
 
-CHM-203 permanece em Backlog até CHM-202 estar Done.
+Item atual em **Doing**: [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7).
 
 ## Princípios de trabalho
 
@@ -112,7 +112,9 @@ O calendário começa somente quando CHM-000 for fechado.
 
 **Done:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
 
-**Doing:** [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6)
+**Done:** [CHM-202 #6](https://github.com/ZaraTakion/chamados-api/issues/6)
+
+**Doing:** [CHM-203 #7](https://github.com/ZaraTakion/chamados-api/issues/7)
 
 **Sprint Goal:** transformar status/permissões em regras de negócio explícitas.
 

@@ -137,7 +137,7 @@ Os 48 testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, 
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprint 01 concluída. Na Sprint 02, CHM-201 centralizou as transições de status; CHM-202 adiciona trilha auditável (48 testes e 94,4% de cobertura da aplicação no CI, aguardando validação local).
+**Estado atual:** Sprint 01 concluída. Na Sprint 02, CHM-201 centralizou as transições, CHM-202 adicionou histórico auditável (48 testes, 94,4% CI e 95,1% Windows), e CHM-203 está padronizando erros.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
