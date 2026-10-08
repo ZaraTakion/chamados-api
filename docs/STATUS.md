@@ -1,13 +1,13 @@
 # Status do Projeto
 
-## Agora — Sprint 04: Produção e observabilidade
+## Agora — Sprint 05: Processamento assíncrono (planejamento)
 
-- Sprints 00, 01, 02 e 03: **Done**.
+- Sprints 00, 01, 02, 03 e 04: **Done**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
 - [CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9): **Done**, PR #23 merged, validação Windows aprovada.
 - [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10): **Done** — PR #24 integrada à main; QA Windows e CI aprovados.
 - [CHM-402 #11](https://github.com/ZaraTakion/chamados-api/issues/11): Done, PR #25 merged; 95 testes aprovados e 1 skip no Windows, 94,5% coverage.
-- [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12): Doing — migrations explícitas e smoke test em PostgreSQL 16 CI.
+- [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12): **Done** — PR #26 integrada, migrations e readiness smoke verificados no PostgreSQL CI.
 - WIP limit: uma tarefa Doing por vez.
 
 ## CHM-301 — Evidências concluídas
@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- WIP: CHM-402 é o único Doing da Sprint 04.
+- Sprint 04 encerrada. WIP: sem Doing até início de CHM-501.
 
 ## CHM-401 — Observabilidade
 
@@ -69,7 +69,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Windows: Ruff, check e migrations verdes; 82 testes (81 passaram, 1 skip PostgreSQL), 286.338s, cobertura **94,8%** (457 statements, 18 misses, 104 branches, 11 partial branches).
 - Logs JSON observados durante os testes de erro, com request ID e sem informação sensível nas linhas exibidas.
 
-## CHM-402 — Preparação para Review
+## CHM-402 — Aceite concluído
 
 - Endpoints `/api/health/live/` e `/api/health/ready/`, mantendo `/api/health/` como liveness legado.
 - Readiness executa `SELECT 1` e devolve 503 seguro se o banco estiver indisponível.
@@ -78,11 +78,19 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CI aprovado em Python 3.10–3.12/SQLite e PostgreSQL 16: 96 testes descobertos por ambiente.
 - QA Windows: 95 testes passaram, 1 skip específico PostgreSQL, 0 falhas, 285.633s; cobertura 94,5%.
 - PR #25 squash merged na main em 08/10/2026, commit e9a9571c.
-- CHM-403 é o único item Doing.
+- CHM-403 concluída com a PR #26; Sprint 04 encerrada.
 
 ## CHM-403 — Evidência de PostgreSQL no CI
 
 - PostgreSQL 16 já executava toda a suíte desde CHM-302.
 - Esta entrega explicita `migrate --noinput`, `migrate --check` e smoke test de `/api/health/ready/` antes dos testes.
 - SQLite permanece na matriz 3.10–3.12 e as diferenças estão descritas em [CI_POSTGRESQL.md](./CI_POSTGRESQL.md).
-- CI da nova mudança e review ainda pendentes.
+- CI completo: 4/4 jobs verdes, 96 testes por ambiente, 1 skip somente em SQLite; 94,0% coverage. PostgreSQL 16 aprovou migrations explícitas, conferência e smoke test.
+- [PR #26 integrada](https://github.com/ZaraTakion/chamados-api/pull/26), commit `b2108028`; Issue #12 fechada.
+
+## Encerramento Sprint 04 — 08/10/2026
+
+- CHM-401, CHM-402 e CHM-403 Done, com PRs #24, #25, #26 integradas.
+- Review: observabilidade segura, health probes e configuração de produção, PostgreSQL 16 real no CI.
+- Retrospectiva: preservar contratos anteriores (throttling legado); detectar regressões no CI; confirmar Windows antes dos merges de código.
+- A próxima Sprint 05 depende de CHM-501; nenhuma tarefa assíncrona foi iniciada até este registro.

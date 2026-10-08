@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 04 ATIVA — Observabilidade.
+**Status:** SPRINT 04 CONCLUÍDA — Sprint 05 em planejamento.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. Único Doing: [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12), aprimoramento de CI PostgreSQL.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. Próxima tarefa planejada: [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13).
 
 ## Princípios de trabalho
 
@@ -145,7 +145,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 04 — Produção e observabilidade
 
-**Status:** ATIVA; CHM-401 e CHM-402 Done, CHM-403 Doing.
+**Status:** DONE — concluída em 08/10/2026. CHM-401, CHM-402 e CHM-403 entregues.
 
 **Sprint Goal:** tornar a API diagnosticável e mais próxima de um serviço operável.
 
@@ -237,3 +237,13 @@ Quando a Bird terminar:
 - QA Windows 08/10/2026: Ruff, Django check, migrations verdes; 82 testes descobertos (81 aprovados, 1 skip), 286.338s, 94,8% coverage.
 - [PR #24](https://github.com/ZaraTakion/chamados-api/pull/24) integrada e Issue #10 fechada.
 - Próximo: CHM-402, com atenção a liveness/readiness, segurança de configuração e testes de integração.
+
+## Review e Retrospectiva — Sprint 04
+
+- CHM-401: logging JSON allowlist e request ID, CI e Windows com 82 testes (um skip no SQLite).
+- CHM-402: liveness/readiness e fail-closed production config, CI com 96 testes, Windows 95 aprovados e 1 skip, coverage 94,5%.
+- CHM-403: migrations explícitas e readiness smoke em PostgreSQL 16, CI 4/4 jobs verde; 96 testes em PostgreSQL e 95+1 skip no SQLite.
+- Manter: regressões automatizadas, PostgreSQL real no CI e separação clara entre validação local e de integração.
+- Melhorar: documentação de infraestrutura operacional e diminuir tempo de suíte no Windows sem remover cobertura.
+- Evitar: mudar comportamento de rota legada sem teste de compatibilidade.
+- Próxima Sprint: CHM-501, Redis/Celery, com uma tarefa Doing por vez e integração após QA.
