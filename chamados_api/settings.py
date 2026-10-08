@@ -6,6 +6,8 @@ from pathlib import Path
 
 import dj_database_url
 
+from chamados_api.deployment import validate_production_config
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() in {"1", "true", "yes"}
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
@@ -132,10 +134,21 @@ SPECTACULAR_SETTINGS = {
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "true").lower() in {"1", "true", "yes"}
+    validate_production_config(
+        debug=DEBUG,
+        secret_key=SECRET_KEY,
+        allowed_hosts=ALLOWED_HOSTS,
+        explicit_hosts=bool(os.getenv("DJANGO_ALLOWED_HOSTS", "").strip()),
+        database_url=database_url,
+        ssl_redirect=SECURE_SSL_REDIRECT,
+    )
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    # Enable only behind a trusted reverse proxy that strips client-supplied headers.
+    if os.getenv("DJANGO_TRUST_PROXY_SSL_HEADER", "false").lower() in {"1", "true", "yes"}:
+        SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # CHM-401: minimal JSON logs; request bodies, query strings and credentials are excluded.
 # Local test runs are quiet by default; production emits request completion metadata.
