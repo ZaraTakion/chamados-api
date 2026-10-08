@@ -11,8 +11,8 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
 
+@extend_schema(responses=UserSerializer)
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
-@extend_schema(responses=UserSerializer)
 def me(request):
     return Response(UserSerializer(request.user).data)

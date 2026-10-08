@@ -16,9 +16,9 @@ class HealthSerializer(serializers.Serializer):
     timestamp = serializers.DateTimeField()
 
 
+@extend_schema(responses=HealthSerializer)
 @api_view(["GET"])
 @permission_classes([permissions.AllowAny])
-@extend_schema(responses=HealthSerializer)
 def health(request):
     return Response({"status": "ok", "timestamp": timezone.now().isoformat()})
 
