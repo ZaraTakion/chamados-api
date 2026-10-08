@@ -112,20 +112,27 @@ Para promover um usuário existente a integrante da equipe, entre em `/admin/` c
 
 ## Testes e verificações
 
+As dependências de produção permanecem em `requirements.txt`. Ferramentas de desenvolvimento e qualidade ficam separadas em `requirements-dev.txt`.
+
 ```bash
+python -m pip install -r requirements-dev.txt
+ruff check .
 python manage.py check
 python manage.py makemigrations --check --dry-run
-python manage.py test
+coverage run manage.py test
+coverage report
 ```
 
-Os testes cobrem cadastro, autenticação, isolamento por usuário, fluxo da equipe, comentários internos, filtros e documentação. O GitHub Actions executa essas verificações em Python 3.10, 3.11 e 3.12.
+O Ruff verifica erros de sintaxe, imports inválidos e nomes indefinidos sem impor uma reforma estética no código. O Coverage mede linhas e branches executados pela suíte sem definir um limite artificial nesta etapa: o CHM-101 registra primeiro a baseline real.
+
+Os testes cobrem cadastro, autenticação, isolamento por usuário, fluxo da equipe, comentários internos, filtros e documentação. O GitHub Actions executa lint, checks do Django, verificação de migrations, testes e cobertura em Python 3.10, 3.11 e 3.12. Cada execução também salva `coverage.json` como artifact por versão do Python.
 
 
 ## Roadmap profissional
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** planejamento concluído; implementação aguardando a conclusão do projeto Bird.
+**Estado atual:** Sprint 01 em execução. O CHM-101 está medindo e automatizando a baseline de qualidade do projeto.
 
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
