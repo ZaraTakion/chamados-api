@@ -5,7 +5,8 @@ from rest_framework_simplejwt.views import TokenBlacklistView, TokenObtainPairVi
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from accounts.views import RegisterView, me
-from tickets.views import TicketAuditHistoryView, TicketViewSet, TicketCommentListCreateView, health
+from tickets.views import TicketAuditHistoryView, TicketViewSet, TicketCommentListCreateView
+from chamados_api.health import health, liveness, readiness
 
 router = DefaultRouter()
 router.register("tickets", TicketViewSet, basename="ticket")
@@ -13,6 +14,8 @@ router.register("tickets", TicketViewSet, basename="ticket")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/health/", health, name="health"),
+    path("api/health/live/", liveness, name="health-live"),
+    path("api/health/ready/", readiness, name="health-ready"),
     path("api/auth/register/", RegisterView.as_view(), name="register"),
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

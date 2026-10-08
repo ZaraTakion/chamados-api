@@ -1,28 +1,12 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
-from rest_framework import generics, permissions, serializers, viewsets
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import generics, permissions, viewsets
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
 
 from tickets.audit import record_ticket_changes, ticket_audit_snapshot
 from tickets.models import Ticket, TicketAuditEvent, TicketComment
 from tickets.permissions import IsRequesterOrStaff
 from tickets.serializers import TicketAuditEventSerializer, TicketCommentSerializer, TicketSerializer
-
-
-class HealthSerializer(serializers.Serializer):
-    status = serializers.CharField()
-    timestamp = serializers.DateTimeField()
-
-
-@extend_schema(responses=HealthSerializer)
-@api_view(["GET"])
-@permission_classes([permissions.AllowAny])
-def health(request):
-    return Response({"status": "ok", "timestamp": timezone.now().isoformat()})
 
 
 class TicketViewSet(viewsets.ModelViewSet):

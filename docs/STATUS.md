@@ -55,7 +55,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- WIP: nenhum item em Doing no momento; CHM-402 é a próxima tarefa planejada.
+- WIP: CHM-402 é o único Doing da Sprint 04.
 
 ## CHM-401 — Observabilidade
 
@@ -66,3 +66,11 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CI: Python 3.10–3.12 (SQLite) e PostgreSQL 16 aprovados; 82 testes descobertos por ambiente (SQLite: 81 passaram e 1 skip; PostgreSQL: 82 passaram). Coverage no CI 94,3%.
 - Windows: Ruff, check e migrations verdes; 82 testes (81 passaram, 1 skip PostgreSQL), 286.338s, cobertura **94,8%** (457 statements, 18 misses, 104 branches, 11 partial branches).
 - Logs JSON observados durante os testes de erro, com request ID e sem informação sensível nas linhas exibidas.
+
+## CHM-402 — Preparação para Review
+
+- Endpoints `/api/health/live/` e `/api/health/ready/`, mantendo `/api/health/` como liveness legado.
+- Readiness executa `SELECT 1` e devolve 503 seguro se o banco estiver indisponível.
+- Guarda de inicialização de produção: segredo aleatório forte, hosts explícitos, PostgreSQL persistente e HTTPS.
+- Checklist de deploy em [PRODUCTION_SECURITY.md](./PRODUCTION_SECURITY.md).
+- CI e validação Windows ainda pendentes; sem autorização para merge.
