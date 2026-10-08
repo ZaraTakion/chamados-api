@@ -38,7 +38,8 @@ class TicketViewSet(viewsets.ModelViewSet):
             return Ticket.objects.none()
         tickets = Ticket.objects.select_related("requester", "assignee")
         if getattr(self, "action", None) in {"update", "partial_update"}:
-            tickets = tickets.select_for_update()
+            # Only lock the ticket row; the nullable assignee JOIN cannot be locked on PostgreSQL.
+            tickets = tickets.select_for_update(of=("self",))
         if self.request.user.is_staff:
             return tickets
         return tickets.filter(requester=self.request.user)
