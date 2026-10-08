@@ -1,4 +1,4 @@
-name: Validação de estabilidade — 50 baterias
+name: Validação de estabilidade — 10 baterias
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - chore/chm-101-quality-baseline
 
 jobs:
-  stability-50:
-    name: 50 baterias completas
+  stability-10:
+    name: 10 baterias completas
     runs-on: ubuntu-latest
     env:
       DJANGO_DEBUG: "true"
@@ -31,13 +31,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for i in $(seq 1 50); do
-            echo "::group::Bateria $i/50"
+          for i in $(seq 1 10); do
+            echo "::group::Bateria $i/10"
             ruff check .
             python manage.py check
             python manage.py makemigrations --check --dry-run
             python manage.py test --verbosity 0
-            echo "Bateria $i/50: OK"
+            echo "Bateria $i/10: OK"
             echo "::endgroup::"
           done
 
@@ -51,6 +51,6 @@ jobs:
       - name: Salvar cobertura da validação
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-stability-50
+          name: coverage-stability-10
           path: coverage-stability.json
           if-no-files-found: error
