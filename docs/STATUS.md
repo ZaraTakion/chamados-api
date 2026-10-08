@@ -5,7 +5,7 @@
 - **Sprint 00:** Done
 - **Sprint 01 — Qualidade e baseline:** Done
 - **Sprint ativa:** Sprint 02 — Domínio e consistência
-- **Único Doing:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5)
+- **Review atual:** [CHM-201 #5](https://github.com/ZaraTakion/chamados-api/issues/5) — CI verde; teste local pendente
 - **Branch:** `feat/chm-201-ticket-transitions`
 - **Backlog:** CHM-202, CHM-203 e as sprints seguintes
 - **WIP:** no máximo 1 item Doing
@@ -43,5 +43,16 @@ Centralizar regras de domínio, tornar transições de chamado explícitas, prep
 - Manter regras de autorização existentes: somente staff altera status.
 - Testar mudanças permitidas, inválidas, idempotentes e término em `closed`.
 - Validar CI e, depois, Windows local antes do merge.
+
+### Validação automatizada do CHM-201
+
+- 35 testes verdes por versão no CI: Python 3.10, 3.11 e 3.12;
+- Ruff, Django check e migrations check verdes;
+- cobertura de código da aplicação: **93,2%**;
+- matriz dos 25 pares de status exercitada por subtestes;
+- validação por endpoint e autorização de staff cobertas;
+- cache de throttling reinicializado entre testes sem desativar o rate limit.
+
+A [PR #19](https://github.com/ZaraTakion/chamados-api/pull/19) está em draft e aguarda validação local no Windows.
 
 Não iniciar CHM-202 até CHM-201 estar Done.

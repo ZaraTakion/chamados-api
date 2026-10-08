@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from tickets.models import Ticket, TicketComment
+from tickets.transitions import InvalidStatusTransition, validate_ticket_transition
 
 User = get_user_model()
 
@@ -29,8 +30,10 @@ class TicketSerializer(serializers.ModelSerializer):
         if not is_staff and "status" in attrs:
             raise serializers.ValidationError({"status": "Somente a equipe pode alterar o status."})
         if self.instance and is_staff and "status" in attrs:
-            if self.instance.status == Ticket.Status.CLOSED and attrs["status"] != Ticket.Status.CLOSED:
-                raise serializers.ValidationError({"status": "Um chamado fechado não pode ser reaberto."})
+            try:
+                validate_ticket_transition(self.instance.status, attrs["status"])
+            except InvalidStatusTransition as exc:
+                raise serializers.ValidationError({"status": str(exc)}) from exc
         return attrs
 
 
