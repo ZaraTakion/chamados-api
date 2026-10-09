@@ -178,3 +178,19 @@ jobs:
       - name: Limpar containers de CI
         if: always()
         run: docker compose down --volumes --remove-orphans
+
+  railway_iac:
+    name: Railway IaC — TypeScript typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Instalar ferramentas de infraestrutura
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Verificar tipagem da configuracao Railway
+        run: npm run check:railway
