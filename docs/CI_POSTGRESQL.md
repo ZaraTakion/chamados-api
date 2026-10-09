@@ -3,7 +3,8 @@
 ## Pipeline
 
 O GitHub Actions valida SQLite em Python 3.10, 3.11 e 3.12 e PostgreSQL 16
-real em um container de serviço. Ambos verificam Ruff, Django system check,
+real iniciado como serviço nativo PostgreSQL 16 do runner Ubuntu (sem
+pull de imagem Docker Hub). Ambos verificam Ruff, Django system check,
 migrations e a suíte completa. O job PostgreSQL aplica migrations no banco do
 CI, confirma que não há migrations pendentes e executa GET /api/health/ready/
 contra o banco real. Então inicia a suíte Django, que cria um banco temporário
@@ -26,7 +27,7 @@ idêntico de lock transacional.
 
 ## Limitações
 
-A instância PostgreSQL em CI usa dados descartáveis de teste. Não confirma
+A instância PostgreSQL nativa em CI usa dados descartáveis de teste. Não confirma
 performance sob carga, backup, disponibilidade, segurança de proxy/TLS ou
 confiabilidade de bancos gerenciados. A execução das migrations na etapa
 pré-teste não substitui um plano de rollback e migração em produção.
