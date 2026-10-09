@@ -137,3 +137,12 @@ acima cobrem o cenário de baixo consumo de RAM no Windows.
 - Evidência manual Windows: testes locais do processador 6/6 OK, Swagger 200, cadastro 201, JWT 200, chamado `CH-000001` criado com HTTP 201; consulta SQLite registrou `Eventos: 1 | Processados: 1 | Notificacoes: 1`.
 - Não houve leitura HTTP da inbox diretamente no navegador do proprietário; esse comportamento foi testado automaticamente com contas sintéticas em banco temporário.
 - Nenhum projeto, banco, worker, domínio ou recurso faturável foi provisionado no Railway. Esta entrega permanece **demonstração local**, não produção.
+
+## Portfólio e pré-release local
+
+A versão `v1.0.0-local.1` inclui coleção Postman sanitizada, visão de
+arquitetura, case de recrutamento, changelog e evidência de CI com
+captura real da interface Swagger. Consulte [PORTFOLIO.md](./PORTFOLIO.md),
+[POSTMAN.md](./POSTMAN.md) e [EVIDENCE.md](./EVIDENCE.md).
+A pré-release não indica disponibilidade pública: todos os usos reais
+continuam em `127.0.0.1`.

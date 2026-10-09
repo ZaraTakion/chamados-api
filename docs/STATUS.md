@@ -151,3 +151,18 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - **Leitura da inbox autenticada:** confirmada no teste E2E automatizado com contas fictícias, **não** diretamente no navegador do proprietário.
 - [PR #30 integrada](https://github.com/ZaraTakion/chamados-api/pull/30), commit `6585d2a`. Nenhum serviço externo provisionado.
 - CHM-601 (deploy original de produção) permanece aberta, sem custo autorizado; CHM-602 (release e portfólio) aguarda decisão de escopo para versão local.
+
+## CHM-602 — Pré-release local v1.0.0-local.1 (Doing)
+
+- Preparar coleção Postman, case para recrutadores, arquitetura, changelog e
+  documentação de evidências com dados sintéticos (branch
+  `docs/chm-602-local-demo-release`).
+- Acrescentar captura **real** do Swagger por Chrome no CI, salvar como
+  artefato GitHub Actions e anexar à GitHub Release somente se a captura
+  passar validação.
+- Criar pré-release `v1.0.0-local.1` a partir da `main` somente após
+  os checks obrigatórios passarem.
+- Checklist em [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
+- **Não existe:** produção HTTPS, serviço gerenciado, backup/rollback de
+  produção ou URL pública. CHM-601 #15 fica aberta e bloqueada; não
+  contratar nada sem autorização.

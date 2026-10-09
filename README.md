@@ -2,6 +2,29 @@
 
 API REST para abrir e acompanhar solicitações de suporte. Construída com Django REST Framework, autenticação JWT e banco relacional. O ambiente local usa SQLite; o Docker Compose oferece PostgreSQL com volume persistente.
 
+## Release para portfólio — v1.0.0-local.1
+
+**Edição gratuita e local:** não há servidor público, domínio ou
+hospedagem paga. A API foi validada em CI com PostgreSQL 16 e
+Redis/Celery reais, além do modo Windows SQLite sem Redis. O código
+e a documentação são públicos; os dados e senhas da demonstração não são.
+
+- [Como executar no Windows](docs/LOCAL_DEMO.md) —
+  `runserver 127.0.0.1:8000` e `process_notifications --watch`.
+- [Coleção Postman](postman/Chamados-API-Local-Demo.postman_collection.json)
+  — 18 requisições, variáveis vazias para senhas/tokens.
+- [Case técnico de portfólio](docs/PORTFOLIO.md) e
+  [visão de arquitetura](docs/ARCHITECTURE.md).
+- [Notas da pré-release](docs/RELEASE_NOTES.md),
+  [changelog](CHANGELOG.md),
+  [evidências reais](docs/EVIDENCE.md) e
+  [critérios explicitamente não atendidos](docs/RELEASE_CHECKLIST.md).
+- [Releases do repositório](https://github.com/ZaraTakion/chamados-api/releases)
+  — localizar a tag `v1.0.0-local.1` **após a publicação**.
+
+`runserver` não deve ser exposto na internet. A CHM-601 de
+deploy público permanece aberta por decisão de não contratar serviços.
+
 ## Funcionalidades
 
 - Cadastro de solicitante, login JWT, renovação e revogação de refresh token.
@@ -199,7 +222,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual (09/10/2026):** Sprints 00–05 concluídas. CHM-601: preparação de deploy Railway IaC integrada (PR #29), mas o proprietário **não autorizou hospedagem paga**. A [demonstração local gratuita](docs/LOCAL_DEMO.md) foi integrada à `main` na [PR #30](https://github.com/ZaraTakion/chamados-api/pull/30): Django + SQLite com processador de notificações sem Redis. CI final **6/6 verde**, 128 testes por ambiente (SQLite 127 pass + 1 skip, PostgreSQL 128 pass), cobertura 94,2%. QA Windows do processador **6/6 OK**, Swagger HTTP 200, cadastro HTTP 201, JWT HTTP 200, ticket de demonstração `CH-000001` HTTP 201, e SQLite confirmou 1 evento, 1 processado e 1 notificação. A leitura HTTP da inbox foi **validada em CI com JWT e usuários fictícios**, não no navegador local do proprietário. CHM-601/Issue #15 segue aberta para critérios de produção (HTTPS, hospedagem e backups); nenhuma infraestrutura externa foi criada. CHM-602 permanece Backlog para release local orientada a portfólio.
+**Estado atual (09/10/2026):** Sprints 00–05 concluídas; demonstração local aprovada (PR #30, CI 6/6 jobs, testes JWT e outbox, QA Windows). CHM-601 de produção continua **bloqueada por decisão de não contratar infraestrutura**. CHM-602 está em preparação da **pré-release v1.0.0-local.1** com coleção Postman, case, arquitetura, evidências reais em CI, changelog e GitHub Release versionada. Não há hospedagem pública nem consumo contratado.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
