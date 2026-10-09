@@ -44,15 +44,14 @@ class TicketAdminLifecycleTests(APITestBase):
         self.assertFalse(form.is_valid())
         self.assertIn("status", form.errors)
 
-    def test_admin_form_rejects_new_ticket_with_terminal_status(self):
+    def test_admin_form_preserves_staff_explicit_creation_status(self):
         ticket = Ticket(
             title="Criado no admin",
             description="Teste",
             requester=self.requester,
         )
         form = self.form_for(ticket, Ticket.Status.CLOSED)
-        self.assertFalse(form.is_valid())
-        self.assertIn("status", form.errors)
+        self.assertTrue(form.is_valid(), form.errors)
 
     def test_admin_form_rejects_inactive_or_nonstaff_assignee(self):
         form = self.form_for(self.ticket, Ticket.Status.OPEN, self.other_user.pk)
@@ -106,7 +105,7 @@ class TicketAdminLifecycleTests(APITestBase):
         )
         self.assertFalse(NotificationOutbox.objects.filter(recipient=self.operator).exists())
 
-    def test_staff_api_cannot_create_terminal_ticket_directly(self):
+    def test_staff_api_can_create_terminal_ticket_under_existing_contract(self):
         self.authenticate(self.staff)
         result = self.client.post(
             reverse("ticket-list"),
@@ -117,9 +116,9 @@ class TicketAdminLifecycleTests(APITestBase):
             },
             format="json",
         )
-        self.assertEqual(result.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(result.data["error"]["code"], "invalid_transition")
-        self.assertFalse(Ticket.objects.filter(title="Pular atendimento").exists())
+        self.assertEqual(result.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(result.data["status"], Ticket.Status.RESOLVED)
+        self.assertTrue(Ticket.objects.filter(title="Pular atendimento").exists())
 
     def test_staff_api_can_create_open_ticket_explicitly(self):
         self.authenticate(self.staff)
