@@ -25,8 +25,6 @@ class TicketAdminForm(forms.ModelForm):
                     validate_ticket_transition(self.instance.status, requested_status)
                 except InvalidStatusTransition as exc:
                     self.add_error("status", str(exc))
-            elif requested_status != Ticket.Status.OPEN:
-                self.add_error("status", "Novos chamados devem começar abertos.")
 
         assignee = values.get("assignee")
         if assignee is not None and (not assignee.is_staff or not assignee.is_active):
