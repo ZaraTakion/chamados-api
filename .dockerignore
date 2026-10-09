@@ -9,3 +9,21 @@ __pycache__
 data/*.sqlite3
 staticfiles
 tests
+
+# Prevent accidental secrets, private uploads, backups and reports in images.
+.env.*
+!.env.example
+data/
+*.sqlite3
+*.sqlite3-*
+*.sqlite3.*
+*.dump
+*.bak
+*.backup
+.coverage*
+coverage.xml
+coverage.json
+htmlcov/
+*.log
+.pytest_cache/
+.mypy_cache/
