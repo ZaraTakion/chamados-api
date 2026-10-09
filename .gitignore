@@ -24,3 +24,7 @@ node_modules/
 # Never commit SQLite journal/WAL/SHM files from demos or backups.
 data/*.sqlite3-*
 data/*.sqlite3-journal
+
+# Never commit environment-specific secrets from preview sessions.
+.env.*
+!.env.example
