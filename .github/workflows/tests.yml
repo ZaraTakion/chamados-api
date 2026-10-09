@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16-alpine
+        image: public.ecr.aws/docker/library/postgres:16-alpine
         env:
           POSTGRES_DB: chamados_ci
           POSTGRES_USER: postgres
@@ -126,6 +126,12 @@ jobs:
   celery_worker:
     name: Redis + Celery — smoke Docker Compose
     runs-on: ubuntu-latest
+    # Use an alternate public mirror in CI when Docker Hub throttles anonymous pulls.
+    # Local Docker Compose remains on the upstream image defaults.
+    env:
+      CHAMADOS_POSTGRES_IMAGE: public.ecr.aws/docker/library/postgres:16-alpine
+      CHAMADOS_REDIS_IMAGE: public.ecr.aws/docker/library/redis:7-alpine
+      CHAMADOS_PYTHON_BASE_IMAGE: public.ecr.aws/docker/library/python:3.12-slim
     steps:
       - uses: actions/checkout@v7
 
