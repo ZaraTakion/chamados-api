@@ -4,6 +4,20 @@ Este changelog registra alterações verificáveis da Chamados API.
 Adotamos [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 e versionamento semântico com sufixo de pré-release `-local.1`.
 
+## [Unreleased] — correções sob revisão (PR #33)
+
+### Fixed
+- Evita novos avisos da outbox para responsáveis que deixaram de ser equipe ou foram desativados.
+- Valida transições de status na edição pelo Django Admin; alterações efetivas de status, prioridade e atribuição registram auditoria e outbox.
+- Impede troca de solicitante de um chamado já existente pelo formulário Django Admin, que contornaria a autorização da API.
+
+### Tests
+- Novas regressões de privilégios de destinatários e de edição/criação no Django Admin.
+
+### Compatibility
+- Permanece permitido à equipe escolher o status inicial na criação de chamados; não foram alteradas rotas, schemas JSON ou migrações.
+- Atualizações diretas por `QuerySet.update()` e alterações administrativas de comentários não são auditadas automaticamente.
+
 ## [v1.0.0-local.1] — 2026-10-09
 
 ### Added
