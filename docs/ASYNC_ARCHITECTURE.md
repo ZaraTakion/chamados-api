@@ -52,9 +52,13 @@ somente eventos confirmados (ver NOTIFICATIONS.md).
 
 Os testes validam contagens, consulta única, repetição sem efeitos colaterais,
 modo eager sem Redis, conteúdo seguro do resultado e configuração de retry.
-Modo eager comprova o código da tarefa, não o worker/broker real. A verificação
-em Docker Compose é etapa distinta. Não são prometidas semânticas exactly-once
-para tarefas futuras com efeitos colaterais.
+Modo eager comprova o código da tarefa, não o worker/broker real. O CI
+atual executa Redis e Celery como processos reais no runner e verifica tanto
+a tarefa de contagem quanto a entrega de notificação, além de validar
+`docker compose config`. Isso não equivale a um teste de construção e
+execução dos containers da imagem de deploy; realize esse teste manualmente
+quando o registry de imagens estiver disponível. Não são prometidas
+semânticas exactly-once para tarefas futuras com efeitos colaterais.
 
 ## Aceite da CHM-501 — 08/10/2026
 
