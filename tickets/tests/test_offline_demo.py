@@ -1,0 +1,50 @@
+"""Tests for running notification delivery locally without a broker."""
+
+from io import StringIO
+from unittest.mock import patch
+
+from django.contrib.auth import get_user_model
+from django.core.management import call_command
+from django.core.management.base import CommandError
+from django.test import TestCase, override_settings
+
+from tickets.models import NotificationOutbox, TicketNotification
+
+
+class OfflineNotificationTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(username="offline-test-user")
+        self.event = NotificationOutbox.objects.create(
+            recipient=self.user,
+            kind=NotificationOutbox.Kind.CREATED,
+            ticket_reference="CH-000123",
+        )
+
+    def test_one_shot_is_idempotent_without_redis(self):
+        out = StringIO()
+        with patch("tickets.tasks.deliver_pending_notifications.delay") as publish:
+            call_command("process_notifications", stdout=out)
+            call_command("process_notifications", stdout=out)
+        publish.assert_not_called()
+        self.assertEqual(TicketNotification.objects.count(), 1)
+        self.assertIn("Notificacoes processadas: 1", out.getvalue())
+        self.assertIn("Notificacoes processadas: 0", out.getvalue())
+
+    def test_watch_processes_and_stops(self):
+        out = StringIO()
+        with patch(
+            "tickets.management.commands.process_notifications.time.sleep",
+            side_effect=KeyboardInterrupt,
+        ):
+            call_command("process_notifications", "--watch", stdout=out)
+        self.assertEqual(TicketNotification.objects.count(), 1)
+        self.assertIn("Processador local encerrado.", out.getvalue())
+
+    @override_settings(DEBUG=False)
+    def test_never_available_in_production(self):
+        with self.assertRaises(CommandError):
+            call_command("process_notifications")
+
+    def test_invalid_interval_rejected(self):
+        with self.assertRaises(CommandError):
+            call_command("process_notifications", "--interval", "0")
