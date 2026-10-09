@@ -137,7 +137,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - **Código integrado:** [PR #29](https://github.com/ZaraTakion/chamados-api/pull/29) squash merged em `23fbaad2`, sem criar recursos na nuvem.
 - **Pendências CHM-601:** aprovar recursos/custos, provisionar projeto Railway separado, verificar PostgreSQL persistente e backups, Redis privado, HTTPS real, migrações, logs, Worker/Beat, smoke autenticado com dados sintéticos, recuperação e rollback. Issue #15 continua **aberta**; nenhuma produção publicada declarada.
 
-## Demonstração local sem custos — em execução
+## Demonstração local sem custos — Done (PR #30)
 
 - Decisão do usuário: **não autorizar recursos pagos** no Railway ou outro
   provedor. Nenhuma infraestrutura externa deve ser criada ou cobrada.
@@ -146,6 +146,8 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
   Redis/Celery worker, em processo separado do servidor HTTP.
 - API continua no SQLite local e as notificações são registradas na inbox
   autenticada; comandos e limitações em [LOCAL_DEMO.md](./LOCAL_DEMO.md).
-- CI/QA Windows pendentes para esta subentrega. CHM-601 (deploy de
-  produção) permanece aberta e **não foi concluída**. CHM-602, release
-  profissional, depende de decidir como apresentar a demonstração local.
+- **CI:** [6/6 jobs aprovados](https://github.com/ZaraTakion/chamados-api/actions/runs/37873992540), 128 testes descobertos por ambiente (SQLite 127 aprovações + 1 skip; PostgreSQL 128 aprovados), cobertura 94,2%; inclui teste E2E com JWT real e inbox privada, Docker e IaC.
+- **QA Windows:** Ruff e Django check verdes, 6/6 testes locais em 0,403s; Swagger HTTP 200, registro HTTP 201, login JWT HTTP 200, criação de `CH-000001` HTTP 201, outbox real 1 evento/1 processado/1 notificação.
+- **Leitura da inbox autenticada:** confirmada no teste E2E automatizado com contas fictícias, **não** diretamente no navegador do proprietário.
+- [PR #30 integrada](https://github.com/ZaraTakion/chamados-api/pull/30), commit `6585d2a`. Nenhum serviço externo provisionado.
+- CHM-601 (deploy original de produção) permanece aberta, sem custo autorizado; CHM-602 (release e portfólio) aguarda decisão de escopo para versão local.

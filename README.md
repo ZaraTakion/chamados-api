@@ -199,7 +199,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual (08/10/2026):** Sprints 00–05 concluídas. CHM-601: **preparação técnica integrada à `main` pela PR #29** (Railway IaC, runbook e smoke HTTP), com CI 6/6 jobs verdes (PostgreSQL 121 testes, SQLite 120 pass + 1 skip, cobertura 94,1%) e QA Windows concluído (121 testes descobertos, 120 passaram + 1 skip, cobertura 94,5%). **A CHM-601 ainda está Doing, pois nenhum ambiente de produção ou demo foi publicado/validado**; a implantação demanda aprovação de recursos/custos, PostgreSQL persistente, HTTPS, Worker/Beat, backups e smoke real. CHM-602 segue no Backlog.
+**Estado atual (09/10/2026):** Sprints 00–05 concluídas. CHM-601: preparação de deploy Railway IaC integrada (PR #29), mas o proprietário **não autorizou hospedagem paga**. A [demonstração local gratuita](docs/LOCAL_DEMO.md) foi integrada à `main` na [PR #30](https://github.com/ZaraTakion/chamados-api/pull/30): Django + SQLite com processador de notificações sem Redis. CI final **6/6 verde**, 128 testes por ambiente (SQLite 127 pass + 1 skip, PostgreSQL 128 pass), cobertura 94,2%. QA Windows do processador **6/6 OK**, Swagger HTTP 200, cadastro HTTP 201, JWT HTTP 200, ticket de demonstração `CH-000001` HTTP 201, e SQLite confirmou 1 evento, 1 processado e 1 notificação. A leitura HTTP da inbox foi **validada em CI com JWT e usuários fictícios**, não no navegador local do proprietário. CHM-601/Issue #15 segue aberta para critérios de produção (HTTPS, hospedagem e backups); nenhuma infraestrutura externa foi criada. CHM-602 permanece Backlog para release local orientada a portfólio.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
@@ -211,6 +211,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 - [Matriz SQLite/PostgreSQL e CI real](docs/CI_POSTGRESQL.md)
 - [Arquitetura Redis/Celery e tarefas idempotentes](docs/ASYNC_ARCHITECTURE.md)
 - [Notificações privadas, outbox transacional e recovery](docs/NOTIFICATIONS.md)
+- [Demonstração local gratuita e teste completo via JWT](docs/LOCAL_DEMO.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)

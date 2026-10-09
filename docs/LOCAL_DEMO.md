@@ -128,3 +128,12 @@ acima cobrem o cenário de baixo consumo de RAM no Windows.
   permanece aberta para os critérios originais de produção (HTTPS,
   banco gerenciado, backups, monitoramento e URL real). A decisão de
   não gastar dinheiro é respeitada; esse passo pode ficar congelado.
+
+## Evidências de aceite — versão local (09/10/2026)
+
+- [PR #30](https://github.com/ZaraTakion/chamados-api/pull/30) integrada à `main`, commit `6585d2a`.
+- [GitHub Actions 37873992540](https://github.com/ZaraTakion/chamados-api/actions/runs/37873992540): 6/6 jobs; 128 testes por ambiente (SQLite 127 passaram/1 skip, PostgreSQL 128 passaram), cobertura 94,2%.
+- Teste Django de ponta a ponta: `python manage.py test tickets.tests.test_local_demo_e2e`. O teste cria dados descartáveis, autentica via JWT real e valida que só a equipe destinatária obtém a notificação em `GET /api/notifications/`; repetições não geram duplicatas.
+- Evidência manual Windows: testes locais do processador 6/6 OK, Swagger 200, cadastro 201, JWT 200, chamado `CH-000001` criado com HTTP 201; consulta SQLite registrou `Eventos: 1 | Processados: 1 | Notificacoes: 1`.
+- Não houve leitura HTTP da inbox diretamente no navegador do proprietário; esse comportamento foi testado automaticamente com contas sintéticas em banco temporário.
+- Nenhum projeto, banco, worker, domínio ou recurso faturável foi provisionado no Railway. Esta entrega permanece **demonstração local**, não produção.

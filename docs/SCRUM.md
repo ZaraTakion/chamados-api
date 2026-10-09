@@ -291,3 +291,12 @@ Quando a Bird terminar:
   monitoramento e URL pública) continuam pendentes; nunca chamar esse
   ambiente de produção. Documentar aceites do modo local separadamente.
 - CHM-602 segue no Backlog enquanto a entrega local é validada.
+
+
+### Review — demonstração local gratuita concluída (09/10/2026)
+
+- [PR #30 integrada](https://github.com/ZaraTakion/chamados-api/pull/30), commit `6585d2a`. Processador local da outbox via comando Django, sem Redis/Docker e bloqueado em produção.
+- CI: 6/6 jobs verdes, SQLite 127 pass + 1 skip, PostgreSQL 128 pass, coverage 94,2%; teste ponta a ponta registra solicitante, usa JWT real, cria ticket, processa evento offline e valida acesso da equipe à inbox com isolamento entre usuários.
+- Windows: testes focados 6/6 aprovados, Swagger e autenticação/criação com respostas 200/201; SQLite comprovou 1 evento processado e 1 notificação para `CH-000001`.
+- Limite da evidência: usuário não executou GET autenticado da inbox em seu navegador; teste equivalente validado com dados sintéticos no CI. Nenhum token/segredo é registrado nas evidências.
+- **Decisão financeira preservada:** nenhum projeto/recurso pago criado; implantação pública/produção CHM-601 #15 permanece aberta e não consta como entregue. WIP único; CHM-602 em Backlog.
