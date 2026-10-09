@@ -66,10 +66,7 @@ jobs:
   postgresql:
     name: PostgreSQL 16 — integridade
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
+    env:
           POSTGRES_DB: chamados_ci
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres-ci-only
@@ -86,6 +83,17 @@ jobs:
       DATABASE_URL: "postgresql://postgres:postgres-ci-only@127.0.0.1:5432/chamados_ci"
     steps:
       - uses: actions/checkout@v7
+
+      - name: Iniciar PostgreSQL 16 nativo (sem registry de containers)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-16 postgresql-client-16
+          sudo service postgresql start
+          sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres-ci-only';"
+          sudo -u postgres createdb -O postgres chamados_ci
+          pg_config --version
+          pg_isready -h 127.0.0.1 -p 5432
+
 
       - uses: actions/setup-python@v7
         with:
