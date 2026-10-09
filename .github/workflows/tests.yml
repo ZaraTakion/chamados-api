@@ -44,6 +44,10 @@ jobs:
       - name: Verificar migrations pendentes
         run: python manage.py makemigrations --check --dry-run
 
+      - name: Smoke Waitress do preview protegido (somente loopback)
+        if: ${{ matrix.python-version == '3.12' }}
+        run: python -m scripts.check_preview_wsgi
+
       - name: Testes com cobertura
         run: coverage run manage.py test
 
