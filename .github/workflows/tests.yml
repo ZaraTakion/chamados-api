@@ -158,9 +158,22 @@ jobs:
         run: |
           docker compose run --rm --no-deps api python manage.py shell -c "from django.contrib.auth import get_user_model; from tickets.models import NotificationOutbox, TicketNotification; from tickets.tasks import deliver_pending_notifications; user, _ = get_user_model().objects.get_or_create(username='ci-notification-recipient'); NotificationOutbox.objects.create(recipient=user, kind='ticket_created', ticket_reference='CH-000001'); result = deliver_pending_notifications.delay().get(timeout=30); assert result['processed'] == 1, result; assert TicketNotification.objects.filter(recipient=user).count() == 1; print('Notification inbox end-to-end success')"
 
+      - name: Iniciar API para teste HTTP end-to-end
+        run: docker compose up -d api
+
+      - name: Smoke HTTP da API no container
+        run: |
+          for attempt in $(seq 1 15); do
+            if docker compose exec -T api python scripts/smoke_deploy.py http://127.0.0.1:8000 --allow-http-local; then
+              exit 0
+            fi
+            sleep 2
+          done
+          exit 1
+
       - name: Relatar logs no caso de falha
         if: failure()
-        run: docker compose logs --tail=80 worker scheduler redis db
+        run: docker compose logs --tail=80 api worker scheduler redis db
 
       - name: Limpar containers de CI
         if: always()
