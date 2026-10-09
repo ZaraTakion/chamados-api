@@ -1,6 +1,6 @@
 # CHM-601 — Preview HTTPS privado sem mensalidade (Cloudflare)
 
-**Status:** preparação de código — **URL externa ainda não ativada**.
+**Status:** código integrado e [CI 6/6 jobs aprovado](https://github.com/ZaraTakion/chamados-api/actions/runs/37948905306). **URL externa ainda não ativada nem verificada**; isso depende de executar o script no Windows.
 
 Este modo cria uma **demonstração temporária, protegida por PIN de e-mail**
 via Cloudflare Quick Tunnel. Não contrata servidor, domínio, serviço Railway,
@@ -124,3 +124,11 @@ e-mails autorizados escolhida por ele.
 ```bat
 python manage.py test tickets.tests.test_protected_tunnel
 ```
+
+## Aceite técnico registrado — 09/10/2026
+
+- [PR #32 integrada](https://github.com/ZaraTakion/chamados-api/pull/32), commit `9444dfaf`.
+- PostgreSQL: **143 testes aprovados**; SQLite 3 versões Python: **142 aprovados + 1 skip**; cobertura **93,7%**; seis jobs verdes.
+- Smoke real de Waitress no GitHub Actions (loopback): hostname correto/HTTPS aceitos, redirecionamento HTTP normal e Host indevido rejeitado.
+- Ainda **não** há URL `trycloudflare.com` testada nem confirmação de PIN com e-mail em um navegador externo. O script foi construído e testado, **não executado na máquina do proprietário**.
+- Os critérios originais de produção da CHM-601 continuam pendentes.

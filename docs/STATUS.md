@@ -169,17 +169,17 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Reprodutibilidade: coleção Postman sem credenciais, guias, case e CHANGELOG.
 - **Escopo local Done; deploy original de produção CHM-601 continua bloqueado/aberto**, sem domínio público ou recursos faturáveis.
 
-## CHM-601 — Preview privado e gratuito (Doing)
+## CHM-601 — Preview privado e gratuito (código Done; ativação remota pendente)
 
 - Retomada da CHM-601 para preparar **preview temporário com acesso
   protegido por email**, sem hospedagem paga e sem reutilizar o banco
   do usuário. Nenhum recurso externo foi contratado.
-- Branch `feat/chm-601-protected-free-tunnel`.
+- [PR #32 integrada](https://github.com/ZaraTakion/chamados-api/pull/32), commit `9444dfaf`.
 - Cloudflare Quick Tunnel exige `--allowed-mail` e versão mínima
   `2026.9.3`; modo anônimo sem e-mail permitido é recusado.
 - Servidor local Waitress no loopback, Django `DEBUG=false`, segredo
   de sessão efêmero, `ALLOWED_HOSTS` exato e banco SQLite isolado.
-- Testes e [guia](./PROTECTED_TUNNEL.md) adicionados. Ainda faltam
-  revisão CI e ativação/verificação externa na máquina do proprietário.
+- [CI #37948905306](https://github.com/ZaraTakion/chamados-api/actions/runs/37948905306): **6/6 jobs verdes**, PostgreSQL **143/143 testes aprovados**, SQLite **142 aprovados + 1 skip**, cobertura 93,7%; smoke Waitress/HTTPS/Host no loopback, Docker/Redis/Celery e Railway IaC aprovados.
+- Testes e [guia](./PROTECTED_TUNNEL.md) entregues. Falta somente a **ativação e verificação externa** do túnel protegido no Windows do proprietário, que não pode ser feita via GitHub.
 - CHM-601 **não** será marcada Done como produção: sem disponibilidade
   24/7, banco remoto/backup, monitoramento real nem domínio permanente.

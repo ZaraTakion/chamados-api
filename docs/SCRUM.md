@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** Sprint 06 — CHM-602 Local Demo Done; CHM-601 em Doing para preview HTTPS protegido e gratuito, sem hospedagem paga. Produção original ainda pendente.
+**Status:** Sprint 06 — CHM-602 Local Demo Done; CHM-601 preview protegido aprovado e integrado via PR #32. Falta ativação remota no Windows; produção original continua pendente e sem hospedagem paga.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -332,3 +332,11 @@ Quando a Bird terminar:
 - Não divulgar a URL, dados reais, tokens ou e-mail de acesso em issues.
 - **Aguardando:** CI, QA externo e confirmação de URL HTTPS protegida
   por email PIN; critérios de **produção** permanecem pendentes.
+
+
+### Review técnica — Cloudflare Protected Preview (09/10/2026)
+
+- [PR #32 integrada](https://github.com/ZaraTakion/chamados-api/pull/32) com executor privado, isolamento de dados e proteções de host/SSL.
+- [CI 37948905306](https://github.com/ZaraTakion/chamados-api/actions/runs/37948905306): 6/6 jobs verdes, 143 testes PostgreSQL, 142 pass + 1 skip SQLite, cobertura 93,7%; smoke Waitress real no loopback com HTTPS e rejeição de Host indevido.
+- A ativação remota com `cloudflared --allowed-mail` só pode ser feita no PC do proprietário. Nenhum link foi gerado nem hospedagem faturável criada.
+- CHM-601 segue **aberta**: comprovação externa por PIN de e-mail e requisitos originais de produção ainda não atendidos.

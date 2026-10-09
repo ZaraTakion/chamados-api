@@ -25,7 +25,7 @@ e a documentação são públicos; os dados e senhas da demonstração não são
 `runserver` não deve ser exposto na internet. A CHM-601 de
 deploy público permanece aberta por decisão de não contratar serviços.
 
-## CHM-601 — Preview HTTPS privado, grátis e temporário (em preparação)
+## CHM-601 — Preview HTTPS privado e gratuito (código aprovado)
 
 Uma segunda forma de compartilhar **somente dados fictícios** é o
 [Cloudflare Quick Tunnel protegido por e-mail](docs/PROTECTED_TUNNEL.md).
@@ -35,8 +35,7 @@ gera segredo novo, roda Django com `DEBUG=false` sobre Waitress
 apenas em `127.0.0.1` e inicia notificações em processo distinto.
 Não reutiliza o banco local nem cobra recursos.
 
-**Importante:** o recurso está em desenvolvimento na PR desta fase;
-uma URL pública ainda **não** foi ativada nem verificada. O Quick Tunnel
+**Implementação integrada:** [PR #32](https://github.com/ZaraTakion/chamados-api/pull/32), com [CI 6/6 jobs aprovado](https://github.com/ZaraTakion/chamados-api/actions/runs/37948905306). **Nenhuma URL externa foi ativada ou verificada.** O Quick Tunnel
 é temporário, com proteção de acesso por PIN de e-mail, e **não**
 comprova deploy de produção. Detalhes em
 [PROTECTED_TUNNEL.md](docs/PROTECTED_TUNNEL.md).
