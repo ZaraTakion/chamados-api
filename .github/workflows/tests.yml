@@ -189,7 +189,7 @@ jobs:
           from pathlib import Path
           p = Path("release-artifacts/swagger-real-ci.png")
           data = p.read_bytes()
-          assert data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"), "Screenshot PNG invalida"
+          assert data.startswith(bytes([137, 80, 78, 71, 13, 10, 26, 10])), "Screenshot PNG invalida"
           assert len(data) > 16000, "Imagem pequena demais, possivel tela vazia"
           print(f"Swagger CI screenshot generated: {len(data)} bytes")
           PY
@@ -228,7 +228,7 @@ jobs:
 
   local_release:
     name: Publicar pré-release local (somente commit explicitamente marcado)
-    if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v1.0.0-local.1') }}
+    if: "${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v1.0.0-local.1') }}"
     needs: [quality, postgresql, celery_worker, railway_iac]
     runs-on: ubuntu-latest
     permissions:
