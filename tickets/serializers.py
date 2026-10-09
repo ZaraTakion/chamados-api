@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from tickets.models import Ticket, TicketAuditEvent, TicketComment
+from tickets.models import Ticket, TicketAuditEvent, TicketComment, TicketNotification
 from tickets.transitions import InvalidStatusTransition, validate_ticket_transition
 
 User = get_user_model()
@@ -68,3 +68,13 @@ class TicketAuditEventSerializer(serializers.ModelSerializer):
         if self.context["request"].user.is_staff:
             return obj.actor_username
         return "Equipe de suporte" if obj.actor_was_staff else "Solicitante"
+
+
+class TicketNotificationSerializer(serializers.ModelSerializer):
+    kind = serializers.CharField(source="source.kind", read_only=True)
+    ticket_reference = serializers.CharField(source="source.ticket_reference", read_only=True)
+
+    class Meta:
+        model = TicketNotification
+        fields = ["id", "kind", "ticket_reference", "created_at"]
+        read_only_fields = fields
