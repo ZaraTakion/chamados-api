@@ -19,8 +19,8 @@ e a documentação são públicos; os dados e senhas da demonstração não são
   [changelog](CHANGELOG.md),
   [evidências reais](docs/EVIDENCE.md) e
   [critérios explicitamente não atendidos](docs/RELEASE_CHECKLIST.md).
-- [Releases do repositório](https://github.com/ZaraTakion/chamados-api/releases)
-  — localizar a tag `v1.0.0-local.1` **após a publicação**.
+- [Pré-release v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) publicada e
+  [screenshot real do Swagger](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png) anexada.
 
 `runserver` não deve ser exposto na internet. A CHM-601 de
 deploy público permanece aberta por decisão de não contratar serviços.
@@ -222,7 +222,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual (09/10/2026):** Sprints 00–05 concluídas; demonstração local aprovada (PR #30, CI 6/6 jobs, testes JWT e outbox, QA Windows). CHM-601 de produção continua **bloqueada por decisão de não contratar infraestrutura**. CHM-602 está em preparação da **pré-release v1.0.0-local.1** com coleção Postman, case, arquitetura, evidências reais em CI, changelog e GitHub Release versionada. Não há hospedagem pública nem consumo contratado.
+**Estado atual (09/10/2026):** Sprints 00–05 concluídas; demonstração local aprovada (PR #30, CI 6/6 jobs, testes JWT e outbox, QA Windows). CHM-601 de produção continua **bloqueada por decisão de não contratar infraestrutura**. CHM-602 **concluída para a edição Local Demo** com [pré-release v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1), 18 requisições Postman, documentação, screenshot real e CI **7/7 jobs verdes** (incluindo publicação); 133 testes por ambiente (SQLite 132 pass/1 skip; PostgreSQL 133 pass), 94,2% coverage. Não há hospedagem pública nem consumo contratado.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)

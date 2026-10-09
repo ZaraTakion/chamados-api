@@ -21,9 +21,9 @@ local**. Não é deploy de produção.
 - [x] CI da PR de documentação/release todo verde ([execução 37879092847](https://github.com/ZaraTakion/chamados-api/actions/runs/37879092847), seis jobs).
 - [x] Screenshot Swagger gerado por Chrome e disponível como artefato `swagger-ci-capture` (GitHub Actions 37879092847).
 - [x] PR CHM-602 [#31](https://github.com/ZaraTakion/chamados-api/pull/31) integrada na `main` (commit `7da98d7`).
-- [ ] CI do commit de publicação verde.
-- [ ] Tag `v1.0.0-local.1` publicada e asset PNG real na GitHub Release.
-- [ ] Link da release registrado no README/Issue e status atualizado.
+- [x] CI do commit de publicação verde.
+- [x] Tag `v1.0.0-local.1` publicada e asset PNG real na GitHub Release.
+- [x] Link da release registrado no README/Issue e status atualizado.
 
 ## Desvios conscientes em relação à DoD original
 
@@ -41,6 +41,13 @@ local**. Não é deploy de produção.
 A versão `local.1` pode ser divulgada de forma profissional e honesta;
 não é apropriado afirmar que a Definition of Done **de produção** foi
 integralmente cumprida. A pré-release informa expressamente isso.
+
+## Evidência da publicação
+
+- [Release confirmada](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) como **pre-release**, sem hospedagem.
+- [Execução CI que publicou a release](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318): 7/7 jobs bem-sucedidos, incluindo captura com Chrome.
+- [Imagem real anexada](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png) em PNG (74.540 bytes).
+- Tag `v1.0.0-local.1` aponta para o commit `5edb6d871be3afa35be1c29e4f74a0f6dd90df81`.
 
 ## Pedido de publicação
 

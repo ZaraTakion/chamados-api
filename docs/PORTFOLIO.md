@@ -17,8 +17,7 @@ segurança de API, testes, automação, documentação técnica e trade-offs.
 
 **Link para repositório:** https://github.com/ZaraTakion/chamados-api
 
-**Versão:** `v1.0.0-local.1` — demonstração local; **não existe URL
-pública de produção**.
+**Versão publicada:** [`v1.0.0-local.1`](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) — demonstração local, com [captura real do Swagger](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png); **não existe URL pública de produção**.
 
 ## Evidências que podem ser verificadas
 

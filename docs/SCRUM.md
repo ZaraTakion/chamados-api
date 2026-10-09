@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 06 ATIVA — CHM-601 bloqueada para hospedagem; CHM-602 em Doing (pré-release local sem custos).
+**Status:** SPRINT 06 — trilha Local Demo concluída (CHM-602 Done). CHM-601 de produção bloqueada; não há item Doing.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) está **bloqueada** por decisão de não contratar hospedagem; sua subentrega de demonstração local já está Done (PR #30). [CHM-602 #16](https://github.com/ZaraTakion/chamados-api/issues/16) é o **único Doing**, preparando pré-release local verificável com critérios de produção explicitamente adiados.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) está **bloqueada** por decisão de não contratar hospedagem; sua subentrega de demonstração local já está Done (PR #30). [CHM-602 #16](https://github.com/ZaraTakion/chamados-api/issues/16) está **Done na trilha local** após tag/release `v1.0.0-local.1`; não há Doing. Critérios de produção explicitamente adiados para CHM-601 #15.
 
 ## Princípios de trabalho
 
@@ -168,7 +168,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 06 — Release profissional
 
-**Status:** ATIVA; CHM-601 bloqueada para produção, CHM-602 Doing para release local.
+**Status:** Trilha Local Demo entregue. CHM-601 bloqueada para produção; CHM-602 Done no escopo local.
 
 **Sprint Goal:** transformar o projeto em evidência de carreira publicamente demonstrável.
 
@@ -312,3 +312,11 @@ Quando a Bird terminar:
 - Publicação via commit explicitamente marcado e dependente de CI verde.
 - Critérios de produção não aplicáveis à edição local estão explicados
   em [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
+
+
+### Review final da edição local — 09/10/2026
+
+- Pré-release [v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) publicada a partir do commit `5edb6d8`; screenshot real do Swagger anexada.
+- [GitHub Actions 37879361318](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318): 6 jobs de validação e 1 job de publicação aprovados. PostgreSQL 133/133, SQLite 132 pass + 1 skip, cobertura 94,2%.
+- Postman com 18 requisições, notas, case, arquitetura e evidências vinculadas ao GitHub.
+- CHM-602 concluída **somente** para a release local. CHM-601 permanece aberta e bloqueada sem autorização de hospedagem; deploy público é requisito diferente, não cumprido.

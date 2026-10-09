@@ -42,8 +42,9 @@ real autenticado via JWT em banco temporário no GitHub Actions.
    [GitHub Actions](https://github.com/ZaraTakion/chamados-api/actions).
 2. Em **Artifacts**, abra `swagger-ci-capture` para ver a captura PNG
    produzida pelo navegador no CI, sem dados de usuários reais.
-3. Depois de publicada a release, o asset
-   `swagger-real-ci.png` também ficará disponível na sua página.
+3. A [pré-release v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) foi publicada; consulte
+   o [PNG real anexado](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png) diretamente. O CI de publicação
+   é a [execução 37879361318](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318).
 
 A captura comprova a interface Swagger no ambiente de testes, **não**
 seu funcionamento na internet. O projeto requer `runserver` local

@@ -69,3 +69,10 @@ Documentação completa: [LOCAL_DEMO](./LOCAL_DEMO.md),
 
 Nenhum token ou senha real deve integrar código, screenshots,
 exemplos ou notas de release.
+
+## Resultado de publicação verificado
+
+- [Pré-release v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) publicada com tag apontando ao commit `5edb6d8`.
+- [CI do commit de lançamento](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318): seis jobs de qualidade/integração e o job de release aprovados; 133 testes no PostgreSQL; 132 pass + 1 skip SQLite; cobertura 94,2%.
+- [Asset PNG real do Swagger](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png) anexado (74.540 bytes), gerado em navegador Chrome no runner CI sobre a API em execução.
+- Nenhum serviço de produção criado; CHM-601 permanece aberta.

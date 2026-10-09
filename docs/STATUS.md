@@ -152,17 +152,19 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - [PR #30 integrada](https://github.com/ZaraTakion/chamados-api/pull/30), commit `6585d2a`. Nenhum serviço externo provisionado.
 - CHM-601 (deploy original de produção) permanece aberta, sem custo autorizado; CHM-602 (release e portfólio) aguarda decisão de escopo para versão local.
 
-## CHM-602 — Pré-release local v1.0.0-local.1 (Doing)
+## CHM-602 — Pré-release local v1.0.0-local.1 (Done)
 
-- Preparar coleção Postman, case para recrutadores, arquitetura, changelog e
-  documentação de evidências com dados sintéticos (branch
-  `docs/chm-602-local-demo-release`).
-- Acrescentar captura **real** do Swagger por Chrome no CI, salvar como
-  artefato GitHub Actions e anexar à GitHub Release somente se a captura
-  passar validação.
-- Criar pré-release `v1.0.0-local.1` a partir da `main` somente após
-  os checks obrigatórios passarem.
+- Coleção Postman (18 requisições), case para recrutadores, arquitetura, changelog e evidências sanitizadas integradas via PR #31.
+- Captura **real** do Swagger gerada em Chrome headless no CI e [anexada à GitHub Release](https://github.com/ZaraTakion/chamados-api/releases/download/v1.0.0-local.1/swagger-real-ci.png).
+- [GitHub Release `v1.0.0-local.1` publicada](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) após 7 jobs bem-sucedidos (6 verificações + publicação). Tag aponta para `5edb6d8`.
 - Checklist em [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
 - **Não existe:** produção HTTPS, serviço gerenciado, backup/rollback de
   produção ou URL pública. CHM-601 #15 fica aberta e bloqueada; não
   contratar nada sem autorização.
+
+### Encerramento técnico CHM-602 — 09/10/2026
+
+- [PR #31 merged](https://github.com/ZaraTakion/chamados-api/pull/31), CI de PR 6/6 verde. 
+- [Execução da release](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318): 7 jobs aprovados, PostgreSQL 133/133, SQLite 132 pass + 1 skip, cobertura 94,2%; screenshot Swagger como artefato e asset de release (74.540 bytes).
+- Reprodutibilidade: coleção Postman sem credenciais, guias, case e CHANGELOG.
+- **Escopo local Done; deploy original de produção CHM-601 continua bloqueado/aberto**, sem domínio público ou recursos faturáveis.

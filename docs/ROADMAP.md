@@ -129,3 +129,13 @@ O roadmap termina quando:
 5. currículo e portfólio puderem apontar para evidências reais;
 6. limitações forem documentadas honestamente;
 7. o projeto tiver uma release/tag estável.
+
+## Marco de portfólio — 09/10/2026
+
+A edição [v1.0.0-local.1](https://github.com/ZaraTakion/chamados-api/releases/tag/v1.0.0-local.1) atingiu os objetivos de
+**demonstração local**: Swagger, autenticação, domínio, outbox, testes,
+documentação e evidências reais de CI. A publicação em produção não
+foi executada porque o proprietário não autorizou recursos pagos.
+Os critérios originais de finalização do roadmap que exigem deploy público
+permanecem **pendentes (CHM-601 #15)**, sem reclassificar local como
+produção. A CHM-602 foi concluída para a release de portfólio local.
