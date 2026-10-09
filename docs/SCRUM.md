@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 05 CONCLUÍDA — Sprint 06 em planejamento.
+**Status:** SPRINT 06 ATIVA — CHM-601 em Doing.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. Próximo item planejado: [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15); nenhum Doing no momento.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único Doing; preparação Railway e runbooks em PR, deploy real depende de conta/autorização. CHM-602 permanece no Backlog.
 
 ## Princípios de trabalho
 
@@ -167,6 +167,8 @@ O calendário começa somente quando CHM-000 for fechado.
 **Resultado esperado:** processamento em background com retries controlados e sem corromper o domínio.
 
 ### Sprint 06 — Release profissional
+
+**Status:** ATIVA; CHM-601 Doing, CHM-602 em Backlog.
 
 **Sprint Goal:** transformar o projeto em evidência de carreira publicamente demonstrável.
 

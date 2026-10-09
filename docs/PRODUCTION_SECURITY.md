@@ -71,3 +71,18 @@ política de backup, observabilidade de infraestrutura, teste TLS/HSTS no
 domínio final, rotação de segredos e configuração segura do proxy dependem
 do operador no ambiente de implantação. A URL de readiness é pública e não
 divulga a causa interna de falhas.
+
+## CHM-601 — Hospedagem Railway
+
+O [guia de deploy](./DEPLOY_RAILWAY.md) documenta três processos separados
+(Web, Celery Worker e Beat) e bancos privados. O Web executa a migration
+em pre-deploy; `/api/health/ready/` serve como gate de tráfego. Apenas os
+endpoints públicos de health (live/ready) têm isenção do redirecionamento
+HTTP para permitir sondas internas do Railway, sem conteúdo sensível. O
+restante da API deve continuar forçando HTTPS. Consulte também o
+[runbook operacional](./OPERATIONS_RUNBOOK.md) antes da publicação.
+
+`DJANGO_HSTS_SECONDS` começa em zero, pois HSTS deve ser ativado apenas
+após certificar o HTTPS e o domínio final. Variáveis de segredos são
+configuradas no provedor, nunca no Git. Os arquivos do `deploy/` são
+preparação de infraestrutura, **não evidência de site já publicado**.

@@ -1,6 +1,6 @@
 # Status do Projeto
 
-## Agora — Sprint 06: Deploy e release profissional (planejamento)
+## Agora — Sprint 06: Deploy e release profissional
 
 - Sprints 00, 01, 02, 03, 04 e 05: **Done**.
 - [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8): **Done**, PR #22 merged.
@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- Sprint 05 encerrada. CHM-501 e CHM-502 concluídas. WIP: nenhum item em Doing; próxima tarefa [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15).
+- Sprint 05 encerrada. WIP: [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único item Doing, preparação de deploy sem publicação externa.
 
 ## CHM-401 — Observabilidade
 
@@ -93,7 +93,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CHM-401, CHM-402 e CHM-403 Done, com PRs #24, #25, #26 integradas.
 - Review: observabilidade segura, health probes e configuração de produção, PostgreSQL 16 real no CI.
 - Retrospectiva: preservar contratos anteriores (throttling legado); detectar regressões no CI; confirmar Windows antes dos merges de código.
-- Sprint 05 concluída via PRs #27 e #28. Sprint 06 é a próxima fase (deploy e release final).
+- Sprint 05 concluída via PRs #27 e #28. Sprint 06 iniciada com CHM-601; CHM-602 aguarda deploy real validado.
 
 ## CHM-501 — Redis + Celery (Done)
 
@@ -125,3 +125,11 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Review: Redis/Celery em Compose com testes reais e outbox transacional com caixa de entrada privada; falhas do broker não bloqueiam a escrita HTTP.
 - Retrospectiva: manter evidência do worker real no CI, evitar efeitos colaterais em transações HTTP, validar backup antes de migrações locais.
 - Próximo: CHM-601 (#15) — hospedagem PostgreSQL persistente, HTTPS, worker + scheduler, logs, rollback e runbook. Sem deploy em produção confirmado até agora.
+
+## CHM-601 — Preparação para produção (Doing)
+
+- Configuração Railway por serviço Web/Worker/Beat, Postgres e Redis privados, healthcheck de readiness e migrations de pre-deploy.
+- Docker context reforçado: `.env.*`, dados, backups e artefatos locais excluídos da imagem.
+- Smoke HTTP público e offline unit tests, além de validação end-to-end no Docker CI.
+- Runbooks: [DEPLOY_RAILWAY.md](./DEPLOY_RAILWAY.md) e [OPERATIONS_RUNBOOK.md](./OPERATIONS_RUNBOOK.md).
+- **Pendências de Done:** CI/QA do PR, conta/hospedagem autorizada, publicação HTTPS real, validação autenticada com dados sintéticos, backup/rollback e links comprovados. Nenhuma produção publicada declarada.
