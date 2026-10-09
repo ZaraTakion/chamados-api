@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- Sprint 04 encerrada. CHM-501 concluída; WIP: sem Doing. Próximo item: [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14).
+- Sprint 04 encerrada; CHM-501 concluída. WIP: [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) é o único Doing.
 
 ## CHM-401 — Observabilidade
 
@@ -93,7 +93,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CHM-401, CHM-402 e CHM-403 Done, com PRs #24, #25, #26 integradas.
 - Review: observabilidade segura, health probes e configuração de produção, PostgreSQL 16 real no CI.
 - Retrospectiva: preservar contratos anteriores (throttling legado); detectar regressões no CI; confirmar Windows antes dos merges de código.
-- Sprint 05 em andamento: CHM-501 Done, CHM-502 é a próxima tarefa planejada.
+- Sprint 05 em andamento: CHM-501 Done; CHM-502 em implementação na branch `feat/chm-502-notification-outbox`.
 
 ## CHM-501 — Redis + Celery (Done)
 
@@ -105,4 +105,12 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - CI: 5/5 jobs aprovados, incluindo Redis+Celery real em Docker Compose e PostgreSQL 16; 101 testes descobertos por ambiente e 94,3% de cobertura.
 - QA Windows em 08/10/2026: 101 testes encontrados, 100 passaram, 1 skip PostgreSQL, 0 falhas, 288.867s; coverage **94,7%** (527 statements, 21 misses, 118 branches, 11 partial branches); Ruff, Django e migrações verdes.
 - [PR #27 integrada](https://github.com/ZaraTakion/chamados-api/pull/27), commit `49b549bc87c348f9bdf445cc36710902ee0d3e60`; Issue #13 fechada.
-- CHM-502: notificações assíncronas, ainda não iniciada.
+- CHM-502 em desenvolvimento: notificações internas por outbox persistido e tarefa periódica Celery.
+
+## CHM-502 — Notificações assíncronas (Doing)
+
+- Eventos: criação, atribuição, status, resolução e comentário público, sem vazamento de notas internas.
+- Caixa de entrada privada no `GET /api/notifications/`.
+- Outbox transacional no banco e processamento agendado pelo Celery Beat; nenhuma conexão Redis no caminho HTTP.
+- Migration `0004_notifications`, testes de rollback/idempotência/privacidade, CI real Redis+worker+scheduler.
+- [NOTIFICATIONS.md](./NOTIFICATIONS.md). CI e QA Windows pendentes, sem merge nesta fase.
