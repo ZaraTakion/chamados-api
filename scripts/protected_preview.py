@@ -165,7 +165,7 @@ def main():
             [sys.executable, "manage.py", "process_notifications", "--watch", "--interval", "10"],
             cwd=ROOT, env=env,
         )
-        print("Preview protegido ativo:", url, flush=True)
+        print("Swagger privado:", url + "/api/docs/", flush=True)
         print("Somente emails autorizados recebem o PIN de acesso.", flush=True)
         print("Banco isolado: data/protected-preview.sqlite3 (nenhum dado do SQLite atual).", flush=True)
         print("Use Ctrl+C para ENCERRAR o tunnel, o servidor e o processador.", flush=True)
