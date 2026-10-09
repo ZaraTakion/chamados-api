@@ -86,3 +86,11 @@ O outbox garante persistência local, não substitui monitoramento em
 produção. Redis/Celery não entregam exactly-once externamente. Não há
 e-mail, web push, marcação de leitura nem política de expurgo nesta etapa;
 esses pontos podem ser adicionados em versões posteriores, conforme uso.
+
+## Aceite da CHM-502 — 08/10/2026
+
+- CI 5/5 jobs verdes; worker real Redis/Celery executou entrega de outbox em caixa de entrada privada. PostgreSQL 16: 113 testes aprovados; SQLite Python 3.10–3.12: 113 encontrados, 112 passaram e 1 skip específico PostgreSQL; coverage CI 94,8%.
+- QA Windows: Ruff, Django check e migrations check aprovados; 113 testes (112 passaram, 1 skip), 0 falhas; cobertura local **95,2%**.
+- Backup SQLite: `data/db-backup-chm502-1791505810.sqlite3`, `PRAGMA integrity_check=ok`. Migration `tickets.0004_notifications` aplicada com sucesso, `showmigrations tickets` confirma 0001–0004 `[X]`.
+- [PR #28 merged](https://github.com/ZaraTakion/chamados-api/pull/28), commit `29b06109`.
+- Próxima Sprint 06: deploy de produção e liberação final com documentação de operação.

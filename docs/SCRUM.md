@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 05 ATIVA — Processamento assíncrono.
+**Status:** SPRINT 05 CONCLUÍDA — Sprint 06 em planejamento.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) é o único item Doing; implementação na branch `feat/chm-502-notification-outbox`.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. Próximo item planejado: [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15); nenhum Doing no momento.
 
 ## Princípios de trabalho
 
@@ -157,7 +157,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 05 — Processamento assíncrono
 
-**Status:** ATIVA; CHM-501 Done, CHM-502 Doing.
+**Status:** DONE — CHM-501 e CHM-502 concluídas em 08/10/2026.
 
 **Sprint Goal:** introduzir fila somente depois que o núcleo síncrono estiver sólido.
 
@@ -258,3 +258,13 @@ Quando a Bird terminar:
 - Windows (08/10/2026): Ruff, check e migration check verdes; 101 testes encontrados, 100 aprovados e 1 skip, duração 288.867s, cobertura 94,7%.
 - PR #27 squash merged no commit `49b549bc`; Issue #13 concluída.
 - Próximo item: CHM-502 — integração segura de notificações após commit de transações, retries e idempotência.
+
+
+## Review e retrospectiva — Sprint 05
+
+- CHM-501: integração Redis/Celery, tarefa read-only idempotente, CI 5/5 jobs e QA Windows (101 testes, 100 aprovados/1 skip, coverage 94,7%). PR #27 integrada.
+- CHM-502: inbox privada, outbox transacional, periódica Celery Beat, segurança por destinatário, retries e idempotência. CI 5/5 jobs (113 testes PostgreSQL/112+1 SQLite), QA Windows 113 testes (112 passaram/1 skip), **95,2% coverage**.
+- Migração local: backup consistente e íntegro antes de `tickets.0004_notifications`; migration aplicada e verificada.
+- [PR #28 integrada](https://github.com/ZaraTakion/chamados-api/pull/28), commit `29b06109`; Issues #13 e #14 fechadas.
+- Retrospectiva: preservar integridade transacional; manter testes de integração com Redis real; fazer backup antes de mudanças de schema; manter WIP máximo 1.
+- Sprint 06: CHM-601 (deploy com runbook) e CHM-602 (evidências, tag e release). Nenhuma implantação de produção é reivindicada antes de smoke test real.
