@@ -86,3 +86,8 @@ restante da API deve continuar forçando HTTPS. Consulte também o
 após certificar o HTTPS e o domínio final. Variáveis de segredos são
 configuradas no provedor, nunca no Git. Os arquivos do `deploy/` são
 preparação de infraestrutura, **não evidência de site já publicado**.
+
+**Atualização Railway (CHM-601):** para serviços novos, a infraestrutura
+é especificada em [`.railway/railway.ts`](../.railway/railway.ts),
+não nos arquivos `railway.json` descontinuados. Executar `railway config plan`
+e revisar os recursos antes da aprovação de qualquer provisionamento.

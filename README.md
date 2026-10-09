@@ -54,7 +54,7 @@ Também é possível apontar a aplicação para um PostgreSQL gerenciado definin
 
 ## Preparação de deploy — Sprint 06
 
-A aplicação possui Dockerfile e arquivos específicos para três processos no Railway (Web, Worker e Beat), além de PostgreSQL e Redis privados. Consulte [guia Railway](docs/DEPLOY_RAILWAY.md) e [runbook de operação, backup e rollback](docs/OPERATIONS_RUNBOOK.md). Depois de publicar, execute um smoke test **sem credenciais**:
+A aplicação possui Dockerfile e uma especificação atual de **Railway Infrastructure as Code** em `.railway/railway.ts` para cinco recursos (Web, Worker, Beat, PostgreSQL e Redis privados). Consulte [guia Railway](docs/DEPLOY_RAILWAY.md) e [runbook de operação, backup e rollback](docs/OPERATIONS_RUNBOOK.md). Depois de publicar, execute um smoke test **sem credenciais**:
 
 ```bash
 python scripts/smoke_deploy.py https://DOMINIO_REAL

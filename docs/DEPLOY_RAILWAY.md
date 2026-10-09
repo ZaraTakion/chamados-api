@@ -1,130 +1,129 @@
-# CHM-601 — Preparação de deploy no Railway
+# CHM-601 — Deploy Railway (Infrastructure as Code)
 
-**Status:** preparação técnica; nenhum ambiente de produção é considerado
-publicado até que haja URL HTTPS e smoke tests reais registrados no issue #15.
+**Estado:** configuração revisada; nenhum serviço novo de produção foi criado.
+A publicação com domínio HTTPS, persistência, backups e smoke autenticado
+será validada após aprovação explícita dos custos e do ambiente.
 
-## Arquitetura e custos
+## Arquitetura
 
-A implantação proposta usa **cinco serviços** no mesmo projeto/environment:
+A aplicação usa cinco recursos privados no mesmo projeto e ambiente:
 
-1. `Postgres` — banco persistente privado, com backups configurados.
-2. `Redis` — broker/result backend privado, sem acesso TCP público.
-3. `chamados-api-web` — único serviço com domínio público.
-4. `chamados-api-worker` — consumidor Celery, privado.
-5. `chamados-api-beat` — instância **única** do scheduler, privada.
-
-O Railway é um serviço externo que pode gerar custos contínuos, inclusive
-com mais de um serviço em execução. **Não iniciar um deploy nem habilitar
-recursos faturáveis sem aprovação do proprietário da conta.** Verificar
-planos, limites, consumo e política de backups no painel antes de aprovar.
-
-Documentação oficial: https://docs.railway.com/guides/django e
-https://docs.railway.com/guides/docker-compose .
-
-## Pré-requisitos
-
-- PR de deploy aprovado, branch `main` verde no CI.
-- Conta Railway autorizada e repositório GitHub conectado com permissões mínimas.
-- Confirmação de custos, região, domínios e se o ambiente é demonstração
-  pública ou prévia privada. Nunca publicar dados pessoais de produção.
-- PostgreSQL e Redis criados **no mesmo projeto e environment** com rede
-  privada; não habilitar TCP proxy público para bancos.
-- Disponibilidade de backups persistentes do Postgres, restauração testada
-  e responsáveis por incidentes definidos antes de dados reais.
-
-## Configuração dos serviços a partir de uma única base de código
-
-Criar três serviços GitHub apontando para `ZaraTakion/chamados-api` na
-branch `main`, todos com o `Dockerfile` da raiz. Em cada serviço,
-configurar o campo **Config as Code** para a rota correspondente (começa
-com `/`) no mesmo repositório:
-
-| Serviço | Config as Code | Entrada |
+| Recurso | Processo | Acesso |
 | --- | --- | --- |
-| Web | `/deploy/railway-web.json` | Dockerfile CMD (Gunicorn + `$PORT`) |
-| Worker | `/deploy/railway-worker.json` | Celery worker, concorrência 1 |
-| Scheduler | `/deploy/railway-beat.json` | Celery Beat (uma réplica) |
+| `Postgres` | Banco gerenciado e persistente | Somente rede privada |
+| `Redis` | Broker e backend de resultados Celery | Somente rede privada |
+| `chamados-api-web` | Django / Gunicorn | Único serviço público |
+| `chamados-api-worker` | Celery Worker, concorrência 1 | Somente rede privada |
+| `chamados-api-beat` | Celery Beat, 1 réplica | Somente rede privada |
 
-O web executa `python manage.py migrate --noinput` no **pre-deploy**
-e só recebe tráfego depois de `GET /api/health/ready/` responder HTTP 200.
-Worker e Beat **não executam migrations**, evitando concorrência de
-alteração de schema. Não escalar Beat horizontalmente.
+**Importante:** esses cinco recursos podem gerar custos recorrentes. Não
+aplicar o plano sem aprovar custos, backups, região e política de publicação.
+Não reutilizar os serviços de outros projetos do workspace.
 
-**Variáveis privadas**: cadastrar no painel do Railway, em cada um dos
-três serviços Django, sem copiar `.env.example` nem publicar valores:
+## Configuração reproduzível e atualizada
 
-| Nome | Valor esperado |
-| --- | --- |
-| `DJANGO_DEBUG` | `false` |
-| `DJANGO_SECRET_KEY` | segredo único, aleatório e privado, com 50+ caracteres |
-| `DJANGO_ALLOWED_HOSTS` | domínio exato da Web e `healthcheck.railway.app`, separados por vírgula |
-| `DJANGO_SECURE_SSL_REDIRECT` | `true` |
-| `DATABASE_URL` | referência `${{Postgres.DATABASE_URL}}` |
-| `CELERY_BROKER_URL` | referência `${{Redis.REDIS_URL}}` |
-| `CELERY_RESULT_BACKEND` | referência `${{Redis.REDIS_URL}}` |
-| `APP_LOG_LEVEL` | `INFO` |
-| `DJANGO_TRUST_PROXY_SSL_HEADER` | `true` **apenas após confirmar** que o proxy sanitiza `X-Forwarded-Proto` |
-| `DJANGO_HSTS_SECONDS` | começar em `0`, alterar apenas após teste de TLS e domínio |
+O Railway descontinuou o Config as Code (`railway.json` e
+`railway.toml`) para serviços novos e recomenda **Infrastructure as Code**
+com o arquivo [`.railway/railway.ts`](../.railway/railway.ts).
+O pacote `railway` está declarado no `package.json` apenas para as
+ferramentas de infraestrutura; **o backend continua sendo Python/Django**.
 
-As expressões `${{Service.VARIABLE}}` acima são **referências de
-variáveis do Railway**, não URLs literais. O nome `Postgres`/`Redis`
-deve corresponder exatamente ao serviço criado no projeto.
+Para uma conta já autorizada, usar o CLI no projeto correto:
 
-A URL de resultados Celery pode compartilhar Redis com o broker; Celery
-usa chaves distintas. Backups e alta disponibilidade requerem configuração
-própria. O Railway atual fornece serviço Postgres com suporte a SSL; manter
-a validação TLS da conexão do Django para produção.
+```bash
+npm install
+railway login
+railway link
+railway config plan
+```
 
-`DJANGO_ALLOWED_HOSTS` deve listar o hostname exato da Web (por exemplo,
-o domínio gerado no ambiente); o hostname `healthcheck.railway.app`
-precisa estar autorizado para o probe do Railway. Nunca usar `*`.
+`railway config plan` consulta o Railway e mostra a alteração proposta sem
+provisioná-la. **Não executar `railway config apply` antes de revisão e
+autorização**, porque ele pode criar serviços pagos e bancos persistentes.
 
-## HTTPS e healthcheck
+Também é possível configurar esses recursos com a integração Railway do
+ChatGPT, mas apenas depois de confirmar projeto, ambiente e autorização de
+custos. O arquivo IaC é a especificação desejada, não uma prova de que a
+infraestrutura existe.
 
-- Apenas o web recebe domínio e tráfego público; não publicar outros serviços.
-- O Gunicorn já usa a variável `PORT` injetada pelo Railway.
-- A plataforma verifica `GET /api/health/ready/` e exige 200.
-- A aplicação redireciona requisições HTTP normais para HTTPS. Somente
-  `/api/health/live/` e `/api/health/ready/` são isentas do
-  **redirecionamento** para permitir probes internos HTTP; não expõem PII.
-- Confirmar cabeçalho de protocolo enviado pelo proxy ANTES de habilitar
-  `DJANGO_TRUST_PROXY_SSL_HEADER`. O proxy precisa remover qualquer
-  `X-Forwarded-Proto` controlado pelo cliente e inserir um valor confiável.
-- Ativar HSTS em etapas apenas com HTTPS já validado. HSTS com um domínio
-  errado pode bloquear usuários durante bastante tempo.
+Fontes oficiais:
+- https://docs.railway.com/infrastructure-as-code
+- https://docs.railway.com/infrastructure-as-code/reference
 
-Referências: https://docs.railway.com/deployments/healthchecks e
-https://docs.railway.com/config-as-code .
+## GitHub e segredos
 
-## Ordem de implantação
+A conta Railway precisa ter acesso de GitHub a
+`ZaraTakion/chamados-api`, e `main` deve estar verde no CI.
+Configurar na seção **Shared Variables** do novo ambiente, antes de
+aplicar o plano:
 
-1. Revisar fatura e configurar Postgres (persistência, backup) e Redis
-   (privado, retenção apropriada).
-2. Criar e configurar Web, Worker e Beat a partir da `main`, **sem
-   habilitar autodeploy de produção antes do aceite**.
-3. Configurar segredos e referências para os três. Usar o mesmo
-   `DJANGO_SECRET_KEY` seguro em todos. Manter Beat com uma réplica.
-4. Implantar **Web primeiro**; o pre-deploy aplica migrations.
-5. Confirmar que a readiness devolve 200 e que o domínio oferece HTTPS.
-6. Implantar Worker e Beat somente após o schema ter sido aplicado.
-7. Executar smoke checks públicos, em uma máquina com rede:
-   `python scripts/smoke_deploy.py https://DOMINIO_REAL`.
-8. Em conta de demonstração e com dados não sensíveis, autenticar e
-   criar um chamado, atualizar status, verificar notificação eventual;
-   conferir logs seguros (sem senhas, tokens, bodies).
-9. Registrar URL, commit deployado, status CI, resultados dos probes,
-   comportamento do Worker/Beat e backups no issue CHM-601.
-10. Somente depois habilitar publicação/autodeploy conforme preferência
-    e concluir Definition of Done.
+- `DJANGO_SECRET_KEY`: segredo aleatório exclusivo, 50+ caracteres,
+  sem enviá-lo para conversas, Git, prints ou logs.
+- `DJANGO_ALLOWED_HOSTS`: domínio exato do web e
+  `healthcheck.railway.app`, separados por vírgula, sem `*`.
 
-O script de smoke usa somente GET públicos, valida readiness, liveness,
-Request ID, no-store, schema e Swagger. **Não substitui** prova de
-autenticação, entrega pelo worker, backups e monitoramento.
+O IaC referencia esses valores como `ctx.shared.DJANGO_SECRET_KEY`
+e `ctx.shared.DJANGO_ALLOWED_HOSTS`; não os armazena no repositório.
+Gerar o domínio público do Web antes de realizar o aceite final.
+Após configurar o domínio, atualizar a variável shared de hosts.
 
-## Bloqueios externos
+A configuração aplica aos três processos:
 
-A criação de serviços, conexão GitHub com Railway, autorização de
-faturamento, provisionamento real, segredos e URLs precisam ser efetuados
-na conta do proprietário. Se a integração do Railway estiver conectada ao
-ChatGPT e autorizada, esses passos podem ser executados na conta. Sem isso,
-a preparação e testes de CI são verificáveis, mas **não o deploy real**.
+- `DJANGO_DEBUG=false`;
+- `DATABASE_URL` referenciando Postgres gerenciado;
+- `CELERY_BROKER_URL` e `CELERY_RESULT_BACKEND` referenciando
+  Redis gerenciado;
+- `DJANGO_SECURE_SSL_REDIRECT=true`, `APP_LOG_LEVEL=INFO`;
+- `DJANGO_HSTS_SECONDS=0` inicialmente.
+
+**Não usar** os valores de `.env.example` em produção. Só ativar
+`DJANGO_TRUST_PROXY_SSL_HEADER=true` após verificar que o proxy TLS
+sobrescreve `X-Forwarded-Proto` e não aceita valor falso do cliente.
+Sem essa confiança, o proxy pode causar redirecionamentos em loop ou
+classificação insegura das requisições.
+
+## Migrações e healthchecks
+
+O Web executa `python manage.py migrate --noinput` no **pre-deploy**.
+Um comando de pre-deploy que falhe bloqueia a promoção daquele deploy.
+Worker e Beat não executam migrations. Os serviços usam o Dockerfile da
+raiz do projeto; o Web usa o CMD de Gunicorn e a variável `PORT`.
+
+O probe HTTP interno `GET /api/health/ready/` deve retornar 200.
+Inclua `healthcheck.railway.app` em `DJANGO_ALLOWED_HOSTS`. Esse
+probe verifica PostgreSQL, mas **não** monitora continuamente o serviço
+após publicação; configure alertas de uptime separados.
+Liveness/readiness estão isentas apenas do redirecionamento interno HTTP;
+a API pública mantém obrigatoriedade de HTTPS.
+
+Fontes:
+- https://docs.railway.com/deployments/pre-deploy-command
+- https://docs.railway.com/deployments/healthchecks
+
+## Ordem do rollout
+
+1. Aprovar região, custos e exposição (demo pública ou privada), e
+   definir projeto **novo**, distinto dos projetos existentes.
+2. Autorizar GitHub e preparar variáveis shared privadas.
+3. Revisar `railway config plan` ou staged changes; avaliar recursos
+   faturáveis, fontes, réplicas, segurança de rede e backups.
+4. Apenas com aprovação: aplicar a infraestrutura. Conferir que Postgres
+   e Redis sejam privados, e que os dados do Postgres sejam persistentes.
+5. Garantir que a migração do Web finalize antes de liberar Worker e Beat
+   para receber e processar eventos. Beat deve ter uma única instância.
+6. Criar domínio público para o Web e concluir HTTPS/proxy/hosts,
+   readiness e limites de segurança.
+7. Executar `python scripts/smoke_deploy.py https://DOMINIO_REAL`,
+   que valida GET públicos de health, schema e Swagger.
+8. Fazer um teste autenticado com usuário e tickets **sintéticos**,
+   verificando gravação, outbox, worker e inbox.
+9. Comprovar backups restauráveis do Postgres; documentar rollback de
+   código, limitação de reversão de schema e procedimento de incidentes.
+10. Registrar URL, commit, logs higienizados, estado de cada serviço,
+    custos aprovados e smoke real em [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15).
+
+O smoke público **não** comprova backup, worker nem autorização; a
+CHM-601 só pode ser marcada Done após as evidências reais.
+
+Consulte [runbook operacional](./OPERATIONS_RUNBOOK.md) e
+[segurança de produção](./PRODUCTION_SECURITY.md).

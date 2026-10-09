@@ -128,7 +128,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 
 ## CHM-601 — Preparação para produção (Doing)
 
-- Configuração Railway por serviço Web/Worker/Beat, Postgres e Redis privados, healthcheck de readiness e migrations de pre-deploy.
+- Railway Infrastructure as Code (`.railway/railway.ts`): Web/Worker/Beat, Postgres e Redis privados, healthcheck de readiness e migrations de pre-deploy. O antigo Config as Code, incompatível com serviços novos, foi retirado.
 - Docker context reforçado: `.env.*`, dados, backups e artefatos locais excluídos da imagem.
 - Smoke HTTP público e offline unit tests, além de validação end-to-end no Docker CI.
 - Runbooks: [DEPLOY_RAILWAY.md](./DEPLOY_RAILWAY.md) e [OPERATIONS_RUNBOOK.md](./OPERATIONS_RUNBOOK.md).

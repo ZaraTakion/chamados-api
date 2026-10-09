@@ -1,6 +1,5 @@
-"""CHM-601: deployment manifests and safe public smoke checks."""
+"""CHM-601: deployment infrastructure and safe public smoke checks."""
 
-import json
 from pathlib import Path
 
 from django.test import Client, SimpleTestCase, override_settings
@@ -11,25 +10,41 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class RailwayDeploymentConfigTests(SimpleTestCase):
-    def _read(self, name):
-        return json.loads((ROOT / "deploy" / name).read_text(encoding="utf-8"))
+    def _iac(self):
+        return (ROOT / ".railway" / "railway.ts").read_text(encoding="utf-8")
+
+    def test_current_infrastructure_as_code_replaces_deprecated_files(self):
+        code = self._iac()
+        self.assertIn('from "railway/iac"', code)
+        self.assertIn('postgres("Postgres")', code)
+        self.assertIn('redis("Redis")', code)
+        self.assertIn('github("ZaraTakion/chamados-api"', code)
+        for old in ("railway-web.json", "railway-worker.json", "railway-beat.json"):
+            self.assertFalse((ROOT / "deploy" / old).exists())
 
     def test_web_service_runs_migrations_and_requires_readiness(self):
-        conf = self._read("railway-web.json")
-        self.assertEqual(conf["build"]["builder"], "DOCKERFILE")
-        self.assertEqual(conf["deploy"]["preDeployCommand"], "python manage.py migrate --noinput")
-        self.assertEqual(conf["deploy"]["healthcheckPath"], "/api/health/ready/")
-        self.assertGreaterEqual(conf["deploy"]["healthcheckTimeout"], 120)
+        code = self._iac()
+        self.assertIn('service("chamados-api-web"', code)
+        self.assertIn('preDeploy: "python manage.py migrate --noinput"', code)
+        self.assertIn('healthcheck: "/api/health/ready/"', code)
+        self.assertIn("healthcheckTimeout: 180", code)
 
     def test_worker_and_beat_have_independent_start_commands(self):
-        worker = self._read("railway-worker.json")
-        beat = self._read("railway-beat.json")
-        self.assertIn("celery -A chamados_api worker", worker["deploy"]["startCommand"])
-        self.assertIn("celery -A chamados_api beat", beat["deploy"]["startCommand"])
-        self.assertNotIn("preDeployCommand", worker["deploy"])
-        self.assertNotIn("preDeployCommand", beat["deploy"])
-        self.assertNotIn("healthcheckPath", worker["deploy"])
-        self.assertNotIn("healthcheckPath", beat["deploy"])
+        code = self._iac()
+        self.assertIn('service("chamados-api-worker"', code)
+        self.assertIn('service("chamados-api-beat"', code)
+        self.assertIn('start: "celery -A chamados_api worker', code)
+        self.assertIn('start: "celery -A chamados_api beat', code)
+        self.assertEqual(code.count("preDeploy:"), 1)
+        self.assertEqual(code.count("healthcheck:"), 1)
+
+    def test_production_credentials_are_railway_shared_variables(self):
+        code = self._iac()
+        self.assertIn("DJANGO_SECRET_KEY: ctx.shared.DJANGO_SECRET_KEY", code)
+        self.assertIn("DJANGO_ALLOWED_HOSTS: ctx.shared.DJANGO_ALLOWED_HOSTS", code)
+        self.assertIn("DATABASE_URL: db.env.DATABASE_URL", code)
+        self.assertIn("CELERY_BROKER_URL: broker.env.REDIS_URL", code)
+        self.assertNotIn("chamados-local-only", code)
 
     def test_docker_context_excludes_secrets_and_local_backups(self):
         patterns = (ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
