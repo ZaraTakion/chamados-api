@@ -2,11 +2,11 @@
 
 ## Objetivo
 
-Registrar no banco mudanças relevantes feitas nos chamados pela API, com contexto suficiente para atribuir autoria e reconstruir o estado anterior. Esse histórico não é um log de segurança universal; as limitações abaixo são parte do contrato atual.
+Registrar no banco mudanças relevantes feitas nos chamados pela API e por edição no Django Admin, com contexto suficiente para atribuir autoria e reconstruir o estado anterior. Esse histórico não é um log de segurança universal; as limitações abaixo são parte do contrato atual.
 
 ## O que é registrado
 
-A cada `PATCH` ou `PUT` aceito pelo endpoint de ticket, as alterações **efetivas** de `status`, `priority` e `assignee` são persistidas em `TicketAuditEvent`.
+A cada `PATCH` ou `PUT` aceito pelo endpoint de ticket, ou edição persistida no Django Admin, as alterações **efetivas** de `status`, `priority` e `assignee` são persistidas em `TicketAuditEvent`.
 
 Cada evento registra:
 
@@ -18,7 +18,7 @@ Cada evento registra:
 
 As transições de `closed` continuam as regras do CHM-201: fechamento permitido a partir dos estados admitidos, reabertura de `closed` rejeitada. Tentativas rejeitadas **não** produzem eventos. Repetir o mesmo valor não produz evento.
 
-O serviço `tickets/audit.py` prepara os eventos após validação do serializer; uma transação engloba atualização e histórico. Em PostgreSQL, a seleção para update é bloqueada por `SELECT FOR UPDATE` antes da validação. A semântica de locks é dependente do banco (SQLite difere de PostgreSQL).
+O serviço `tickets/audit.py` prepara os eventos após validação do serializer ou formulário administrativo; uma transação engloba atualização e histórico. Em PostgreSQL, a seleção para update é bloqueada por `SELECT FOR UPDATE` antes da validação. A semântica de locks é dependente do banco (SQLite difere de PostgreSQL).
 
 ## Endpoint GET
 
@@ -49,12 +49,13 @@ Se o chamado for excluído, os eventos continuam no banco com `ticket = NULL`, r
 
 ## Limitações explícitas
 
-- Esta implementação observa atualizações **via API DRF**. Alterações diretas pelo ORM, `QuerySet.update`, scripts e Django Admin **não** geram eventos automaticamente.
+- Esta implementação observa atualizações pela **API DRF e pelo formulário Django Admin de chamados**. Alterações diretas pelo ORM, `QuerySet.update` ou scripts externos **não** geram eventos automaticamente.
+- O gerenciamento administrativo de comentários mantém operações independentes e não é coberto pela trilha `TicketAuditEvent`. Não declarar auditoria de comentários sem uma política específica.
 - Criação de chamado, alteração de título/descrição, comentários, exclusão e tentativas de acesso negadas não geram eventos nesta etapa.
 - Não há proteção contra alterações maliciosas por quem já possua privilégios administrativos de banco; "auditável" significa trilha persistente no aplicativo, não log imutável à prova de adulteração.
 - Os registros históricos preservam nomes e identificadores: deverão integrar a futura política de privacidade e retenção.
-- O workflow CI atual usa SQLite; validação real com PostgreSQL está planejada para CHM-403.
+- O CI atual executa SQLite e PostgreSQL 16; os cenários de auditoria e API são exercitados em ambos, mas não equivalem a testes de carga ou pentest.
 
 ## Testes
 
-`tickets/tests/test_audit_history.py` cobre gravação, múltiplos campos, autor e horário, filtros de acesso, anonimização da equipe, endpoints somente leitura, rollback em falha, ausência de eventos em mudanças inválidas/idempotentes, integridade dos snapshots após exclusão e schema OpenAPI.
+`tickets/tests/test_admin_lifecycle.py` cobre a edição administrativa; `tickets/tests/test_audit_history.py` cobre gravação, múltiplos campos, autor e horário, filtros de acesso, anonimização da equipe, endpoints somente leitura, rollback em falha, ausência de eventos em mudanças inválidas/idempotentes, integridade dos snapshots após exclusão e schema OpenAPI.
