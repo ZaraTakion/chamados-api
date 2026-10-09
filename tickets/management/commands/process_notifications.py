@@ -36,9 +36,9 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        if not settings.DEBUG:
+        if not settings.DEBUG and not settings.PROTECTED_PREVIEW:
             raise CommandError(
-                "Comando disponivel somente com DJANGO_DEBUG=true; "
+                 "Comando disponivel somente no desenvolvimento ou em preview protegido; "
                 "use Celery Worker e Beat em producao."
             )
         interval = options["interval"]
