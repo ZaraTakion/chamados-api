@@ -12,6 +12,7 @@ from django.test import TestCase, override_settings
 from tickets.models import NotificationOutbox, TicketNotification
 
 
+@override_settings(DEBUG=True)
 class OfflineNotificationTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(username="offline-test-user")
