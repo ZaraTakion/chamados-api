@@ -4,7 +4,7 @@
 
 Introduzir processamento assíncrono após estabilizar a API síncrona.
 Redis é o broker Celery; o worker é um serviço independente no Docker Compose.
-HTTP ainda não despacha tarefas nesta etapa (isso será tratado na CHM-502).
+Na CHM-501, HTTP ainda não gerava eventos assíncronos. A CHM-502 introduz outbox transacional e um scheduler que processa eventos após commit, sem comunicar com Redis durante requisições.
 
 ## Arquitetura e segurança
 
@@ -44,8 +44,9 @@ Sem Redis ativo, .delay() pode falhar; nenhum endpoint a chama nesta etapa.
 OperationalError do banco ativa até 3 retries automáticos com backoff
 exponencial e jitter. A tarefa tem soft time limit de 20 segundos e hard
 time limit de 30 segundos. Se o broker falhar, a falha do envio precisa ser
-tratada na origem; CHM-502 deve enfileirar com transaction.on_commit e
-tolerar indisponibilidade da infraestrutura assíncrona.
+tratada na origem. CHM-502 evita publicar diretamente no request: persiste
+intenções de notificação na mesma transação e o worker periódico processa
+somente eventos confirmados (ver NOTIFICATIONS.md).
 
 ## Testes e limites
 
@@ -60,4 +61,4 @@ para tarefas futuras com efeitos colaterais.
 - CI: cinco jobs aprovados, incluindo worker real com Redis e PostgreSQL no Docker Compose. PostgreSQL 16 passou em 101 testes; a matriz SQLite encontrou 101, com 100 passando e 1 skip específico PostgreSQL; coverage CI 94,3%.
 - Windows: Ruff e Django check aprovados; `makemigrations --check --dry-run` sem mudanças; 101 testes encontrados, 100 passaram, 1 skip específico PostgreSQL, 0 falhas, coverage **94,7%**.
 - [PR #27 merged](https://github.com/ZaraTakion/chamados-api/pull/27), commit `49b549bc`.
-- Os próximos fluxos HTTP que publicarem tarefas serão implementados na CHM-502, usando publicação após commit e idempotência de efeitos colaterais.
+- CHM-502 foi desenhada com outbox transacional, polling periódico após commit e entrega idempotente em inbox. A publicação não acontece dentro da requisição HTTP; ver NOTIFICATIONS.md.

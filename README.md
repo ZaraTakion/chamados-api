@@ -11,6 +11,7 @@ API REST para abrir e acompanhar solicitações de suporte. Construída com Djan
 - Prioridade, categoria, busca, filtros, ordenação e paginação.
 - Conversa por chamado, com notas internas visíveis somente à equipe.
 - Histórico persistente de status, prioridade e atribuição, com acesso por papel e snapshots de auditoria.
+- Notificações internas assíncronas para criação, atribuição, mudanças de status, resolução e comentários públicos, com caixa de entrada privada.
 - Validação de dados com constraints no banco, respostas de erro padronizadas (mantendo campos antigos), limite básico de requisições anônimas e documentação OpenAPI.
 
 ## Executar localmente com SQLite
@@ -83,6 +84,7 @@ Envie o token de acesso em chamadas protegidas: `Authorization: Bearer <access>`
 | `POST` | `/api/auth/token/refresh/` | Refresh token | Renovar access token |
 | `POST` | `/api/auth/token/blacklist/` | Refresh token | Revogar refresh token |
 | `GET` | `/api/auth/me/` | Autenticado | Perfil atual |
+| `GET` | `/api/notifications/` | Autenticado | Caixa de entrada privada de notificações |
 | `GET`, `POST` | `/api/tickets/` | Autenticado | Listar/criar chamados |
 | `GET`, `PUT`, `PATCH`, `DELETE` | `/api/tickets/{id}/` | Dono ou equipe | Consultar/alterar chamado; exclusão só pela equipe |
 | `GET`, `POST` | `/api/tickets/{id}/comments/` | Dono ou equipe | Listar/comentar; notas internas só para equipe |
@@ -163,7 +165,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 concluiu liveness/readiness e validação de segurança de produção (PR #25; QA Windows 96 testes encontrados, 95 aprovados, 1 skip; 94,5% cobertura). CHM-403 concluída via PR #26: migrations explícitas, validação de schema e readiness smoke no PostgreSQL 16, com 4/4 jobs verdes (96 testes, 94,0% cobertura CI). Sprint 04 encerrada. Sprint 05 ativa: CHM-501 concluída via PR #27 — Redis, Celery, worker Compose e tarefa de métricas idempotente; 5/5 jobs do CI verdes (101 testes por ambiente) e Windows 100 aprovados, 1 skip, cobertura 94,7%. Próxima tarefa CHM-502 (notificações assíncronas), ainda não iniciada.
+**Estado atual:** Sprints 01, 02 e 03 concluídas. CHM-301 mede consultas SQL e previne N+1; CHM-302 adiciona constraints de integridade, corrige row-lock com `assignee` opcional e inclui PostgreSQL 16 no CI. CI aprovado em Python 3.10–3.12 (SQLite) e PostgreSQL 16. Validação Windows concluída em 08/10/2026: migration `0003` aplicada, 75 testes encontrados (74 aprovados, 1 skip PostgreSQL), cobertura 95,8%. Sprint 04 em andamento: CHM-401 (logs JSON seguros e request ID) concluída via PR #24, com CI Python 3.10–3.12/PostgreSQL 16 verde (82 testes por ambiente) e QA Windows aprovado (81 passaram, 1 skip, cobertura 94,8%). CHM-402 concluiu liveness/readiness e validação de segurança de produção (PR #25; QA Windows 96 testes encontrados, 95 aprovados, 1 skip; 94,5% cobertura). CHM-403 concluída via PR #26: migrations explícitas, validação de schema e readiness smoke no PostgreSQL 16, com 4/4 jobs verdes (96 testes, 94,0% cobertura CI). Sprint 04 encerrada. Sprint 05 ativa: CHM-501 concluída via PR #27 — Redis, Celery, worker Compose e tarefa de métricas idempotente; 5/5 jobs do CI verdes (101 testes por ambiente) e Windows 100 aprovados, 1 skip, cobertura 94,7%. CHM-502 em desenvolvimento: outbox transacional, Celery Beat para criar notificações na caixa de entrada privada e testes de rollback/retry; CI e aceite Windows pendentes. A CHM-502 adiciona a migration `0004_notifications`.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
@@ -174,6 +176,7 @@ A próxima fase do projeto está planejada em Scrum para transformar esta API em
 - [Checklist de produção e endpoints de health](docs/PRODUCTION_SECURITY.md)
 - [Matriz SQLite/PostgreSQL e CI real](docs/CI_POSTGRESQL.md)
 - [Arquitetura Redis/Celery e tarefas idempotentes](docs/ASYNC_ARCHITECTURE.md)
+- [Notificações privadas, outbox transacional e recovery](docs/NOTIFICATIONS.md)
 - [Status atual](docs/STATUS.md)
 - [Scrum e sprints](docs/SCRUM.md)
 - [Roadmap de 90 dias](docs/ROADMAP.md)

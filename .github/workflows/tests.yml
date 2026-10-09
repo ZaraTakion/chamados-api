@@ -142,10 +142,10 @@ jobs:
           PY
 
       - name: Construir API e worker
-        run: docker compose build api worker
+        run: docker compose build api worker scheduler
 
       - name: Iniciar PostgreSQL, Redis e worker
-        run: docker compose up -d db redis worker
+        run: docker compose up -d db redis worker scheduler
 
       - name: Aplicar migrations no banco de integração
         run: docker compose run --rm --no-deps api python manage.py migrate --noinput
@@ -154,9 +154,13 @@ jobs:
         run: |
           docker compose run --rm --no-deps api python manage.py shell -c "from tickets.tasks import ticket_queue_summary; r = ticket_queue_summary.delay(); result = r.get(timeout=30); assert result['total'] == 0, result; assert set(result['by_status']) == {'open', 'in_progress', 'waiting', 'resolved', 'closed'}; print('Celery + Redis: tarefa executada com sucesso')"
 
+      - name: Testar entrega de notificação pelo worker real
+        run: |
+          docker compose run --rm --no-deps api python manage.py shell -c "from django.contrib.auth import get_user_model; from tickets.models import NotificationOutbox, TicketNotification; from tickets.tasks import deliver_pending_notifications; user, _ = get_user_model().objects.get_or_create(username='ci-notification-recipient'); NotificationOutbox.objects.create(recipient=user, kind='ticket_created', ticket_reference='CH-000001'); result = deliver_pending_notifications.delay().get(timeout=30); assert result['processed'] == 1, result; assert TicketNotification.objects.filter(recipient=user).count() == 1; print('Notification inbox end-to-end success')"
+
       - name: Relatar logs no caso de falha
         if: failure()
-        run: docker compose logs --tail=80 worker redis db
+        run: docker compose logs --tail=80 worker scheduler redis db
 
       - name: Limpar containers de CI
         if: always()
