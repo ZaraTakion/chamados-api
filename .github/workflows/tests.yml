@@ -176,6 +176,32 @@ jobs:
           done
           exit 1
 
+      - name: Capturar tela real do Swagger com Chrome headless
+        run: |
+          mkdir -p release-artifacts
+          command -v google-chrome
+          google-chrome --headless=new --no-sandbox --disable-gpu \
+            --disable-dev-shm-usage --hide-scrollbars \
+            --window-size=1440,1000 --virtual-time-budget=10000 \
+            --screenshot="$PWD/release-artifacts/swagger-real-ci.png" \
+            "http://127.0.0.1:8000/api/docs/" >/dev/null 2>&1
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("release-artifacts/swagger-real-ci.png")
+          data = p.read_bytes()
+          assert data.startswith(b"\\x89PNG\\r\\n\\x1a\\n"), "Screenshot PNG invalida"
+          assert len(data) > 16000, "Imagem pequena demais, possivel tela vazia"
+          print(f"Swagger CI screenshot generated: {len(data)} bytes")
+          PY
+
+      - name: Salvar evidencia visual real da API
+        uses: actions/upload-artifact@v4
+        with:
+          name: swagger-ci-capture
+          path: release-artifacts/swagger-real-ci.png
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Relatar logs no caso de falha
         if: failure()
         run: docker compose logs --tail=80 api worker scheduler redis db
@@ -199,3 +225,40 @@ jobs:
 
       - name: Verificar tipagem da configuracao Railway
         run: npm run check:railway
+
+  local_release:
+    name: Publicar pré-release local (somente commit explicitamente marcado)
+    if: ${{ github.event_name == 'push' && startsWith(github.event.head_commit.message, 'release: v1.0.0-local.1') }}
+    needs: [quality, postgresql, celery_worker, railway_iac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Baixar screenshot real gerada no CI
+        uses: actions/download-artifact@v4
+        with:
+          name: swagger-ci-capture
+          path: release-artifacts
+
+      - name: Verificar asset antes de liberar
+        run: |
+          test -s release-artifacts/swagger-real-ci.png
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          git status --short
+          gh release view v1.0.0-local.1 --json tagName > /dev/null 2>&1 && {
+            echo "A release ja existe; nao substituir tag publicada."
+            exit 1
+          } || true
+
+      - name: Criar tag e pré-release com asset real
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.0.0-local.1 release-artifacts/swagger-real-ci.png \
+            --target "${GITHUB_SHA}" \
+            --title "Chamados API v1.0.0-local.1 — Local Demo" \
+            --notes-file docs/RELEASE_NOTES.md \
+            --prerelease \
+            --latest=false
