@@ -31,3 +31,40 @@ def validate_production_config(
 
     if not ssl_redirect:
         raise ImproperlyConfigured("DJANGO_SECURE_SSL_REDIRECT must be true in production.")
+
+
+def validate_protected_preview_config(
+    *,
+    debug,
+    secret_key,
+    allowed_hosts,
+    database_url,
+    ssl_redirect,
+    sqlite_path,
+    base_dir,
+):
+    """Fail closed for one email-protected trycloudflare.com preview.
+
+    This *never* relaxes standard production deployment validation.
+    The preview has an isolated SQLite DB and explicitly configured host.
+    """
+    import re
+    from pathlib import Path
+
+    if debug or database_url or not ssl_redirect:
+        raise ImproperlyConfigured(
+            "Protected preview requires DEBUG=false, isolated SQLite and HTTPS redirect."
+        )
+    if (
+        len(secret_key) < 50
+        or len(set(secret_key)) < 12
+        or secret_key.startswith(("dev-only", "replace-", "django-insecure-"))
+    ):
+        raise ImproperlyConfigured("Protected preview requires an ephemeral strong secret.")
+    if len(allowed_hosts) != 1 or not re.fullmatch(
+        r"[a-z0-9-]+\.trycloudflare\.com", allowed_hosts[0], flags=re.ASCII
+    ):
+        raise ImproperlyConfigured("Protected preview requires one exact trycloudflare.com hostname.")
+    expected = (Path(base_dir) / "data" / "protected-preview.sqlite3").resolve()
+    if Path(sqlite_path).resolve() != expected:
+        raise ImproperlyConfigured("Protected preview must use its isolated demo SQLite database.")

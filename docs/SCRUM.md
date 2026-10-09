@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 06 — trilha Local Demo concluída (CHM-602 Done). CHM-601 de produção bloqueada; não há item Doing.
+**Status:** Sprint 06 — CHM-602 Local Demo Done; CHM-601 em Doing para preview HTTPS protegido e gratuito, sem hospedagem paga. Produção original ainda pendente.
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -320,3 +320,15 @@ Quando a Bird terminar:
 - [GitHub Actions 37879361318](https://github.com/ZaraTakion/chamados-api/actions/runs/37879361318): 6 jobs de validação e 1 job de publicação aprovados. PostgreSQL 133/133, SQLite 132 pass + 1 skip, cobertura 94,2%.
 - Postman com 18 requisições, notas, case, arquitetura e evidências vinculadas ao GitHub.
 - CHM-602 concluída **somente** para a release local. CHM-601 permanece aberta e bloqueada sem autorização de hospedagem; deploy público é requisito diferente, não cumprido.
+
+## CHM-601 — Novo ciclo técnico: preview temporário gratuito
+
+- **WIP único:** modo Quick Tunnel protegido por e-mail, com binário
+  `cloudflared` atual (2026.9.3+) e sem contratação de infraestrutura.
+- Branch `feat/chm-601-protected-free-tunnel`, validação Python,
+  documentação e automação de ambiente isolado no Windows.
+- Não reutilizar `data/db.sqlite3`; usar DB exclusivo para preview
+  em `data/protected-preview.sqlite3`.
+- Não divulgar a URL, dados reais, tokens ou e-mail de acesso em issues.
+- **Aguardando:** CI, QA externo e confirmação de URL HTTPS protegida
+  por email PIN; critérios de **produção** permanecem pendentes.
