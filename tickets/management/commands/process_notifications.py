@@ -8,9 +8,15 @@ import time
 
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
-from django.db import OperationalError, close_old_connections
+from django.db import OperationalError, close_old_connections, connection
 
 from tickets.tasks import deliver_pending_notifications
+
+
+def _refresh_db_connection():
+    # TestCase keeps an outer atomic block open; never close it mid-transaction.
+    if not connection.in_atomic_block:
+        close_old_connections()
 
 
 class Command(BaseCommand):
@@ -44,7 +50,7 @@ class Command(BaseCommand):
             self.stdout.write("Processador local iniciado. Pressione Ctrl+C para encerrar.")
         try:
             while True:
-                close_old_connections()
+                _refresh_db_connection()
                 try:
                     result = deliver_pending_notifications.run()
                 except OperationalError:
@@ -61,4 +67,4 @@ class Command(BaseCommand):
         except KeyboardInterrupt:
             self.stdout.write("Processador local encerrado.")
         finally:
-            close_old_connections()
+            _refresh_db_connection()
