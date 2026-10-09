@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: public.ecr.aws/docker/library/postgres:16-alpine
+        image: postgres:16-alpine
         env:
           POSTGRES_DB: chamados_ci
           POSTGRES_USER: postgres
@@ -124,22 +124,38 @@ jobs:
         run: coverage report
 
   celery_worker:
-    name: Redis + Celery — smoke Docker Compose
+    name: Redis + Celery — integração real no runner
     runs-on: ubuntu-latest
-    # Use an alternate public mirror in CI when Docker Hub throttles anonymous pulls.
-    # Local Docker Compose remains on the upstream image defaults.
     env:
-      CHAMADOS_POSTGRES_IMAGE: public.ecr.aws/docker/library/postgres:16-alpine
-      CHAMADOS_REDIS_IMAGE: public.ecr.aws/docker/library/redis:7-alpine
-      CHAMADOS_PYTHON_BASE_IMAGE: public.ecr.aws/docker/library/python:3.12-slim
+      DJANGO_DEBUG: "true"
+      DJANGO_SECRET_KEY: "ci-only-not-a-production-secret-with-adequate-length"
+      CELERY_BROKER_URL: redis://127.0.0.1:6379/0
+      CELERY_RESULT_BACKEND: redis://127.0.0.1:6379/1
     steps:
       - uses: actions/checkout@v7
 
-      - name: Criar ambiente de exemplo somente para CI
-        run: cp .env.example .env
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
 
-      - name: Verificar configuração Compose
-        run: docker compose config --quiet
+      - name: Instalar Redis da distribuição (sem Docker Hub)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y redis-server
+          sudo service redis-server start
+          redis-cli ping
+
+      - name: Instalar dependências Python
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Validar Compose sem baixar imagens
+        run: |
+          cp .env.example .env
+          docker compose config --quiet
 
       - name: Validar credenciais de desenvolvimento do Compose
         run: |
@@ -156,34 +172,40 @@ jobs:
               assert unquote(urlsplit(url).password or "") == db_password, "Compose DB password mismatch"
           PY
 
-      - name: Construir API e worker
-        run: docker compose build api worker scheduler
+      - name: Aplicar migrations em SQLite de integração
+        run: python manage.py migrate --noinput
 
-      - name: Iniciar PostgreSQL, Redis e worker
-        run: docker compose up -d db redis worker scheduler
-
-      - name: Aplicar migrations no banco de integração
-        run: docker compose run --rm --no-deps api python manage.py migrate --noinput
-
-      - name: Executar tarefa no worker real
+      - name: Iniciar worker Celery real
         run: |
-          docker compose run --rm --no-deps api python manage.py shell -c "from tickets.tasks import ticket_queue_summary; r = ticket_queue_summary.delay(); result = r.get(timeout=30); assert result['total'] == 0, result; assert set(result['by_status']) == {'open', 'in_progress', 'waiting', 'resolved', 'closed'}; print('Celery + Redis: tarefa executada com sucesso')"
+          celery -A chamados_api worker --loglevel=WARNING --concurrency=1 --pool=solo > /tmp/chamados-celery.log 2>&1 &
+          echo $! > /tmp/chamados-celery.pid
 
-      - name: Testar entrega de notificação pelo worker real
+      - name: Executar tarefa no broker Redis real
         run: |
-          docker compose run --rm --no-deps api python manage.py shell -c "from django.contrib.auth import get_user_model; from tickets.models import NotificationOutbox, TicketNotification; from tickets.tasks import deliver_pending_notifications; user, _ = get_user_model().objects.get_or_create(username='ci-notification-recipient'); NotificationOutbox.objects.create(recipient=user, kind='ticket_created', ticket_reference='CH-000001'); result = deliver_pending_notifications.delay().get(timeout=30); assert result['processed'] == 1, result; assert TicketNotification.objects.filter(recipient=user).count() == 1; print('Notification inbox end-to-end success')"
-
-      - name: Iniciar API para teste HTTP end-to-end
-        run: docker compose up -d api
-
-      - name: Smoke HTTP da API no container
-        run: |
-          for attempt in $(seq 1 15); do
-            if docker compose exec -T api python scripts/smoke_deploy.py http://127.0.0.1:8000 --allow-http-local; then
+          for attempt in $(seq 1 20); do
+            if python manage.py shell -c "from tickets.tasks import ticket_queue_summary; r = ticket_queue_summary.delay().get(timeout=5); assert r['total'] == 0, r; assert set(r['by_status']) == {'open', 'in_progress', 'waiting', 'resolved', 'closed'}; print('Celery + Redis: OK')"; then
               exit 0
             fi
             sleep 2
           done
+          cat /tmp/chamados-celery.log
+          exit 1
+
+      - name: Enviar e processar notificação no worker real
+        run: |
+          python manage.py shell -c "from django.contrib.auth import get_user_model; from tickets.models import NotificationOutbox, TicketNotification; from tickets.tasks import deliver_pending_notifications; user, _ = get_user_model().objects.get_or_create(username='ci-notification-recipient'); NotificationOutbox.objects.create(recipient=user, kind='ticket_created', ticket_reference='CH-000001'); result = deliver_pending_notifications.delay().get(timeout=30); assert result['processed'] == 1, result; assert TicketNotification.objects.filter(recipient=user).count() == 1; print('Notification outbox: OK')"
+
+      - name: Iniciar API HTTP no runner
+        run: |
+          gunicorn chamados_api.wsgi:application --bind 127.0.0.1:8000 --workers 2 --access-logfile - --error-logfile - > /tmp/chamados-api.log 2>&1 &
+          echo $! > /tmp/chamados-api.pid
+          for attempt in $(seq 1 20); do
+            if python scripts/smoke_deploy.py http://127.0.0.1:8000 --allow-http-local; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat /tmp/chamados-api.log
           exit 1
 
       - name: Capturar tela real do Swagger com Chrome headless
@@ -212,13 +234,17 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Relatar logs no caso de falha
+      - name: Log de diagnostico
         if: failure()
-        run: docker compose logs --tail=80 api worker scheduler redis db
+        run: |
+          cat /tmp/chamados-celery.log || true
+          cat /tmp/chamados-api.log || true
 
-      - name: Limpar containers de CI
+      - name: Encerrar processos do runner
         if: always()
-        run: docker compose down --volumes --remove-orphans
+        run: |
+          if test -f /tmp/chamados-celery.pid; then kill "$(cat /tmp/chamados-celery.pid)" || true; fi
+          if test -f /tmp/chamados-api.pid; then kill "$(cat /tmp/chamados-api.pid)" || true; fi
 
   railway_iac:
     name: Railway IaC — TypeScript typecheck
