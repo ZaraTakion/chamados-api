@@ -6,10 +6,11 @@ from pathlib import Path
 
 import dj_database_url
 
-from chamados_api.deployment import validate_production_config
+from chamados_api.deployment import validate_production_config, validate_protected_preview_config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() in {"1", "true", "yes"}
+PROTECTED_PREVIEW = os.getenv("DJANGO_PROTECTED_PREVIEW", "false").lower() in {"1", "true", "yes"}
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 if not SECRET_KEY:
     if not DEBUG:
@@ -134,14 +135,25 @@ SPECTACULAR_SETTINGS = {
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "true").lower() in {"1", "true", "yes"}
-    validate_production_config(
-        debug=DEBUG,
-        secret_key=SECRET_KEY,
-        allowed_hosts=ALLOWED_HOSTS,
-        explicit_hosts=bool(os.getenv("DJANGO_ALLOWED_HOSTS", "").strip()),
-        database_url=database_url,
-        ssl_redirect=SECURE_SSL_REDIRECT,
-    )
+    if PROTECTED_PREVIEW:
+        validate_protected_preview_config(
+            debug=DEBUG,
+            secret_key=SECRET_KEY,
+            allowed_hosts=ALLOWED_HOSTS,
+            database_url=database_url,
+            ssl_redirect=SECURE_SSL_REDIRECT,
+            sqlite_path=DATABASES["default"]["NAME"],
+            base_dir=BASE_DIR,
+        )
+    else:
+        validate_production_config(
+            debug=DEBUG,
+            secret_key=SECRET_KEY,
+            allowed_hosts=ALLOWED_HOSTS,
+            explicit_hosts=bool(os.getenv("DJANGO_ALLOWED_HOSTS", "").strip()),
+            database_url=database_url,
+            ssl_redirect=SECURE_SSL_REDIRECT,
+        )
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
