@@ -146,6 +146,13 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+    # Railway probes arrive over private HTTP. Only non-sensitive health routes
+    # bypass the redirect; all user-facing API endpoints still require HTTPS.
+    SECURE_REDIRECT_EXEMPT = [r"^api/health/(?:live|ready)/$"]
+    # Configure HSTS only after confirming TLS works on the final host/domain.
+    SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_HSTS_SECONDS", "0"))
+    if SECURE_HSTS_SECONDS < 0:
+        raise ValueError("DJANGO_HSTS_SECONDS cannot be negative")
     # Enable only behind a trusted reverse proxy that strips client-supplied headers.
     if os.getenv("DJANGO_TRUST_PROXY_SSL_HEADER", "false").lower() in {"1", "true", "yes"}:
         SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

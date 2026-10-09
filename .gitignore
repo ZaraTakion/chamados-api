@@ -16,3 +16,7 @@ coverage.xml
 htmlcov/
 
 coverage.json
+
+# Infrastructure-as-Code tooling (not part of the Django backend)
+node_modules/
+*.tsbuildinfo

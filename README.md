@@ -52,6 +52,16 @@ O Compose executa as migrações, inicia a API em `http://localhost:8000`, mant�
 
 Também é possível apontar a aplicação para um PostgreSQL gerenciado definindo `DATABASE_URL`. Em hospedagem com disco efêmero, não dependa do SQLite local: use PostgreSQL ou outro armazenamento persistente.
 
+## Preparação de deploy — Sprint 06
+
+A aplicação possui Dockerfile e uma especificação atual de **Railway Infrastructure as Code** em `.railway/railway.ts` para cinco recursos (Web, Worker, Beat, PostgreSQL e Redis privados). Consulte [guia Railway](docs/DEPLOY_RAILWAY.md) e [runbook de operação, backup e rollback](docs/OPERATIONS_RUNBOOK.md). Depois de publicar, execute um smoke test **sem credenciais**:
+
+```bash
+python scripts/smoke_deploy.py https://DOMINIO_REAL
+```
+
+Este comando só verifica endpoints públicos; ele não cria uma implantação nem comprova processamento das notificações. **Nunca** use os valores de `.env.example` em produção nem registre tokens, senhas ou URLs de banco em issues/screenshots. Toda aprovação de custos e provisionamento depende do proprietário da conta.
+
 ## Autenticação
 
 Cadastre um usuário:
@@ -165,7 +175,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual (08/10/2026):** Sprints 00–05 concluídas. A API possui autenticação JWT, tickets e comentários com autorização, auditoria, validações de integridade, observabilidade por request ID, probes HTTP, Redis/Celery e notificações privadas via outbox transacional (CHM-502, PR #28). CI: cinco jobs verdes, incluindo PostgreSQL 16 e integração real Redis/Celery; 113 testes em PostgreSQL, 112 aprovados e 1 ignorado em SQLite, cobertura CI 94,8%. QA Windows: 113 testes (112 aprovados, 1 ignorado), 0 falhas, cobertura 95,2%; migração `tickets.0004_notifications` aplicada após backup SQLite íntegro. **Próxima Sprint 06:** CHM-601 (deploy de produção e runbook) e CHM-602 (demonstração e release). Ainda não existe deploy de produção validado.
+**Estado atual (08/10/2026):** Sprints 00–05 concluídas. CHM-502 foi integrada à `main` após CI com cinco jobs verdes e QA Windows de 113 testes (112 aprovados/1 skip, 95,2% coverage); a migration `tickets.0004_notifications` foi aplicada após backup SQLite íntegro. **CHM-601 está Doing**: configuração de implantação em Railway, verificador público e runbook operacionais em PR. **Nenhum serviço de produção ou demonstração foi publicado ou validado nesta etapa**; a ativação de recursos externos depende do proprietário da hospedagem. CHM-602 permanece planejada.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
