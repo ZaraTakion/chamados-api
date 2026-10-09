@@ -189,7 +189,7 @@ LOGGING = {
     },
 }
 
-# CHM-501: Celery remains opt-in for HTTP flows until CHM-502 integrates events.
+# CHM-502: HTTP persists outbox rows only; Celery Beat processes them after commit.
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/0")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND", "redis://127.0.0.1:6379/1")
 CELERY_TASK_SERIALIZER = "json"
@@ -200,3 +200,11 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_TASK_DEFAULT_QUEUE = "tickets"
 CELERY_TASK_SOFT_TIME_LIMIT = 20
 CELERY_TASK_TIME_LIMIT = 30
+
+# The worker scans only committed outbox entries. No broker I/O occurs in HTTP.
+CELERY_BEAT_SCHEDULE = {
+    "deliver-notification-outbox": {
+        "task": "tickets.deliver_pending_notifications",
+        "schedule": 30.0,
+    },
+}
