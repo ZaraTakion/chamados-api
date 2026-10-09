@@ -6,6 +6,7 @@ from unittest.mock import patch
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from django.db import OperationalError
 from django.test import TestCase, override_settings
 
 from tickets.models import NotificationOutbox, TicketNotification
@@ -48,3 +49,36 @@ class OfflineNotificationTests(TestCase):
     def test_invalid_interval_rejected(self):
         with self.assertRaises(CommandError):
             call_command("process_notifications", "--interval", "0")
+
+    def test_transient_database_error_does_not_lose_outbox(self):
+        with patch(
+            "tickets.management.commands.process_notifications.deliver_pending_notifications.run",
+            side_effect=OperationalError("temporary database failure"),
+        ):
+            with self.assertRaises(CommandError):
+                call_command("process_notifications")
+        self.event.refresh_from_db()
+        self.assertIsNone(self.event.processed_at)
+        call_command("process_notifications", stdout=StringIO())
+        self.assertEqual(TicketNotification.objects.count(), 1)
+
+    def test_watch_handles_database_failure_without_exposing_details(self):
+        output = StringIO()
+        errors = StringIO()
+        with (
+            patch(
+                "tickets.management.commands.process_notifications.deliver_pending_notifications.run",
+                side_effect=[OperationalError("private database details"), {"processed": 0}],
+            ) as runner,
+            patch(
+                "tickets.management.commands.process_notifications.time.sleep",
+                side_effect=[None, KeyboardInterrupt],
+            ),
+        ):
+            call_command(
+                "process_notifications", "--watch", "--interval", "1",
+                stdout=output, stderr=errors,
+            )
+        self.assertEqual(runner.call_count, 2)
+        self.assertIn("proximo ciclo", errors.getvalue())
+        self.assertNotIn("private database details", errors.getvalue())
