@@ -243,14 +243,16 @@ jobs:
           path: release-artifacts
 
       - name: Verificar asset antes de liberar
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           test -s release-artifacts/swagger-real-ci.png
           test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
           git status --short
-          gh release view v1.0.0-local.1 --json tagName > /dev/null 2>&1 && {
+          if gh release view v1.0.0-local.1 > /dev/null 2>&1; then
             echo "A release ja existe; nao substituir tag publicada."
             exit 1
-          } || true
+          fi
 
       - name: Criar tag e pré-release com asset real
         env:
