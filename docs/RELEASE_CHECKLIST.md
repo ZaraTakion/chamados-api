@@ -18,9 +18,9 @@ local**. Não é deploy de produção.
 
 ## Critérios a comprovar no commit/tag final
 
-- [ ] CI da PR de documentação/release todo verde.
-- [ ] Screenshot Swagger gerado por Chrome e disponível como artefato.
-- [ ] PR CHM-602 integrada na `main`.
+- [x] CI da PR de documentação/release todo verde ([execução 37879092847](https://github.com/ZaraTakion/chamados-api/actions/runs/37879092847), seis jobs).
+- [x] Screenshot Swagger gerado por Chrome e disponível como artefato `swagger-ci-capture` (GitHub Actions 37879092847).
+- [x] PR CHM-602 [#31](https://github.com/ZaraTakion/chamados-api/pull/31) integrada na `main` (commit `7da98d7`).
 - [ ] CI do commit de publicação verde.
 - [ ] Tag `v1.0.0-local.1` publicada e asset PNG real na GitHub Release.
 - [ ] Link da release registrado no README/Issue e status atualizado.
@@ -41,3 +41,10 @@ local**. Não é deploy de produção.
 A versão `local.1` pode ser divulgada de forma profissional e honesta;
 não é apropriado afirmar que a Definition of Done **de produção** foi
 integralmente cumprida. A pré-release informa expressamente isso.
+
+## Pedido de publicação
+
+A partir desta revisão aprovada, o commit com mensagem
+`release: v1.0.0-local.1` aciona no GitHub Actions a criação da
+pré-release após executar novamente os jobs de qualidade e integração.
+Não é executado deploy externo e nenhum segredo de usuário é acessado.
