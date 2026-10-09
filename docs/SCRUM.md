@@ -278,3 +278,16 @@ Quando a Bird terminar:
 - CI 6/6 jobs (121 testes no PostgreSQL, 120 pass + 1 skip em SQLite), coverage 94,1%, Railway IaC typecheck e Docker Compose smoke aprovados.
 - QA Windows: Ruff, Django check, `makemigrations --check --dry-run` verdes; 121 testes (120 passaram + 1 skip), cobertura 94,5%; nenhuma migration nova.
 - A CHM-601 permanece **Doing** até deploy real autorizado, PostgreSQL persistente/backup verificado, HTTPS, readiness, Worker/Beat, logs e smoke autenticado. CHM-602 aguarda.
+
+## Decisão de Sprint 06 — versão gratuita e local (08/10/2026)
+
+- Proprietário rejeitou explicitamente o provisionamento/cobranças no
+  Railway. A escolha é respeitada; não criar infraestrutura externa.
+- CHM-601 continua o único item em execução, com foco temporário na
+  subentrega de demonstração local via SQLite, HTTP loopback e
+  `process_notifications --watch`, sem Redis nem Docker (branch
+  `feat/chm-601-zero-cost-local-demo`).
+- Critérios originais de produção (PostgreSQL persistente, HTTPS, backups,
+  monitoramento e URL pública) continuam pendentes; nunca chamar esse
+  ambiente de produção. Documentar aceites do modo local separadamente.
+- CHM-602 segue no Backlog enquanto a entrega local é validada.

@@ -94,3 +94,22 @@ esses pontos podem ser adicionados em versões posteriores, conforme uso.
 - Backup SQLite: `data/db-backup-chm502-1791505810.sqlite3`, `PRAGMA integrity_check=ok`. Migration `tickets.0004_notifications` aplicada com sucesso, `showmigrations tickets` confirma 0001–0004 `[X]`.
 - [PR #28 merged](https://github.com/ZaraTakion/chamados-api/pull/28), commit `29b06109`.
 - Próxima Sprint 06: deploy de produção e liberação final com documentação de operação.
+
+## Execução local sem Redis (demo sem custos)
+
+Em Windows, o Celery worker não tem suporte oficial e Docker pode ser
+inviável em máquinas de pouca memória. Existe uma alternativa que
+reutiliza a mesma outbox do PostgreSQL/SQLite:
+
+```bat
+python manage.py process_notifications --watch --interval 30
+```
+
+O comando chama a rotina persistente de entrega no mesmo processo CLI,
+sem publicar mensagens no broker. Execute-o em um CMD separado do
+`python manage.py runserver 127.0.0.1:8000`. A API segue responsiva
+porque não precisa esperar pela entrega. Eventos permanecem no banco
+enquanto o comando estiver parado; processamento repetido não duplica
+itens. O comando é bloqueado com `DJANGO_DEBUG=false` e não deve ser
+executado simultaneamente ao Celery num mesmo banco. Consulte
+[LOCAL_DEMO.md](./LOCAL_DEMO.md).

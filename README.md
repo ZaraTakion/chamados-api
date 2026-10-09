@@ -41,6 +41,30 @@ python manage.py runserver
 
 A API fica em `http://127.0.0.1:8000`; documentação interativa em `/api/docs/` e administração Django em `/admin/`. O arquivo local SQLite é criado em `data/db.sqlite3` e não é versionado.
 
+## Demonstração funcional e gratuita no Windows (sem Docker/Redis)
+
+Para apresentar a API completa localmente, siga o
+[guia de demonstração offline](docs/LOCAL_DEMO.md).
+O servidor Django e o processador de notificações operam em terminais
+separados, sem provisionar serviço externo e reutilizando a outbox
+transacional já implementada:
+
+```bat
+REM Terminal 1 — aplicação HTTP apenas em loopback
+python manage.py runserver 127.0.0.1:8000
+```
+
+```bat
+REM Terminal 2 — processador de notificações local
+python manage.py process_notifications --watch --interval 30
+```
+
+Acesse `http://127.0.0.1:8000/api/docs/` para testar JWT, chamados e
+notificações. **Este modo é exclusivamente de desenvolvimento:** não
+publicar `runserver` na internet. A hospedagem de produção permanece
+uma tarefa separada e não foi autorizada; nenhum serviço Railway foi
+criado.
+
 ## Executar com Docker e PostgreSQL
 
 ```bash
