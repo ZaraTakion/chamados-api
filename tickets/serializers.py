@@ -34,6 +34,11 @@ class TicketSerializer(serializers.ModelSerializer):
                 validate_ticket_transition(self.instance.status, attrs["status"])
             except InvalidStatusTransition as exc:
                 raise serializers.ValidationError({"status": str(exc)}, code="invalid_transition") from exc
+        if self.instance is None and attrs.get("status", Ticket.Status.OPEN) != Ticket.Status.OPEN:
+            raise serializers.ValidationError(
+                {"status": "Novos chamados devem começar abertos."},
+                code="invalid_transition",
+            )
         return attrs
 
 
