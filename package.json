@@ -1,8 +1,13 @@
 {
   "name": "chamados-api-railway-infrastructure",
   "private": true,
+  "type": "module",
   "description": "Deployment tooling only; Django remains the application runtime.",
+  "scripts": {
+    "check:railway": "tsc --noEmit --project tsconfig.railway.json"
+  },
   "devDependencies": {
-    "railway": "^3.12.0"
+    "railway": "^3.12.0",
+    "typescript": "^5.9.3"
   }
 }
