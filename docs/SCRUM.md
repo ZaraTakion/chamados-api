@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único Doing; preparação Railway e runbooks em PR, deploy real depende de conta/autorização. CHM-602 permanece no Backlog.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único Doing; preparação técnica aprovada (PR #29 integrada, CI 6/6, Windows 120 testes + 1 skip e 94,5% coverage), mas deploy real depende de aprovação de recursos/custos e validação HTTPS/backup. Issue aberta. CHM-602 permanece no Backlog.
 
 ## Princípios de trabalho
 
@@ -270,3 +270,11 @@ Quando a Bird terminar:
 - [PR #28 integrada](https://github.com/ZaraTakion/chamados-api/pull/28), commit `29b06109`; Issues #13 e #14 fechadas.
 - Retrospectiva: preservar integridade transacional; manter testes de integração com Redis real; fazer backup antes de mudanças de schema; manter WIP máximo 1.
 - Sprint 06: CHM-601 (deploy com runbook) e CHM-602 (evidências, tag e release). Nenhuma implantação de produção é reivindicada antes de smoke test real.
+
+
+### CHM-601 — Review técnico (código) — 08/10/2026
+
+- [PR #29 integrada](https://github.com/ZaraTakion/chamados-api/pull/29) (`23fbaad2`) com Railway Infrastructure as Code, smoke HTTP seguro, runbook operacional e proteção de artefatos locais em imagens.
+- CI 6/6 jobs (121 testes no PostgreSQL, 120 pass + 1 skip em SQLite), coverage 94,1%, Railway IaC typecheck e Docker Compose smoke aprovados.
+- QA Windows: Ruff, Django check, `makemigrations --check --dry-run` verdes; 121 testes (120 passaram + 1 skip), cobertura 94,5%; nenhuma migration nova.
+- A CHM-601 permanece **Doing** até deploy real autorizado, PostgreSQL persistente/backup verificado, HTTPS, readiness, Worker/Beat, logs e smoke autenticado. CHM-602 aguarda.

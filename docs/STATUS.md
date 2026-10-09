@@ -57,7 +57,7 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Logs HTTP em JSON com campos seguros e sem corpos/credenciais/query strings.
 - Nível configurável por `APP_LOG_LEVEL`; configurações locais/produção em [OBSERVABILITY.md](./OBSERVABILITY.md).
 - Testes de segurança e correlação aprovados no CI e no Windows.
-- Sprint 05 encerrada. WIP: [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único item Doing, preparação de deploy sem publicação externa.
+- Sprint 05 encerrada. WIP: [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único item Doing. Preparação técnica foi integrada via PR #29; implantação real ainda não realizada.
 
 ## CHM-401 — Observabilidade
 
@@ -126,10 +126,13 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - Retrospectiva: manter evidência do worker real no CI, evitar efeitos colaterais em transações HTTP, validar backup antes de migrações locais.
 - Próximo: CHM-601 (#15) — hospedagem PostgreSQL persistente, HTTPS, worker + scheduler, logs, rollback e runbook. Sem deploy em produção confirmado até agora.
 
-## CHM-601 — Preparação para produção (Doing)
+## CHM-601 — Preparação técnica integrada; deploy real pendente (Doing)
 
 - Railway Infrastructure as Code (`.railway/railway.ts`): Web/Worker/Beat, Postgres e Redis privados, healthcheck de readiness e migrations de pre-deploy. O antigo Config as Code, incompatível com serviços novos, foi retirado.
 - Docker context reforçado: `.env.*`, dados, backups e artefatos locais excluídos da imagem.
 - Smoke HTTP público e offline unit tests, além de validação end-to-end no Docker CI.
 - Runbooks: [DEPLOY_RAILWAY.md](./DEPLOY_RAILWAY.md) e [OPERATIONS_RUNBOOK.md](./OPERATIONS_RUNBOOK.md).
-- **Pendências de Done:** CI/QA do PR, conta/hospedagem autorizada, publicação HTTPS real, validação autenticada com dados sintéticos, backup/rollback e links comprovados. Nenhuma produção publicada declarada.
+- **CI final:** 6/6 jobs verdes (SQLite 120 testes passaram + 1 skip; PostgreSQL 121 aprovados), cobertura 94,1%; Railway IaC typecheck e Docker HTTP/Celery smoke aprovados.
+- **QA Windows:** Ruff, Django check, migrations check aprovados; 121 testes descobertos, 120 passaram + 1 skip, 0 falhas em 261.486s; cobertura **94,5%**.
+- **Código integrado:** [PR #29](https://github.com/ZaraTakion/chamados-api/pull/29) squash merged em `23fbaad2`, sem criar recursos na nuvem.
+- **Pendências CHM-601:** aprovar recursos/custos, provisionar projeto Railway separado, verificar PostgreSQL persistente e backups, Redis privado, HTTPS real, migrações, logs, Worker/Beat, smoke autenticado com dados sintéticos, recuperação e rollback. Issue #15 continua **aberta**; nenhuma produção publicada declarada.

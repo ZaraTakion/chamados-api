@@ -175,7 +175,7 @@ Os testes cobrem cadastro, JWT (refresh/blacklist), isolamento por usuário, flu
 
 A próxima fase do projeto está planejada em Scrum para transformar esta API em uma evidência mais completa de engenharia de backend.
 
-**Estado atual (08/10/2026):** Sprints 00–05 concluídas. CHM-502 foi integrada à `main` após CI com cinco jobs verdes e QA Windows de 113 testes (112 aprovados/1 skip, 95,2% coverage); a migration `tickets.0004_notifications` foi aplicada após backup SQLite íntegro. **CHM-601 está Doing**: configuração de implantação em Railway, verificador público e runbook operacionais em PR. **Nenhum serviço de produção ou demonstração foi publicado ou validado nesta etapa**; a ativação de recursos externos depende do proprietário da hospedagem. CHM-602 permanece planejada.
+**Estado atual (08/10/2026):** Sprints 00–05 concluídas. CHM-601: **preparação técnica integrada à `main` pela PR #29** (Railway IaC, runbook e smoke HTTP), com CI 6/6 jobs verdes (PostgreSQL 121 testes, SQLite 120 pass + 1 skip, cobertura 94,1%) e QA Windows concluído (121 testes descobertos, 120 passaram + 1 skip, cobertura 94,5%). **A CHM-601 ainda está Doing, pois nenhum ambiente de produção ou demo foi publicado/validado**; a implantação demanda aprovação de recursos/custos, PostgreSQL persistente, HTTPS, Worker/Beat, backups e smoke real. CHM-602 segue no Backlog.
 
 - [Regras de transição de chamados](docs/TICKET_LIFECYCLE.md)
 - [Histórico auditável e limitações](docs/TICKET_AUDIT.md)
