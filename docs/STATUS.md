@@ -136,3 +136,16 @@ CHM-301 e CHM-302 estão encerrados. Sprint 03 concluída em 08/10/2026; Sprint 
 - **QA Windows:** Ruff, Django check, migrations check aprovados; 121 testes descobertos, 120 passaram + 1 skip, 0 falhas em 261.486s; cobertura **94,5%**.
 - **Código integrado:** [PR #29](https://github.com/ZaraTakion/chamados-api/pull/29) squash merged em `23fbaad2`, sem criar recursos na nuvem.
 - **Pendências CHM-601:** aprovar recursos/custos, provisionar projeto Railway separado, verificar PostgreSQL persistente e backups, Redis privado, HTTPS real, migrações, logs, Worker/Beat, smoke autenticado com dados sintéticos, recuperação e rollback. Issue #15 continua **aberta**; nenhuma produção publicada declarada.
+
+## Demonstração local sem custos — em execução
+
+- Decisão do usuário: **não autorizar recursos pagos** no Railway ou outro
+  provedor. Nenhuma infraestrutura externa deve ser criada ou cobrada.
+- Nova subentrega CHM-601 na branch `feat/chm-601-zero-cost-local-demo`:
+  comando Django `process_notifications` para processar outbox local sem
+  Redis/Celery worker, em processo separado do servidor HTTP.
+- API continua no SQLite local e as notificações são registradas na inbox
+  autenticada; comandos e limitações em [LOCAL_DEMO.md](./LOCAL_DEMO.md).
+- CI/QA Windows pendentes para esta subentrega. CHM-601 (deploy de
+  produção) permanece aberta e **não foi concluída**. CHM-602, release
+  profissional, depende de decidir como apresentar a demonstração local.
