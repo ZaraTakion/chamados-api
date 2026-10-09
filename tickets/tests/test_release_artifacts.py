@@ -75,7 +75,7 @@ class ReleaseArtifactsTests(SimpleTestCase):
         notes = (ROOT / "docs" / "RELEASE_NOTES.md").read_text(encoding="utf-8")
         self.assertIn("v1.0.0-local.1", notes)
         self.assertIn("sem serviço público", notes)
-        self.assertIn("não autorizou", notes)
+        self.assertIn("não contratar", notes)
         evidence = (ROOT / "docs" / "EVIDENCE.md").read_text(encoding="utf-8")
         self.assertIn("não", evidence.lower())
         self.assertIn("swagger-ci-capture", evidence)
