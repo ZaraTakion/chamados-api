@@ -15,7 +15,7 @@ Evoluir a Chamados API de uma API funcional de portfólio para um **backend Pyth
 
 ## Estado atual
 
-**Status:** SPRINT 06 ATIVA — CHM-601 em Doing.
+**Status:** SPRINT 06 ATIVA — CHM-601 bloqueada para hospedagem; CHM-602 em Doing (pré-release local sem custos).
 
 A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-api/issues/3) e [CHM-102 #4](https://github.com/ZaraTakion/chamados-api/issues/4) estão Done e suas PRs foram mergeadas.
 
@@ -27,7 +27,7 @@ A Sprint 01 foi concluída: [CHM-101 #3](https://github.com/ZaraTakion/chamados-
 
 A Sprint 02 está encerrada. [CHM-301 #8](https://github.com/ZaraTakion/chamados-api/issues/8) está **Done**, após 70 testes aprovados no Windows e merge da PR #22.
 
-[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) é o único Doing; preparação técnica aprovada (PR #29 integrada, CI 6/6, Windows 120 testes + 1 skip e 94,5% coverage), mas deploy real depende de aprovação de recursos/custos e validação HTTPS/backup. Issue aberta. CHM-602 permanece no Backlog.
+[CHM-302 #9](https://github.com/ZaraTakion/chamados-api/issues/9) está **Done**, após aceite Windows e merge da PR #23. [CHM-401 #10](https://github.com/ZaraTakion/chamados-api/issues/10) está **Done**, PR #24 integrada após CI e QA Windows. CHM-402 #11 está Done, após PR #25 merged e QA Windows aprovado. [CHM-403 #12](https://github.com/ZaraTakion/chamados-api/issues/12) está **Done**, após validação do CI e merge da PR #26. [CHM-501 #13](https://github.com/ZaraTakion/chamados-api/issues/13) está **Done**, após QA Windows e merge da PR #27. [CHM-502 #14](https://github.com/ZaraTakion/chamados-api/issues/14) está **Done**, após CI/QA Windows, backup/migration `0004` e merge da PR #28. [CHM-601 #15](https://github.com/ZaraTakion/chamados-api/issues/15) está **bloqueada** por decisão de não contratar hospedagem; sua subentrega de demonstração local já está Done (PR #30). [CHM-602 #16](https://github.com/ZaraTakion/chamados-api/issues/16) é o **único Doing**, preparando pré-release local verificável com critérios de produção explicitamente adiados.
 
 ## Princípios de trabalho
 
@@ -168,7 +168,7 @@ O calendário começa somente quando CHM-000 for fechado.
 
 ### Sprint 06 — Release profissional
 
-**Status:** ATIVA; CHM-601 Doing, CHM-602 em Backlog.
+**Status:** ATIVA; CHM-601 bloqueada para produção, CHM-602 Doing para release local.
 
 **Sprint Goal:** transformar o projeto em evidência de carreira publicamente demonstrável.
 
@@ -300,3 +300,15 @@ Quando a Bird terminar:
 - Windows: testes focados 6/6 aprovados, Swagger e autenticação/criação com respostas 200/201; SQLite comprovou 1 evento processado e 1 notificação para `CH-000001`.
 - Limite da evidência: usuário não executou GET autenticado da inbox em seu navegador; teste equivalente validado com dados sintéticos no CI. Nenhum token/segredo é registrado nas evidências.
 - **Decisão financeira preservada:** nenhum projeto/recurso pago criado; implantação pública/produção CHM-601 #15 permanece aberta e não consta como entregue. WIP único; CHM-602 em Backlog.
+
+## Adaptação de Sprint 06 para concluir versão local — 09/10/2026
+
+- WIP único: CHM-602 (pré-release `v1.0.0-local.1`) em Doing.
+- CHM-601 #15 permanece aberta e bloqueada, sem hospedagem pública
+  ou recursos cobrados; não tentar encerrá-la como produção entregue.
+- Entrega CHM-602: README orientado a recrutadores, Postman sem segredos,
+  diagrama de arquitetura, evidências reais de CI, screenshot Swagger
+  capturado em Chrome no CI, CHANGELOG, notas, tag e GitHub Release.
+- Publicação via commit explicitamente marcado e dependente de CI verde.
+- Critérios de produção não aplicáveis à edição local estão explicados
+  em [RELEASE_CHECKLIST.md](./RELEASE_CHECKLIST.md).
