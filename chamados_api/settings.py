@@ -12,6 +12,8 @@ from chamados_api.deployment import validate_production_config, validate_protect
 BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() in {"1", "true", "yes"}
 PROTECTED_PREVIEW = os.getenv("DJANGO_PROTECTED_PREVIEW", "false").lower() in {"1", "true", "yes"}
+if PROTECTED_PREVIEW and DEBUG:
+    raise ImproperlyConfigured("Protected preview cannot run with DEBUG=true.")
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 if not SECRET_KEY:
     if not DEBUG:
