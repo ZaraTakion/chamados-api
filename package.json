@@ -1,0 +1,8 @@
+{
+  "name": "chamados-api-railway-infrastructure",
+  "private": true,
+  "description": "Deployment tooling only; Django remains the application runtime.",
+  "devDependencies": {
+    "railway": "^3.12.0"
+  }
+}
