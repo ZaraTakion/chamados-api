@@ -36,12 +36,13 @@ de segundos), não em tempo real.
 ## Regras de destinatários
 
 - Chamado criado: equipe ativa, exceto o autor do chamado.
-- Atribuição efetiva: novo responsável, exceto o próprio autor da ação.
+- Atribuição efetiva: novo responsável **ainda ativo e integrante da equipe**, exceto o próprio autor da ação.
 - Mudança efetiva de status: solicitante, exceto o autor da ação.
 - Resolvido: evento específico ticket_resolved, sem duplicar status_changed.
-- Comentário público: solicitante e responsável (se houver), exceto autor.
+- Comentário público: solicitante e responsável **ativo e ainda integrante da equipe** (se houver), exceto autor.
 - Nota interna: não gera notificação para usuários.
 - Atualização sem mudança efetiva de status/atribuição: sem novo evento.
+- A revogação do papel de equipe não apaga avisos **anteriores** da caixa de entrada; esta revisão impede a criação de novos avisos para responsáveis desativados/despromovidos. O histórico anterior e sua retenção dependem de uma política futura.
 
 ## Segurança
 
@@ -76,7 +77,7 @@ em GET /api/notifications/. Em testes sem Redis, execute:
 
     python manage.py test tickets.tests.test_notifications
 
-Os testes cobrem rollback, privacidade, seleção de destinatários, ausência
+Os testes cobrem rollback, privacidade, seleção de destinatários e revogação de equipe (`test_notification_recipients.py`), ausência
 de notas internas, repetição, retries e modo eager. O CI Docker executa a
 entrega real através do Redis e do worker; o teste Windows usa SQLite.
 

@@ -34,11 +34,23 @@ def ticket_created(ticket, actor):
     _create_events(ticket, NotificationOutbox.Kind.CREATED, staff_ids)
 
 
+def _eligible_assignee_id(ticket):
+    """Do not deliver new ticket notices to deactivated or former staff."""
+    if not ticket.assignee_id:
+        return None
+    return (
+        get_user_model().objects.filter(
+            pk=ticket.assignee_id, is_staff=True, is_active=True
+        ).values_list("pk", flat=True).first()
+    )
+
+
 def ticket_updated(ticket, actor, audit_events):
     for event in audit_events:
         if event.field == TicketAuditEvent.Field.ASSIGNEE:
-            if ticket.assignee_id and ticket.assignee_id != actor.pk:
-                _create_events(ticket, NotificationOutbox.Kind.ASSIGNED, [ticket.assignee_id])
+            assignee_id = _eligible_assignee_id(ticket)
+            if assignee_id and assignee_id != actor.pk:
+                _create_events(ticket, NotificationOutbox.Kind.ASSIGNED, [assignee_id])
         elif event.field == TicketAuditEvent.Field.STATUS and ticket.requester_id != actor.pk:
             kind = (
                 NotificationOutbox.Kind.RESOLVED
@@ -51,6 +63,6 @@ def ticket_updated(ticket, actor, audit_events):
 def public_comment_created(comment):
     if comment.is_internal:
         return
-    recipients = {comment.ticket.requester_id, comment.ticket.assignee_id}
+    recipients = {comment.ticket.requester_id, _eligible_assignee_id(comment.ticket)}
     recipients.discard(comment.author_id)
     _create_events(comment.ticket, NotificationOutbox.Kind.PUBLIC_COMMENT, recipients)

@@ -37,12 +37,15 @@ Reaplicar o status atual não é uma transição e é aceito (idempotência da i
 
 - `tickets/transitions.py` contém a matriz e `validate_ticket_transition`; não importa views nem serializers.
 - `tickets/serializers.py` usa a regra na atualização de status.
-- `tickets/tests/test_transitions.py` verifica todas as combinações (origem, destino) e os fluxos de API.
+- `tickets/admin.py` reutiliza a mesma regra nos formulários de edição do Django Admin.
+- `tickets/tests/test_transitions.py` e `tickets/tests/test_admin_lifecycle.py` verificam os fluxos da API e do Admin.
 
 ## Limitações e próximos passos
 
-Esta etapa valida **atualizações feitas pelos endpoints DRF**. Não é um bloqueio no banco de dados e não intercepta `QuerySet.update()`, Django Admin nem manipulações diretas do modelo.
+A API e o formulário de edição no Django Admin validam transições; **não há bloqueio de máquina de estados diretamente no banco**. Scripts, `QuerySet.update()` e operações ORM diretas podem contornar o domínio e não devem ser usados para mudanças operacionais sem uma auditoria explícita.
 
-Criação de tickets mantém o contrato anterior: solicitantes não recebem autorização para escolher status, enquanto a equipe pode criar tickets com status explícito conforme o serializer atual. Padronizar regras de estado inicial é uma decisão separada; não foi introduzida implicitamente neste CHM.
+**Compatibilidade preservada:** solicitantes não podem escolher o status inicial; equipe pode criar tickets com status explícito no contrato atual, inclusive na criação administrativa. Esta revisão não alterou esse comportamento existente.
 
-Histórico auditável, mudanças concorrentes e registro de ator/data são responsabilidade dos próximos itens do roadmap (especialmente CHM-202).
+O Django Admin agora registra as mudanças efetivas de status, prioridade e responsável no mesmo modelo de auditoria e gera eventos de outbox no mesmo fluxo de gravação. O responsável precisa ser um usuário da equipe ativa.
+
+Validação em PostgreSQL/SQLite usa estratégias de bloqueio diferentes; concorrência e políticas de retenção de chamados devem ser consideradas antes de deploy.
