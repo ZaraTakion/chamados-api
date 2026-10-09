@@ -4,9 +4,12 @@ from rest_framework import generics, permissions, viewsets
 from rest_framework.exceptions import PermissionDenied
 
 from tickets.audit import record_ticket_changes, ticket_audit_snapshot
-from tickets.models import Ticket, TicketAuditEvent, TicketComment
+from tickets.models import Ticket, TicketAuditEvent, TicketComment, TicketNotification
+from tickets.notifications import public_comment_created, ticket_created, ticket_updated
 from tickets.permissions import IsRequesterOrStaff
-from tickets.serializers import TicketAuditEventSerializer, TicketCommentSerializer, TicketSerializer
+from tickets.serializers import (
+    TicketAuditEventSerializer, TicketCommentSerializer, TicketNotificationSerializer, TicketSerializer,
+)
 
 
 class TicketViewSet(viewsets.ModelViewSet):
@@ -33,13 +36,19 @@ class TicketViewSet(viewsets.ModelViewSet):
         # Validation, ticket update and audit inserts share a single transaction.
         return super().update(request, *args, **kwargs)
 
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
     def perform_update(self, serializer):
         previous = ticket_audit_snapshot(serializer.instance)
         ticket = serializer.save()
-        record_ticket_changes(ticket, self.request.user, previous)
+        changes = record_ticket_changes(ticket, self.request.user, previous)
+        ticket_updated(ticket, self.request.user, changes)
 
     def perform_create(self, serializer):
-        serializer.save(requester=self.request.user)
+        ticket = serializer.save(requester=self.request.user)
+        ticket_created(ticket, self.request.user)
 
     def perform_destroy(self, instance):
         if not self.request.user.is_staff:
@@ -50,6 +59,10 @@ class TicketViewSet(viewsets.ModelViewSet):
 class TicketCommentListCreateView(generics.ListCreateAPIView):
     serializer_class = TicketCommentSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
     def get_ticket(self):
         queryset = Ticket.objects.all()
@@ -68,7 +81,8 @@ class TicketCommentListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         ticket = self.get_ticket()
-        serializer.save(ticket=ticket, author=self.request.user)
+        comment = serializer.save(ticket=ticket, author=self.request.user)
+        public_comment_created(comment)
 
 
 class TicketAuditHistoryView(generics.ListAPIView):
@@ -92,3 +106,18 @@ class TicketAuditHistoryView(generics.ListAPIView):
                 TicketAuditEvent.Field.PRIORITY,
             ])
         return events
+
+
+class TicketNotificationListView(generics.ListAPIView):
+    """Only the authenticated recipient can inspect their notification inbox."""
+
+    serializer_class = TicketNotificationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = []
+
+    def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return TicketNotification.objects.none()
+        return TicketNotification.objects.filter(
+            recipient=self.request.user
+        ).select_related("source")
