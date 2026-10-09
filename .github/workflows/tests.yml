@@ -67,17 +67,6 @@ jobs:
     name: PostgreSQL 16 — integridade
     runs-on: ubuntu-latest
     env:
-          POSTGRES_DB: chamados_ci
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres-ci-only
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres -d chamados_ci"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-    env:
       DJANGO_DEBUG: "true"
       DJANGO_SECRET_KEY: "ci-only-not-a-production-secret-with-adequate-length"
       DATABASE_URL: "postgresql://postgres:postgres-ci-only@127.0.0.1:5432/chamados_ci"
