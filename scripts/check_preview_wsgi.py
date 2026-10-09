@@ -16,13 +16,13 @@ from scripts.protected_preview import preview_environment
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def request(port, host, secure):
+def request(port, host, secure, path="/api/health/live/"):
     connection = http.client.HTTPConnection("127.0.0.1", port, timeout=3)
     headers = {"Host": host}
     if secure:
         headers["X-Forwarded-Proto"] = "https"
     try:
-        connection.request("GET", "/api/health/live/", headers=headers)
+        connection.request("GET", path, headers=headers)
         response = connection.getresponse()
         return response.status, dict(response.getheaders()), response.read()
     finally:
@@ -64,9 +64,9 @@ def main():
 
         code, _, data = request(port, host, True)
         assert code == 200 and b'"status":"ok"' in data.replace(b" ", b""), (code, data[:120])
-        code, headers, _ = request(port, host, False)
+        code, headers, _ = request(port, host, False, "/api/auth/me/")
         assert code == 301, code
-        assert headers["Location"] == f"https://{host}/api/health/live/", headers
+        assert headers["Location"] == f"https://{host}/api/auth/me/", headers
         code, _, _ = request(port, "malicious.example.com", True)
         assert code == 400, code
         print("Protected preview loopback WSGI smoke PASSED: HTTPS, redirect and strict Host.")
