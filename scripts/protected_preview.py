@@ -154,7 +154,7 @@ def main():
         # The database is intentionally isolated from data/db.sqlite3.
         (ROOT / "data").mkdir(exist_ok=True)
         run_command(["manage.py", "migrate", "--noinput"], env)
-        run_command(["manage.py", "collectstatic", "--noinput", "--clear"], env)
+        run_command(["manage.py", "collectstatic", "--noinput"], env)
         run_command(["manage.py", "check", "--deploy"], env)
 
         server = subprocess.Popen(
