@@ -27,3 +27,7 @@ htmlcov/
 *.log
 .pytest_cache/
 .mypy_cache/
+
+# Railway CLI/SDK are development tooling, never part of the Python image.
+node_modules/
+.railway/
