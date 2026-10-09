@@ -36,8 +36,13 @@ flowchart TD
   Worker --> PG
 ```
 
-O Docker Compose com Redis, worker e PostgreSQL é testado em GitHub
-Actions com criação real de notificação. A configuração Railway IaC
+O Docker Compose permanece disponível para executar Redis, worker e
+PostgreSQL localmente. O pipeline atual de GitHub Actions valida a configuração
+Compose sem baixar imagens; executa tarefas e notificações reais em Celery + Redis
+e API HTTP em processos do runner (com SQLite), enquanto um job separado testa
+PostgreSQL 16 real. Testes containerizados completos foram executados em
+pipelines anteriores, mas **não fazem parte de cada CI atual**, devido aos
+limites de pull de registries públicos. A configuração Railway IaC
 é **preparação**, não evidência de serviços contratados, deploy HTTPS ou
 backups em produção. O usuário não autorizou recursos pagos.
 
@@ -62,8 +67,9 @@ backups em produção. O usuário não autorizou recursos pagos.
 
 - Rotas públicas `/api/health/live/`, `/api/health/ready/` e Swagger.
 - Logs JSON estruturados, request ID e métricas de baseline do ORM.
-- CI em Python 3.10/3.11/3.12 + SQLite e PostgreSQL 16; smoke do
-  Docker Compose real e typecheck da configuração Railway IaC.
+- CI em Python 3.10/3.11/3.12 + SQLite e PostgreSQL 16; integração
+  Redis/Celery e API HTTP em runner; validação estática do Compose e
+  typecheck da configuração Railway IaC.
 - Backups **locais** ficam fora do Git (`data/`). Não existe backup
   ou restauração de produção comprovados.
 
