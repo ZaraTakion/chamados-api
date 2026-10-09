@@ -25,6 +25,22 @@ e a documentação são públicos; os dados e senhas da demonstração não são
 `runserver` não deve ser exposto na internet. A CHM-601 de
 deploy público permanece aberta por decisão de não contratar serviços.
 
+## CHM-601 — Preview HTTPS privado, grátis e temporário (em preparação)
+
+Uma segunda forma de compartilhar **somente dados fictícios** é o
+[Cloudflare Quick Tunnel protegido por e-mail](docs/PROTECTED_TUNNEL.md).
+O script `scripts/protected_preview.py` exige `cloudflared >= 2026.9.3`
+e um e-mail individual autorizado. Ele cria banco SQLite **separado**,
+gera segredo novo, roda Django com `DEBUG=false` sobre Waitress
+apenas em `127.0.0.1` e inicia notificações em processo distinto.
+Não reutiliza o banco local nem cobra recursos.
+
+**Importante:** o recurso está em desenvolvimento na PR desta fase;
+uma URL pública ainda **não** foi ativada nem verificada. O Quick Tunnel
+é temporário, com proteção de acesso por PIN de e-mail, e **não**
+comprova deploy de produção. Detalhes em
+[PROTECTED_TUNNEL.md](docs/PROTECTED_TUNNEL.md).
+
 ## Funcionalidades
 
 - Cadastro de solicitante, login JWT, renovação e revogação de refresh token.

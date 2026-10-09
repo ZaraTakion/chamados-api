@@ -91,3 +91,13 @@ preparação de infraestrutura, **não evidência de site já publicado**.
 é especificada em [`.railway/railway.ts`](../.railway/railway.ts),
 não nos arquivos `railway.json` descontinuados. Executar `railway config plan`
 e revisar os recursos antes da aprovação de qualquer provisionamento.
+
+## Demonstração externa temporária (não produção)
+
+O [guia Cloudflare Quick Tunnel protegido](./PROTECTED_TUNNEL.md)
+descreve um fluxo isolado que exige autenticação por e-mail no proxy,
+`DEBUG=false`, Waitress com loopback, segredo de sessão aleatório,
+host exato e base de dados descartável. **Não utilizar** o banco de
+produção ou SQLite do solicitante nesse fluxo; não expor
+`runserver`. Os requisitos gerais de Postgres persistente, HTTPS
+operacional permanente e monitoramento da CHM-601 permanecem separados.

@@ -146,3 +146,12 @@ captura real da interface Swagger. Consulte [PORTFOLIO.md](./PORTFOLIO.md),
 [POSTMAN.md](./POSTMAN.md) e [EVIDENCE.md](./EVIDENCE.md).
 A pré-release não indica disponibilidade pública: todos os usos reais
 continuam em `127.0.0.1`.
+
+## Visualização remota privada, opcional
+
+Para compartilhar a demo por URL HTTPS temporária e protegida com
+PIN de e-mail, existe um **fluxo separado** em
+[PROTECTED_TUNNEL.md](./PROTECTED_TUNNEL.md). O script usa
+`data/protected-preview.sqlite3` com Django `DEBUG=false` e Waitress,
+sem reutilizar este banco local nem contratos de infraestrutura paga.
+A URL só existe quando o proprietário iniciar o túnel na própria máquina.
